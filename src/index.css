@@ -1,0 +1,67 @@
+:root {
+  /* Tema claro estilo AlphaFold / DeepMind */
+  --bg: #fbfcff;
+  --bg-soft: #f1f4fb;
+  --surface: #ffffff;
+  --text-h: #0a0e1a;
+  --text: #5a6275;
+  --border: #e6e9f2;
+  --accent: #2b6ef2;
+  --viewer-bg: #f4f7fc;
+
+  /* Degradado de marca (azul -> índigo -> turquesa) */
+  --grad: linear-gradient(110deg, #2b6ef2 0%, #6a5cff 46%, #00c2b8 100%);
+  --grad-soft: linear-gradient(180deg, #ffffff 0%, #f1f5fd 100%);
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-lg:
+    0 24px 60px -20px rgba(20, 40, 90, 0.28),
+    0 8px 24px -12px rgba(20, 40, 90, 0.18);
+
+  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  font: 17px/1.55 var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #eef3ff 0%, rgba(238, 243, 255, 0) 60%),
+    var(--bg);
+  min-height: 100svh;
+}
+
+#root {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  box-sizing: border-box;
+}
+
+h1,
+h2 {
+  font-family: var(--sans);
+  color: var(--text-h);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
