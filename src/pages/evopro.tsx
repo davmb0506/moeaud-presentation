@@ -126,7 +126,7 @@ const STEP_LABEL: Record<Phase, string> = {
   inicial: "Evaluar con AF2",
   evaluacion: "Eliminar peor mitad",
   eliminar: "Generar offspring",
-  offspring: "Siguiente generación",
+  offspring: "Siguiente",
 };
 
 const PHASE_TITLE: Record<Phase, string> = {

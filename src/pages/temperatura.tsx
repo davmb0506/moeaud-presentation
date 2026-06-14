@@ -159,7 +159,7 @@ export function Temperatura() {
             </div>
             <div>
               <dt>T</dt>
-              <dd>temperatura: controla la dispersión</dd>
+              <dd>temperatura</dd>
             </div>
             <div>
               <dt>
@@ -172,11 +172,11 @@ export function Temperatura() {
           <ul className="temp-list">
             <li>
               <strong>T → 0:</strong> la masa se concentra en el <em>logit</em>{" "}
-              mayor <span className="temp-tag explota">explotación</span>.
+              mayor (<span className="temp-tag explota">explotación</span>).
             </li>
             <li>
               <strong>T alta:</strong> la distribución se aplana hacia la
-              uniforme <span className="temp-tag explora">exploración</span>.
+              uniforme (<span className="temp-tag explora">exploración</span>).
             </li>
           </ul>
 
@@ -200,15 +200,10 @@ export function Temperatura() {
           <div className="temp-chart">
             <div className="temp-chart-head">
               <span className="temp-chart-title">Preferencia de ProteinMPNN</span>
-              <span className="temp-chart-sub">
-                logits <span className="temp-T">z</span> por aminoácido en esta
-                posición del <em>backbone</em>
-              </span>
             </div>
             <table className="temp-table">
               <thead>
                 <tr>
-                  <th className="temp-table-rowhead">aminoácido</th>
                   {LOGITS.map((l) => (
                     <th key={l.aa} style={{ color: l.color }} title={l.name}>
                       {l.aa}
@@ -218,9 +213,6 @@ export function Temperatura() {
               </thead>
               <tbody>
                 <tr>
-                  <td className="temp-table-rowhead">
-                    logit <span className="temp-T">z</span>
-                  </td>
                   {LOGITS.map((l) => (
                     <td key={l.aa} className={l.z < 0 ? "neg" : ""}>
                       {l.z.toFixed(1)}
@@ -232,11 +224,7 @@ export function Temperatura() {
           </div>
 
           {/* 2. Transformación softmax controlada por T */}
-          <div className="temp-transform">
-            <span className="temp-transform-arrow" aria-hidden>↓</span>
-            <span className="temp-transform-op">softmax(z / T)</span>
-            <span className="temp-transform-arrow" aria-hidden>↓</span>
-          </div>
+          
 
           <div className="temp-slider">
             <div className="temp-slider-top">

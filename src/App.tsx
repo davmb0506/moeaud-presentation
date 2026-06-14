@@ -4,13 +4,16 @@ import "./App.css";
 import { MoleculeViewer } from "./components/MoleculeViewer";
 import { Agenda } from "./pages/agenda";
 import { EvoproIntro } from "./pages/evopro-intro";
+import { Experimentos } from "./pages/experimentos";
 import { Temperatura } from "./pages/temperatura";
+import { ExperimentosTemp } from "./pages/experimentos-temp";
+import { Multiobjetivo } from "./pages/multiobjetivo";
 import { Referencias } from "./pages/referencias";
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 6;
+const TOTAL_SLIDES = 9;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -263,10 +266,43 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <Experimentos />
+        <SlideNo n={5} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
         viewport={viewport}
       >
         <Temperatura />
-        <SlideNo n={5} />
+        <SlideNo n={6} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <ExperimentosTemp />
+        <SlideNo n={7} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <Multiobjetivo />
+        <SlideNo n={8} />
       </motion.section>
 
       <motion.section
@@ -277,7 +313,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={6} />
+        <SlideNo n={9} />
       </motion.section>
     </main>
   );
