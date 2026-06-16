@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 
 const wrap: Variants = {
@@ -14,36 +15,44 @@ const fade: Variants = {
   },
 };
 
-const C1 = "#2b6ef2"; // placement
-const C2 = "#6a5cff"; // fold
-const C3 = "#00b894"; // stability
+// Lienzo
+const VW = 360;
+const VH = 300;
+const PADL = 44;
+const PADR = 20;
+const PADT = 22;
+const PADB = 40;
+const PW = VW - PADL - PADR;
+const PH = VH - PADT - PADB;
+const R = 0.9; // radio del frente esquemático (en unidades de datos)
 
-type Obj = { sym: string; name: string; weight: string; color: string };
+const sx = (f: number) => PADL + f * PW;
+const sy = (f: number) => PADT + (1 - f) * PH;
 
-const OBJS: Obj[] = [
-  { sym: "P", name: "Confianza de acoplamiento", weight: "1", color: C1 },
-  { sym: "F", name: "Confianza de plegamiento", weight: "1/10", color: C2 },
-  { sym: "S", name: "Estabilidad conformacional", weight: "5", color: C3 },
-];
-
-// Mini frente de Pareto: puntos dominados (gris) + frente no dominado (acento).
-const DOMINATED = [
-  { x: 58, y: 70 },
-  { x: 74, y: 60 },
-  { x: 86, y: 92 },
-  { x: 64, y: 96 },
-  { x: 100, y: 78 },
-  { x: 92, y: 56 },
-];
-const FRONT = [
-  { x: 30, y: 96 },
-  { x: 42, y: 70 },
-  { x: 58, y: 50 },
-  { x: 80, y: 38 },
-  { x: 108, y: 30 },
-];
+// Frente esquemático: cuarto de curva convexa entre (R,0) y (0,R).
+const ARC = Array.from({ length: 61 }, (_, i) => {
+  const a = (i / 60) * (Math.PI / 2);
+  return `${sx(R * Math.cos(a))},${sy(R * Math.sin(a))}`;
+}).join(" ");
 
 export function Multiobjetivo() {
+  // peso relativo sobre f1 (5..95 %)
+  const [w1p, setW1p] = useState(55);
+  const w1 = w1p / 100;
+  const w2 = 1 - w1;
+
+  // La suma ponderada toca la curva donde el radio es normal a (w1, w2).
+  const a = Math.atan2(w2, w1);
+  const px = R * Math.cos(a);
+  const py = R * Math.sin(a);
+
+  // Recta de iso-aptitud: tangente a la curva en (px, py).
+  const L = 0.55;
+  const x1 = sx(px - L * Math.sin(a));
+  const y1 = sy(py + L * Math.cos(a));
+  const x2 = sx(px + L * Math.sin(a));
+  const y2 = sy(py - L * Math.cos(a));
+
   return (
     <motion.div
       className="mo"
@@ -55,103 +64,92 @@ export function Multiobjetivo() {
       <motion.div variants={fade} className="mo-head">
         <h2 className="mo-title">Transición a optimización multiobjetivo</h2>
         <p className="mo-sub">
-          EvoPro combina objetivos físicos independientes en un{" "}
-          <strong>único escalar</strong>. Como esos objetivos{" "}
-          <strong>compiten entre sí</strong>, conviene optimizarlos de forma{" "}
-          <strong>simultánea</strong>.
+          EvoPro base reduce varias métricas de AlphaFold2 a un único número
+          mediante una suma de pesos fijos. En el espacio de objetivos, esa
+          escalarización equivale a elegir una dirección y quedarse con un solo
+          punto del frente; la optimización multiobjetivo, en cambio, busca el
+          frente completo.
         </p>
       </motion.div>
 
-      <div className="mo-flow">
-        {/* Antes: escalarización */}
-        <motion.div variants={fade} className="mo-card">
-          <span className="mo-card-tag">Enfoque actual · escalarización</span>
-          <div className="mo-formula">
-            <span className="mo-fx">F(x)</span>
-            <span className="mo-eq">=</span>
-            <span>
-              <span className="mo-w">−1</span>·<span style={{ color: C1 }}>P</span>
-            </span>
-            <span className="mo-op">−</span>
-            <span>
-              <span className="mo-w">1/10</span>·<span style={{ color: C2 }}>F</span>
-            </span>
-            <span className="mo-op">+</span>
-            <span>
-              <span className="mo-w">5</span>·<span style={{ color: C3 }}>S</span>
-            </span>
-          </div>
-          <ul className="mo-objs">
-            {OBJS.map((o) => (
-              <li key={o.sym}>
-                <span className="mo-chip" style={{ background: o.color }}>
-                  {o.sym}
-                </span>
-                <span className="mo-obj-name">{o.name}</span>
-                <span className="mo-obj-w">peso {o.weight}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mo-card-note">
-            Suma ponderada con <strong>pesos fijos</strong> → colapsa el problema
-            a <strong>una sola solución</strong>.
-          </p>
-        </motion.div>
+      
 
-        <div className="mo-arrow" aria-hidden>
-          <span>→</span>
+      <motion.div variants={fade} className="mo-fig">
+        <svg
+          viewBox={`0 0 ${VW} ${VH}`}
+          role="img"
+          aria-label="Espacio de objetivos: el frente de Pareto y la dirección de los pesos"
+        >
+          <defs>
+            <clipPath id="moClip">
+              <rect x={PADL} y={PADT} width={PW} height={PH} />
+            </clipPath>
+          </defs>
+
+          <line className="mo-axis" x1={PADL} y1={PADT} x2={PADL} y2={PADT + PH} />
+          <line
+            className="mo-axis"
+            x1={PADL}
+            y1={PADT + PH}
+            x2={PADL + PW}
+            y2={PADT + PH}
+          />
+          <text className="mo-axt" x={PADL + PW} y={PADT + PH + 26} textAnchor="end">
+            f₁
+          </text>
+          <text className="mo-axt" x={PADL - 30} y={PADT + 6}>
+            f₂
+          </text>
+          <text className="mo-hint" x={PADL + 4} y={PADT + PH - 6}>
+            mejor
+          </text>
+
+          <polyline className="mo-front" points={ARC} />
+          <text
+            className="mo-frontlbl"
+            x={sx(R * Math.cos(Math.PI / 4)) + 6}
+            y={sy(R * Math.sin(Math.PI / 4)) - 6}
+          >
+            frente de Pareto
+          </text>
+
+          <g clipPath="url(#moClip)">
+            <motion.line
+              className="mo-dir"
+              initial={false}
+              animate={{ x1, y1, x2, y2 }}
+              transition={{ type: "spring", stiffness: 220, damping: 26 }}
+            />
+          </g>
+
+          <motion.circle
+            className="mo-pt"
+            r={6}
+            initial={false}
+            animate={{ cx: sx(px), cy: sy(py) }}
+            transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          />
+        </svg>
+
+        <div className="mo-ctrl">
+          <label htmlFor="mo-w">
+            dirección de los pesos — w₁ {Math.round(w1 * 100)} / w₂{" "}
+            {Math.round(w2 * 100)}
+          </label>
+          <input
+            id="mo-w"
+            type="range"
+            min={5}
+            max={95}
+            step={1}
+            value={w1p}
+            onChange={(e) => setW1p(Number(e.target.value))}
+          />
         </div>
 
-        {/* Después: multiobjetivo */}
-        <motion.div variants={fade} className="mo-card mo-card-after">
-          <span className="mo-card-tag">Propuesta · multiobjetivo</span>
-          <div className="mo-formula">
-            <span className="mo-fx">f(x)</span>
-            <span className="mo-eq">=</span>
-            <span className="mo-vec">
-              (<span style={{ color: C1 }}>P</span>,{" "}
-              <span style={{ color: C2 }}>F</span>,{" "}
-              <span style={{ color: C3 }}>S</span>)
-            </span>
-          </div>
-          <svg className="mo-pareto" viewBox="0 0 150 120" role="img" aria-label="frente de Pareto">
-            <line x1="20" y1="8" x2="20" y2="108" className="mo-axis" />
-            <line x1="20" y1="108" x2="142" y2="108" className="mo-axis" />
-            <text x="8" y="14" className="mo-axislabel">f₂</text>
-            <text x="138" y="118" className="mo-axislabel">f₁</text>
-            {DOMINATED.map((p, i) => (
-              <circle key={`d${i}`} cx={p.x} cy={p.y} r={3} className="mo-dot-dom" />
-            ))}
-            <polyline
-              points={FRONT.map((p) => `${p.x},${p.y}`).join(" ")}
-              className="mo-front-line"
-            />
-            {FRONT.map((p, i) => (
-              <circle key={`f${i}`} cx={p.x} cy={p.y} r={3.6} className="mo-dot-front" />
-            ))}
-          </svg>
-          <p className="mo-card-note">
-            Optimización simultánea → <strong>frente de Pareto</strong>: conjunto
-            de soluciones <strong>no dominadas</strong> (compromisos).
-          </p>
-        </motion.div>
-      </div>
+        
+      </motion.div>
 
-      <motion.ul variants={fade} className="mo-points">
-        <li>
-          <strong>Objetivos en conflicto.</strong> Surgen de mecanismos físicos
-          distintos; mejorar uno suele degradar otro, sin un óptimo único.
-        </li>
-        <li>
-          <strong>Pesos arbitrarios.</strong> La escalarización fija pesos sobre
-          escalas heterogéneas y sesga la búsqueda hacia una sola región.
-        </li>
-        <li>
-          <strong>Compromisos ocultos.</strong> Un escalar no recupera el
-          conjunto de soluciones de compromiso que sí entrega el frente de
-          Pareto.
-        </li>
-      </motion.ul>
 
       <motion.p variants={fade} className="mo-cite">
         Nanda V, Belure SV, Shir OM. Searching for the Pareto frontier in

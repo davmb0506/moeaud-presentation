@@ -18,8 +18,8 @@
     0 24px 60px -20px rgba(20, 40, 90, 0.28),
     0 8px 24px -12px rgba(20, 40, 90, 0.18);
 
-  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sans: Georgia, "Times New Roman", Times, serif;
+  --mono: Georgia, "Times New Roman", Times, serif;
 
   font: 17px/1.55 var(--sans);
   color: var(--text);

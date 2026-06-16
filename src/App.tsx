@@ -8,12 +8,14 @@ import { Experimentos } from "./pages/experimentos";
 import { Temperatura } from "./pages/temperatura";
 import { ExperimentosTemp } from "./pages/experimentos-temp";
 import { Multiobjetivo } from "./pages/multiobjetivo";
+import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
+import { Moeaud } from "./pages/moeaud";
 import { Referencias } from "./pages/referencias";
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 9;
+const TOTAL_SLIDES = 11;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -306,6 +308,28 @@ export default function App() {
       </motion.section>
 
       <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <DisenoAlgoritmo />
+        <SlideNo n={9} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <Moeaud />
+        <SlideNo n={10} />
+      </motion.section>
+
+      <motion.section
         className="refs-slide slide"
         variants={slideContainer}
         initial="hidden"
@@ -313,7 +337,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={9} />
+        <SlideNo n={11} />
       </motion.section>
     </main>
   );
