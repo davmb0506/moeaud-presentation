@@ -361,7 +361,7 @@ export default function App() {
         <SlideNo n={11} />
       </motion.section>
 
-      <motion.section
+      {/* <motion.section
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -370,7 +370,7 @@ export default function App() {
       >
         <MecanismosDeck />
         <SlideNo n={12} />
-      </motion.section>
+      </motion.section> */}
 
       <motion.section
         className="showcase slide"
@@ -417,13 +417,13 @@ export default function App() {
       </motion.section>
 
       <motion.section
-        className="refs-slide slide"
+        className="showcase slide"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.1 }}
+        viewport={{ amount: 0.12 }}
       >
-        <Referencias />
+        <ValidacionFlujo />
         <SlideNo n={17} />
       </motion.section>
 
@@ -434,20 +434,21 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <ValidacionFlujo />
+        <ValidacionRuns />
         <SlideNo n={18} />
       </motion.section>
-
       <motion.section
-        className="showcase slide"
+        className="refs-slide slide"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.12 }}
+        viewport={{ amount: 0.1 }}
       >
-        <ValidacionRuns />
+        <Referencias />
         <SlideNo n={19} />
       </motion.section>
+
+      
     </main>
   );
 }

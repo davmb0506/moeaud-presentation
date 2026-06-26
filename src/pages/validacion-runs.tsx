@@ -11,7 +11,7 @@ const fade: Variants = {
 
 const METRICS = [
   {
-    label: "Pool único agregado",
+    label: "Pool agregado",
     value: "1,208",
     note: "candidatos extraídos de archivos finales",
   },
