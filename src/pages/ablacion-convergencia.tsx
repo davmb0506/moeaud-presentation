@@ -84,10 +84,10 @@ const SLIDES: SlideData[] = [
     sub: (
       <>
         No se observa diferencia significativa en el hipervolumen acumulado final
-        (<B>con mecanismos: media 1.190, mediana 1.210</B>;{" "}
-        <O>sin mecanismos: media 1.199, mediana 1.203</O>).
+        (<B>con mecanismos: media 1.190</B>;{" "}
+        <O>sin mecanismos: media 1.199</O>).
       </>
-    ),
+    ), 
     img: "/figures/ablation_cumhv_ipsae_sc.png",
     alt: "Curva de convergencia del hipervolumen acumulado — ipSAE / SC: con mecanismos frente a sin mecanismos.",
     rows: [

@@ -2193,7 +2193,7 @@
 }
 
 .exp-figure-abl {
-  padding: 12px;
+  padding: 8px;
 }
 
 .exp-img {
@@ -2205,9 +2205,9 @@
 }
 
 .exp-img-abl {
-  width: min(100%, 860px);
+  width: min(100%, 760px);
   max-width: 100%;
-  max-height: 52vh;
+  max-height: 40vh;
   object-fit: contain;
   margin-inline: auto;
 }
@@ -4191,6 +4191,48 @@
   gap: 16px;
   padding: 0 16px;
   text-align: left;
+}
+
+/* Compactación visual para la lámina de ablación-convergencia */
+.mec-deck .exp {
+  gap: 12px;
+}
+
+.mec-deck .exp-head {
+  gap: 5px;
+}
+
+.mec-deck .exp-title {
+  font-size: clamp(22px, 2.25vw, 32px);
+  line-height: 1.12;
+}
+
+.mec-deck .exp-sub {
+  font-size: clamp(12.5px, 1vw, 14px);
+  line-height: 1.45;
+  max-width: 92ch;
+}
+
+.mec-deck .exp-table {
+  font-size: 11px;
+}
+
+.mec-deck .exp-table th,
+.mec-deck .exp-table td {
+  padding: 7px 9px;
+  line-height: 1.3;
+}
+
+.mec-deck .exp-msg {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mec-deck .exp-foot {
+  padding-top: 9px;
+  font-size: 10.5px;
+  line-height: 1.35;
 }
 
 .mec-deck-top {

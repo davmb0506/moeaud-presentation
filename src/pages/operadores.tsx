@@ -166,8 +166,7 @@ export function Operadores() {
       </h2>
       <p className="ablacion-sub">
         Comparación de las mejores soluciones sobre el{" "}
-        <strong>objetivo por defecto de EvoPro</strong>. Haz clic en una solución
-        para ver su complejo.
+        <strong>objetivo por defecto de EvoPro</strong>.
       </p>
 
       <div className="ablacion-grid">

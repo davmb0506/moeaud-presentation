@@ -9,7 +9,6 @@ import { Temperatura } from "./pages/temperatura";
 import { ExperimentosTemp } from "./pages/experimentos-temp";
 import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 import { Moeaud } from "./pages/moeaud";
-import { MecanismosDeck } from "./pages/mecanismos/MecanismosDeck";
 import { AblacionConvergencia } from "./pages/ablacion-convergencia";
 import { Operadores } from "./pages/operadores";
 import { Ablacion } from "./pages/ablacion";
