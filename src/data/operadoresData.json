@@ -1,0 +1,511 @@
+{
+  "stats": {
+    "base": {
+      "n": 22,
+      "mean": -188.85,
+      "std": 5.35
+    },
+    "both": {
+      "n": 27,
+      "mean": -192.31,
+      "std": 3.14
+    },
+    "U": 441.0,
+    "p": 0.003797521344879762,
+    "cliffs_delta": 0.485
+  },
+  "base": [
+    {
+      "score": -196.6,
+      "plddt": 89.4,
+      "iptm": 0.12,
+      "contact": 10.4,
+      "binder": "AAAAEAARRAAEAAAAAAREAARRAAEEAARRAAEEEERRRAEEEARAAAEGAAWRAELEAE",
+      "id": "base_run_10",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_10.pdb"
+    },
+    {
+      "score": -189.15,
+      "plddt": 74.2,
+      "iptm": 0.13,
+      "contact": 20.7,
+      "binder": "MLVLTPVRDEEEARRAAEIAGRPKRLEVLTVNGEKVAVLRGATEEGAAELFRRYGAMVITLP",
+      "id": "base_run_11",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_11.pdb"
+    },
+    {
+      "score": -181.34,
+      "plddt": 73.1,
+      "iptm": 0.11,
+      "contact": 16.0,
+      "binder": "MVGLVPVSSREEAEEAARVAGVAEEPVLVRIDGRLYAVLRGITEEGAARVRRELGLEVRLYP",
+      "id": "base_run_12",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_12.pdb"
+    },
+    {
+      "score": -187.93,
+      "plddt": 75.1,
+      "iptm": 0.17,
+      "contact": 17.6,
+      "binder": "MIGIALLPTREDVYEAARLAGVPEPSRVREAGGKYLGVLEGITQEGVQAIEERFGVRVILLP",
+      "id": "base_run_13",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_13.pdb"
+    },
+    {
+      "score": -183.92,
+      "plddt": 72.4,
+      "iptm": 0.1,
+      "contact": 19.6,
+      "binder": "MHYLAVADTRELAEEAGRLAGVEGEVPVFEKDGKYLALLRGATEEQAQRVAEELGLPILRLP",
+      "id": "base_run_14",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_14.pdb"
+    },
+    {
+      "score": -185.61,
+      "plddt": 80.6,
+      "iptm": 0.08,
+      "contact": 11.2,
+      "binder": "MTVEVRVESEEEAREAAKIAGSSKAPKVYEKDGKLWAVIEGATEAGVAALKEKYGEENVKVL",
+      "id": "base_run_15",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_15.pdb"
+    },
+    {
+      "score": -182.83,
+      "plddt": 71.2,
+      "iptm": 0.14,
+      "contact": 17.0,
+      "binder": "GIALVRVDSREQAAEAGRVAGSAKPPTVLRGNGELVALVEGATEEGVARVREELGLEARLIN",
+      "id": "base_run_16",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_16.pdb"
+    },
+    {
+      "score": -184.2,
+      "plddt": 74.6,
+      "iptm": 0.12,
+      "contact": 17.2,
+      "binder": "MTALVPVKSEEEAREAAELAGVEKEPEVIEGGGMKIAVLRGATEEGLPKVEERFGVLEVLPG",
+      "id": "base_run_17",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_17.pdb"
+    },
+    {
+      "score": -189.58,
+      "plddt": 75.4,
+      "iptm": 0.12,
+      "contact": 19.3,
+      "binder": "GIAFVPVDSEEEARELARAAGVKNEPILIPVNGKIVAVFRGATLEQARRLAELSGRPVLYLE",
+      "id": "base_run_18",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_18.pdb"
+    },
+    {
+      "score": -197.98,
+      "plddt": 92.2,
+      "iptm": 0.1,
+      "contact": 10.8,
+      "binder": "EEETEKRKREEKRRREEEWRRREESETRRLEEERKRREEEARRRAEERRKVDEWKLEVAAWH",
+      "id": "base_run_19",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_19.pdb"
+    },
+    {
+      "score": -187.97,
+      "plddt": 72.8,
+      "iptm": 0.12,
+      "contact": 21.4,
+      "binder": "GVALAEVETEEEAEEAGRLAGATEKPQVAEVNGKKVAILEGATEEGARRVEEVLGSRVAYFP",
+      "id": "base_run_20",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_20.pdb"
+    },
+    {
+      "score": -200.13,
+      "plddt": 91.2,
+      "iptm": 0.11,
+      "contact": 13.6,
+      "binder": "EEEEREREEEWRRTREETRRLAEELEFRREEEYRRRQEEEERERERLERESYRYLLEELLAP",
+      "id": "base_run_21",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_21.pdb"
+    },
+    {
+      "score": -184.07,
+      "plddt": 75.4,
+      "iptm": 0.12,
+      "contact": 14.5,
+      "binder": "GIGYAEVESEEEAREAGKLAGATTEPVVEEVDGKKIATLNGATEEGAKRVEEELGLKVRYLP",
+      "id": "base_run_22",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_22.pdb"
+    },
+    {
+      "score": -192.46,
+      "plddt": 77.6,
+      "iptm": 0.11,
+      "contact": 19.5,
+      "binder": "MVAVVPVDSEEEAREAARLAGVAAEPRVVEHDGQLYAVLEGATEEGARRVEEELGRPVLLIP",
+      "id": "base_run_23",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_23.pdb"
+    },
+    {
+      "score": -194.78,
+      "plddt": 84.9,
+      "iptm": 0.1,
+      "contact": 14.7,
+      "binder": "AEEEEEKRREEEDEREERRRRREERERTRRGHEERRRAEERQQYAEALRQAAWAAADPFGGA",
+      "id": "base_run_24",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_24.pdb"
+    },
+    {
+      "score": -185.61,
+      "plddt": 73.9,
+      "iptm": 0.12,
+      "contact": 17.6,
+      "binder": "MVGYAEVASEEEARRAAEVAGLTAEPRVITVGGRLVAVLEGISREGAERVSRELGLRVALGP",
+      "id": "base_run_25",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_25.pdb"
+    },
+    {
+      "score": -184.71,
+      "plddt": 72.9,
+      "iptm": 0.1,
+      "contact": 17.9,
+      "binder": "MTAFAVVDSEEEAREAGRVAGVEREPRVINGFGKKVAVLEGATEEGARRVEEELGLEVTLGE",
+      "id": "base_run_26",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_26.pdb"
+    },
+    {
+      "score": -196.04,
+      "plddt": 88.4,
+      "iptm": 0.08,
+      "contact": 13.1,
+      "binder": "EEEERTELEQEERELREREERRRREEEERRHAEELSRLEREAAEARRRLELAAVLAYPPPPP",
+      "id": "base_run_27",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_27.pdb"
+    },
+    {
+      "score": -190.78,
+      "plddt": 87.6,
+      "iptm": 0.11,
+      "contact": 8.1,
+      "binder": "SEEEEAAQREEAEEAAERAAAEAARRAAEEAAAKAEEERAAAEVKREEALEAAFKRAEELMP",
+      "id": "base_run_28",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_28.pdb"
+    },
+    {
+      "score": -188.15,
+      "plddt": 74.6,
+      "iptm": 0.09,
+      "contact": 18.0,
+      "binder": "MIALAVVDSEEQAREAGRVAGVEAEPAVLRFNGKLVAVLRGATEEGAERVRRELGLEVTLLP",
+      "id": "base_run_29",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_29.pdb"
+    },
+    {
+      "score": -185.9,
+      "plddt": 75.0,
+      "iptm": 0.11,
+      "contact": 18.6,
+      "binder": "MIALVEVESEEEAREAARLAGATRLGKPRLLGGKLVATLFGATEEGARRVEEELGLKVSLVP",
+      "id": "base_run_8",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_8.pdb"
+    },
+    {
+      "score": -184.99,
+      "plddt": 73.1,
+      "iptm": 0.42,
+      "contact": 16.1,
+      "binder": "MEGLARVRTLEEALLAGRLAGMRSPPELVRRDGEVYARITFPDAATAERVARELGLEIELLE",
+      "id": "base_run_9",
+      "group": "base",
+      "pdb": "/pdbs/operadores/base/run_9.pdb"
+    }
+  ],
+  "both": [
+    {
+      "score": -192.77,
+      "plddt": 76.3,
+      "iptm": 0.1,
+      "contact": 21.4,
+      "binder": "MIALVEVDSEEEAREAARVAGVEEEPEVGELNGKKVAVLRGATEEGARAVEERLGLKVIMLP",
+      "id": "both_evopro_both_01_01",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_01.pdb"
+    },
+    {
+      "score": -200.46,
+      "plddt": 83.1,
+      "iptm": 0.43,
+      "contact": 24.3,
+      "binder": "MLAYLEVDSEEEAREAARVAGVSAPPVVGRGGGKLVARIDGVDAEGAARIQRELGKEVTLLP",
+      "id": "both_evopro_both_01_20251210_210909",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251210_210909.pdb"
+    },
+    {
+      "score": -190.66,
+      "plddt": 74.3,
+      "iptm": 0.12,
+      "contact": 21.2,
+      "binder": "MLALVEVESEEEAREAARIAGVESDPEVVMVNGRKVALLEGADEEGAARIEEELGLEVRLLP",
+      "id": "both_evopro_both_01_20251211_040539",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251211_040539.pdb"
+    },
+    {
+      "score": -201.68,
+      "plddt": 80.0,
+      "iptm": 0.33,
+      "contact": 27.5,
+      "binder": "MLVLAEVESDEEARRAGRIAGVESDPEVRMVNGRKWAKLDGADEEGARRIREELGLEVILGP",
+      "id": "both_evopro_both_01_20251211_101129",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251211_101129.pdb"
+    },
+    {
+      "score": -192.03,
+      "plddt": 75.4,
+      "iptm": 0.13,
+      "contact": 23.0,
+      "binder": "MVGLVPVESEEEAREAARIAGVESDPEVVMVNGRKVARMEGADEEGARRVHEELGLGVLLLP",
+      "id": "both_evopro_both_01_20251211_170034",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251211_170034.pdb"
+    },
+    {
+      "score": -190.83,
+      "plddt": 75.7,
+      "iptm": 0.1,
+      "contact": 19.2,
+      "binder": "MLALAIVESEEEAREAARIAGVESEPRVVTVNGRKVARLEGATAAGAEAVRRELGLKVTLLE",
+      "id": "both_evopro_both_01_20251211_232744",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251211_232744.pdb"
+    },
+    {
+      "score": -188.62,
+      "plddt": 74.4,
+      "iptm": 0.1,
+      "contact": 19.4,
+      "binder": "MLALAEVESEEEAREAARVAGVKSDPEVVMINGRKVAVLKGADEEGARRVREKLGLTVELVP",
+      "id": "both_evopro_both_01_20251212_054748",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251212_054748.pdb"
+    },
+    {
+      "score": -193.05,
+      "plddt": 76.5,
+      "iptm": 0.13,
+      "contact": 21.6,
+      "binder": "MIALAEVASEEEAREAGRVAGVEEEPEVLTQGGRKIAVLRGATEEGAAAVERELGLKVALVP",
+      "id": "both_evopro_both_01_20251212_115248",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251212_115248.pdb"
+    },
+    {
+      "score": -190.17,
+      "plddt": 76.8,
+      "iptm": 0.1,
+      "contact": 18.4,
+      "binder": "MLGLAVVESEEQAREAARLAGSKEEPEVREVGGKKVAVIKGADEEGARNIEEHLGLEVTLLP",
+      "id": "both_evopro_both_01_20251212_184803",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251212_184803.pdb"
+    },
+    {
+      "score": -190.71,
+      "plddt": 76.8,
+      "iptm": 0.1,
+      "contact": 19.4,
+      "binder": "MLALAEVDSEEEARRAAELAGVEEEPEVIEVNGRKVARIEGATEEGAERVRRELGREVRLLP",
+      "id": "both_evopro_both_01_20251213_014238",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251213_014238.pdb"
+    },
+    {
+      "score": -196.72,
+      "plddt": 77.8,
+      "iptm": 0.38,
+      "contact": 23.9,
+      "binder": "MLALMEVESEEEAREAARIAGVEKEPKVVMVNGRKVARIEGATLAGARAVVERLGLEVHLLP",
+      "id": "both_evopro_both_01_20251213_090339",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251213_090339.pdb"
+    },
+    {
+      "score": -193.27,
+      "plddt": 78.4,
+      "iptm": 0.1,
+      "contact": 20.0,
+      "binder": "MLALVEVDSEEEAREAARVAGVAEEPEVIELGGKKVAVLKGATFEGAQRVEERLGRRVVLGP",
+      "id": "both_evopro_both_01_20251213_163050",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251213_163050.pdb"
+    },
+    {
+      "score": -189.31,
+      "plddt": 78.0,
+      "iptm": 0.09,
+      "contact": 16.1,
+      "binder": "MIALAVVESEEEAREAARVAGVKKEPEVVMRNGRKVARLRGATEEGARAVREELGLEVTLHP",
+      "id": "both_evopro_both_01_20251213_233959",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251213_233959.pdb"
+    },
+    {
+      "score": -193.33,
+      "plddt": 76.1,
+      "iptm": 0.14,
+      "contact": 21.7,
+      "binder": "MLALVEVESEEEAREAARVAGVESEPQVATVNGRKVARLEGADEEGAERVRRELGLKVELFP",
+      "id": "both_evopro_both_01_20251214_060935",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251214_060935.pdb"
+    },
+    {
+      "score": -193.63,
+      "plddt": 77.5,
+      "iptm": 0.16,
+      "contact": 20.3,
+      "binder": "MVALAEVESEEEAREAARIAGVQSEPEVVMVNGRKVAILEGADEEGAARIRRELGLEVTLVP",
+      "id": "both_evopro_both_01_20251214_122709",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251214_122709.pdb"
+    },
+    {
+      "score": -189.46,
+      "plddt": 70.5,
+      "iptm": 0.15,
+      "contact": 24.1,
+      "binder": "MLALAWVESEEEAREAARIAGVESDPFVVMVNGRKVARLEGADEAGAARIREELGLEVRLVN",
+      "id": "both_evopro_both_01_20251214_185808",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251214_185808.pdb"
+    },
+    {
+      "score": -189.98,
+      "plddt": 75.5,
+      "iptm": 0.11,
+      "contact": 19.7,
+      "binder": "MLALARVASEEEARRAAEVAGVEEEPEVVRLGDELWAVLRGATEEGAERVRRELGLEVRLLE",
+      "id": "both_evopro_both_01_20251215_003726",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251215_003726.pdb"
+    },
+    {
+      "score": -190.01,
+      "plddt": 75.9,
+      "iptm": 0.11,
+      "contact": 18.7,
+      "binder": "MIALAEVRSREEAREAARVAGATEEPQVTEVDGRLVAIIPGADAEGARNIREELGLEVTLLP",
+      "id": "both_evopro_both_01_20251215_073048",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251215_073048.pdb"
+    },
+    {
+      "score": -189.19,
+      "plddt": 77.4,
+      "iptm": 0.1,
+      "contact": 15.6,
+      "binder": "MLALAEVESEEEARRAAEVAGVAEEPEVITLGGRKVARLEGATEEGAWRVEEELGLRVRLFE",
+      "id": "both_evopro_both_01_20251215_143459",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251215_143459.pdb"
+    },
+    {
+      "score": -194.77,
+      "plddt": 77.3,
+      "iptm": 0.15,
+      "contact": 21.0,
+      "binder": "MLALAEVESEEQAREAARVAGVESEPEVVTVNGRKIAVIEGATEEGARRIEEELGLRVDLLP",
+      "id": "both_evopro_both_01_20251215_213609",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251215_213609.pdb"
+    },
+    {
+      "score": -190.35,
+      "plddt": 77.1,
+      "iptm": 0.1,
+      "contact": 17.9,
+      "binder": "MLALAVVQSEEEAREAGRVAGVEREPRVVTVNGRKVARLEGATEEGAARVREELGLEVTLRP",
+      "id": "both_evopro_both_01_20251216_034623",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251216_034623.pdb"
+    },
+    {
+      "score": -191.44,
+      "plddt": 74.2,
+      "iptm": 0.16,
+      "contact": 21.4,
+      "binder": "MLALAEVRSREEAREAARVAGVEREPRVITLNGKLVAVLEGATEEGAERVRRELGLRVALAS",
+      "id": "both_evopro_both_01_20251216_102101",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251216_102101.pdb"
+    },
+    {
+      "score": -192.1,
+      "plddt": 78.2,
+      "iptm": 0.11,
+      "contact": 18.8,
+      "binder": "MTVLAVVDSDEQAAEAGRVAGVAEEPEVITINGRKVARLEGADEEGARRVEEELGLEATVLP",
+      "id": "both_evopro_both_01_20251216_172930",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251216_172930.pdb"
+    },
+    {
+      "score": -192.99,
+      "plddt": 75.0,
+      "iptm": 0.12,
+      "contact": 22.6,
+      "binder": "MLALLEVESEEQAREAARIAGVDSEPEVVMVNGRKVAFIAGVDEEGARRIERELGRRVTLAP",
+      "id": "both_evopro_both_01_20251217_083412",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251217_083412.pdb"
+    },
+    {
+      "score": -192.95,
+      "plddt": 76.0,
+      "iptm": 0.14,
+      "contact": 22.2,
+      "binder": "MIALVEVESEEEAREAARVAGVEREPEVGMVNGRKVARLEGATEEGARRIEEKLGLKVTLFP",
+      "id": "both_evopro_both_01_20251217_145445",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251217_145445.pdb"
+    },
+    {
+      "score": -190.97,
+      "plddt": 73.4,
+      "iptm": 0.14,
+      "contact": 22.4,
+      "binder": "MLALAVVDSEEEARRAAEIAGVAEEPLVVTVGGKMVAVLRGATEEGAERVRRELGLEVHLLP",
+      "id": "both_evopro_both_01_20251217_213931",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251217_213931.pdb"
+    },
+    {
+      "score": -191.03,
+      "plddt": 77.0,
+      "iptm": 0.14,
+      "contact": 19.6,
+      "binder": "GVAYVTVDSEEQAREAARVAGITTEPEVVMVNGRKVAELKGATEEGARRVREELGLEVTLVE",
+      "id": "both_evopro_both_01_20251218_034917",
+      "group": "both",
+      "pdb": "/pdbs/operadores/both/evopro_both_01_20251218_034917.pdb"
+    }
+  ]
+}

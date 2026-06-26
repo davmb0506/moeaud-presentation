@@ -1,0 +1,276 @@
+{
+  "objectives": {
+    "x": "1 − Composite (ipSAE+SC+ΔSASA)",
+    "y": "1 − TM-score del binder"
+  },
+  "counts": {
+    "con": 18,
+    "sin": 15
+  },
+  "points": [
+    {
+      "id": "con_0",
+      "cond": "con",
+      "f1": 0.0,
+      "f2": 0.2215,
+      "binder": "WRQATTAEAIEVLHTMQKQRS",
+      "pdb": "/pdbs/composite/con/con_0.pdb"
+    },
+    {
+      "id": "con_1",
+      "cond": "con",
+      "f1": 0.0039,
+      "f2": 0.2141,
+      "binder": "WRQATHAEVIAVLQTMAKQYS",
+      "pdb": "/pdbs/composite/con/con_1.pdb"
+    },
+    {
+      "id": "con_2",
+      "cond": "con",
+      "f1": 0.0059,
+      "f2": 0.2049,
+      "binder": "WRQATHAEVIAVLQTMAKQVS",
+      "pdb": "/pdbs/composite/con/con_2.pdb"
+    },
+    {
+      "id": "con_3",
+      "cond": "con",
+      "f1": 0.0063,
+      "f2": 0.1907,
+      "binder": "WRQITHAEAIASLQTMQKQYS",
+      "pdb": "/pdbs/composite/con/con_3.pdb"
+    },
+    {
+      "id": "con_4",
+      "cond": "con",
+      "f1": 0.0072,
+      "f2": 0.1856,
+      "binder": "WRQITHAEAIASLQTMQKQRS",
+      "pdb": "/pdbs/composite/con/con_4.pdb"
+    },
+    {
+      "id": "con_5",
+      "cond": "con",
+      "f1": 0.015,
+      "f2": 0.1598,
+      "binder": "WRQITQAEAIAVLQTMAKQRS",
+      "pdb": "/pdbs/composite/con/con_5.pdb"
+    },
+    {
+      "id": "con_6",
+      "cond": "con",
+      "f1": 0.0299,
+      "f2": 0.1237,
+      "binder": "WRQITQAEAIAVLQTMAKQLS",
+      "pdb": "/pdbs/composite/con/con_6.pdb"
+    },
+    {
+      "id": "con_7",
+      "cond": "con",
+      "f1": 0.0399,
+      "f2": 0.1017,
+      "binder": "SPFHDKLMNALAEMMMANIAE",
+      "pdb": "/pdbs/composite/con/con_7.pdb"
+    },
+    {
+      "id": "con_8",
+      "cond": "con",
+      "f1": 0.0406,
+      "f2": 0.101,
+      "binder": "SRLYQHLQRFVKDADANLARN",
+      "pdb": "/pdbs/composite/con/con_8.pdb"
+    },
+    {
+      "id": "con_9",
+      "cond": "con",
+      "f1": 0.0416,
+      "f2": 0.0974,
+      "binder": "SPFHEKLMSALAQMMMANIAE",
+      "pdb": "/pdbs/composite/con/con_9.pdb"
+    },
+    {
+      "id": "con_10",
+      "cond": "con",
+      "f1": 0.0451,
+      "f2": 0.097,
+      "binder": "SRVWQAIMELASETTAARETA",
+      "pdb": "/pdbs/composite/con/con_10.pdb"
+    },
+    {
+      "id": "con_11",
+      "cond": "con",
+      "f1": 0.0473,
+      "f2": 0.0928,
+      "binder": "SPFHRKLMNALAEMMMANIAE",
+      "pdb": "/pdbs/composite/con/con_11.pdb"
+    },
+    {
+      "id": "con_12",
+      "cond": "con",
+      "f1": 0.0518,
+      "f2": 0.059,
+      "binder": "SRVWEAIMNLAKQTESARRDA",
+      "pdb": "/pdbs/composite/con/con_12.pdb"
+    },
+    {
+      "id": "con_13",
+      "cond": "con",
+      "f1": 0.0631,
+      "f2": 0.0499,
+      "binder": "SRVWHAIMNLAKETTAAREDA",
+      "pdb": "/pdbs/composite/con/con_13.pdb"
+    },
+    {
+      "id": "con_14",
+      "cond": "con",
+      "f1": 0.0832,
+      "f2": 0.0492,
+      "binder": "SRVWQAIMELAKETDSAREEA",
+      "pdb": "/pdbs/composite/con/con_14.pdb"
+    },
+    {
+      "id": "con_15",
+      "cond": "con",
+      "f1": 0.0922,
+      "f2": 0.0487,
+      "binder": "DKQKLHTEAIKLLQNMQEQLQ",
+      "pdb": "/pdbs/composite/con/con_15.pdb"
+    },
+    {
+      "id": "con_16",
+      "cond": "con",
+      "f1": 0.1275,
+      "f2": 0.0485,
+      "binder": "DAKKIHAETIKLLQTMQKQLS",
+      "pdb": "/pdbs/composite/con/con_16.pdb"
+    },
+    {
+      "id": "con_17",
+      "cond": "con",
+      "f1": 0.1592,
+      "f2": 0.0424,
+      "binder": "DAKKIHAEAIKLLQTMQKQLS",
+      "pdb": "/pdbs/composite/con/con_17.pdb"
+    },
+    {
+      "id": "sin_0",
+      "cond": "sin",
+      "f1": 0.0,
+      "f2": 0.1993,
+      "binder": "WQRISHQEAIAFLKTTQDDMN",
+      "pdb": "/pdbs/composite/sin/sin_0.pdb"
+    },
+    {
+      "id": "sin_1",
+      "cond": "sin",
+      "f1": 0.0069,
+      "f2": 0.1692,
+      "binder": "SWIRLTHDEALSVLHQMMADQ",
+      "pdb": "/pdbs/composite/sin/sin_1.pdb"
+    },
+    {
+      "id": "sin_2",
+      "cond": "sin",
+      "f1": 0.0096,
+      "f2": 0.1631,
+      "binder": "EYIKLSHNEAIGLLQHMAQQR",
+      "pdb": "/pdbs/composite/sin/sin_2.pdb"
+    },
+    {
+      "id": "sin_3",
+      "cond": "sin",
+      "f1": 0.0099,
+      "f2": 0.1465,
+      "binder": "MWIRLTHDEALTLLHQMLADQ",
+      "pdb": "/pdbs/composite/sin/sin_3.pdb"
+    },
+    {
+      "id": "sin_4",
+      "cond": "sin",
+      "f1": 0.0178,
+      "f2": 0.1373,
+      "binder": "YPAWEKLLRVNRQLTQEMNRN",
+      "pdb": "/pdbs/composite/sin/sin_4.pdb"
+    },
+    {
+      "id": "sin_5",
+      "cond": "sin",
+      "f1": 0.0179,
+      "f2": 0.1136,
+      "binder": "TTALRKLQDLGRNWQNEIASQ",
+      "pdb": "/pdbs/composite/sin/sin_5.pdb"
+    },
+    {
+      "id": "sin_6",
+      "cond": "sin",
+      "f1": 0.0193,
+      "f2": 0.1113,
+      "binder": "TWIRLTHDEALTILQQAMADQ",
+      "pdb": "/pdbs/composite/sin/sin_6.pdb"
+    },
+    {
+      "id": "sin_7",
+      "cond": "sin",
+      "f1": 0.0216,
+      "f2": 0.0806,
+      "binder": "SPAWEKLLRLNRQLTQEVNRN",
+      "pdb": "/pdbs/composite/sin/sin_7.pdb"
+    },
+    {
+      "id": "sin_8",
+      "cond": "sin",
+      "f1": 0.0436,
+      "f2": 0.0784,
+      "binder": "SEAWEKLLRLYQQLTSEWERN",
+      "pdb": "/pdbs/composite/sin/sin_8.pdb"
+    },
+    {
+      "id": "sin_9",
+      "cond": "sin",
+      "f1": 0.048,
+      "f2": 0.0704,
+      "binder": "SEAWEKLLRLNQNLHQEWERN",
+      "pdb": "/pdbs/composite/sin/sin_9.pdb"
+    },
+    {
+      "id": "sin_10",
+      "cond": "sin",
+      "f1": 0.0487,
+      "f2": 0.07,
+      "binder": "SEAWEKLLRLNRQLTQEWERN",
+      "pdb": "/pdbs/composite/sin/sin_10.pdb"
+    },
+    {
+      "id": "sin_11",
+      "cond": "sin",
+      "f1": 0.0498,
+      "f2": 0.066,
+      "binder": "SEAWEKLLRLNHQLTQEWERN",
+      "pdb": "/pdbs/composite/sin/sin_11.pdb"
+    },
+    {
+      "id": "sin_12",
+      "cond": "sin",
+      "f1": 0.0517,
+      "f2": 0.0654,
+      "binder": "SEAWDKLLRLNQNLTQEWERN",
+      "pdb": "/pdbs/composite/sin/sin_12.pdb"
+    },
+    {
+      "id": "sin_13",
+      "cond": "sin",
+      "f1": 0.0522,
+      "f2": 0.0625,
+      "binder": "SEAWEKLLRLNQNLASEWERN",
+      "pdb": "/pdbs/composite/sin/sin_13.pdb"
+    },
+    {
+      "id": "sin_14",
+      "cond": "sin",
+      "f1": 0.0524,
+      "f2": 0.0396,
+      "binder": "SEAWEKLLRLNRNLHQEVERN",
+      "pdb": "/pdbs/composite/sin/sin_14.pdb"
+    }
+  ]
+}

@@ -35,23 +35,19 @@ const ARC = Array.from({ length: 61 }, (_, i) => {
   return `${sx(R * Math.cos(a))},${sy(R * Math.sin(a))}`;
 }).join(" ");
 
+// Puntos no dominados repartidos a lo largo del frente (modo multiobjetivo).
+const MO_PTS = Array.from({ length: 11 }, (_, i) => {
+  const a = (Math.PI / 2) * (0.06 + (0.88 * i) / 10);
+  return { x: sx(R * Math.cos(a)), y: sy(R * Math.sin(a)) };
+});
+
+type Mode = "weighted" | "mo";
+
 export function Multiobjetivo() {
-  // peso relativo sobre f1 (5..95 %)
-  const [w1p, setW1p] = useState(55);
-  const w1 = w1p / 100;
-  const w2 = 1 - w1;
-
-  // La suma ponderada toca la curva donde el radio es normal a (w1, w2).
-  const a = Math.atan2(w2, w1);
-  const px = R * Math.cos(a);
-  const py = R * Math.sin(a);
-
-  // Recta de iso-aptitud: tangente a la curva en (px, py).
-  const L = 0.55;
-  const x1 = sx(px - L * Math.sin(a));
-  const y1 = sy(py + L * Math.cos(a));
-  const x2 = sx(px + L * Math.sin(a));
-  const y2 = sy(py - L * Math.cos(a));
+  const [mode, setMode] = useState<Mode>("weighted");
+  // Punto representativo (rodilla del frente) para la suma ponderada.
+  const kx = sx(R * Math.cos(Math.PI / 4));
+  const ky = sy(R * Math.sin(Math.PI / 4));
 
   return (
     <motion.div
@@ -64,92 +60,78 @@ export function Multiobjetivo() {
       <motion.div variants={fade} className="mo-head">
         <h2 className="mo-title">Transición a optimización multiobjetivo</h2>
         <p className="mo-sub">
-          EvoPro base reduce varias métricas de AlphaFold2 a un único número
-          mediante una suma de pesos fijos. En el espacio de objetivos, esa
-          escalarización equivale a elegir una dirección y quedarse con un solo
-          punto del frente; la optimización multiobjetivo, en cambio, busca el
-          frente completo.
+          EvoPro base combina varias métricas de AlphaFold en un único número con
+          pesos fijos: eso entrega una sola solución. La optimización
+          multiobjetivo busca el frente completo de compromisos.
         </p>
       </motion.div>
 
-      
+      <motion.div variants={fade} className="mo-seg" role="tablist">
+        <button
+          type="button"
+          className={"op-seg-btn" + (mode === "weighted" ? " active" : "")}
+          style={mode === "weighted" ? { background: "#2b6ef2" } : undefined}
+          onClick={() => setMode("weighted")}
+        >
+          Suma ponderada
+        </button>
+        <button
+          type="button"
+          className={"op-seg-btn" + (mode === "mo" ? " active" : "")}
+          style={mode === "mo" ? { background: "#00b894" } : undefined}
+          onClick={() => setMode("mo")}
+        >
+          Multiobjetivo
+        </button>
+      </motion.div>
 
-      <motion.div variants={fade} className="mo-fig">
+      <motion.div
+        className="mo-fig"
+        variants={fade}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.1, once: true }}
+      >
         <svg
           viewBox={`0 0 ${VW} ${VH}`}
           role="img"
-          aria-label="Espacio de objetivos: el frente de Pareto y la dirección de los pesos"
+          aria-label="Espacio de objetivos y frente de Pareto"
         >
-          <defs>
-            <clipPath id="moClip">
-              <rect x={PADL} y={PADT} width={PW} height={PH} />
-            </clipPath>
-          </defs>
-
           <line className="mo-axis" x1={PADL} y1={PADT} x2={PADL} y2={PADT + PH} />
-          <line
-            className="mo-axis"
-            x1={PADL}
-            y1={PADT + PH}
-            x2={PADL + PW}
-            y2={PADT + PH}
-          />
+          <line className="mo-axis" x1={PADL} y1={PADT + PH} x2={PADL + PW} y2={PADT + PH} />
           <text className="mo-axt" x={PADL + PW} y={PADT + PH + 26} textAnchor="end">
             f₁
           </text>
           <text className="mo-axt" x={PADL - 30} y={PADT + 6}>
             f₂
           </text>
-          <text className="mo-hint" x={PADL + 4} y={PADT + PH - 6}>
-            mejor
-          </text>
 
           <polyline className="mo-front" points={ARC} />
-          <text
-            className="mo-frontlbl"
-            x={sx(R * Math.cos(Math.PI / 4)) + 6}
-            y={sy(R * Math.sin(Math.PI / 4)) - 6}
-          >
-            frente de Pareto
-          </text>
 
-          <g clipPath="url(#moClip)">
-            <motion.line
-              className="mo-dir"
-              initial={false}
-              animate={{ x1, y1, x2, y2 }}
-              transition={{ type: "spring", stiffness: 220, damping: 26 }}
-            />
-          </g>
+          {/* Suma ponderada: una sola solución */}
+          {mode === "weighted" && <circle className="mo-pt" cx={kx} cy={ky} r={6} />}
 
-          <motion.circle
-            className="mo-pt"
-            r={6}
-            initial={false}
-            animate={{ cx: sx(px), cy: sy(py) }}
-            transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          />
+          {/* Multiobjetivo: el frente completo */}
+          {mode === "mo" &&
+            MO_PTS.map((p, i) => (
+              <motion.circle
+                key={i}
+                className="mo-pt mo-mo"
+                cx={p.x}
+                cy={p.y}
+                initial={{ r: 0, opacity: 0 }}
+                animate={{ r: 5, opacity: 1 }}
+                transition={{ duration: 0.3, delay: i * 0.05, ease: "easeOut" }}
+              />
+            ))}
         </svg>
 
-        <div className="mo-ctrl">
-          <label htmlFor="mo-w">
-            dirección de los pesos — w₁ {Math.round(w1 * 100)} / w₂{" "}
-            {Math.round(w2 * 100)}
-          </label>
-          <input
-            id="mo-w"
-            type="range"
-            min={5}
-            max={95}
-            step={1}
-            value={w1p}
-            onChange={(e) => setW1p(Number(e.target.value))}
-          />
-        </div>
-
-        
+        <p className="mo-cap">
+          {mode === "weighted"
+            ? "Suma ponderada: una sola solución del frente."
+            : "Multiobjetivo: el frente completo en una sola ejecución."}
+        </p>
       </motion.div>
-
 
       <motion.p variants={fade} className="mo-cite">
         Nanda V, Belure SV, Shir OM. Searching for the Pareto frontier in

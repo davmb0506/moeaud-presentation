@@ -7,15 +7,22 @@ import { EvoproIntro } from "./pages/evopro-intro";
 import { Experimentos } from "./pages/experimentos";
 import { Temperatura } from "./pages/temperatura";
 import { ExperimentosTemp } from "./pages/experimentos-temp";
-import { Multiobjetivo } from "./pages/multiobjetivo";
 import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 import { Moeaud } from "./pages/moeaud";
+import { MecanismosDeck } from "./pages/mecanismos/MecanismosDeck";
+import { AblacionConvergencia } from "./pages/ablacion-convergencia";
+import { Operadores } from "./pages/operadores";
+import { Ablacion } from "./pages/ablacion";
+import { CompositeFront } from "./pages/composite-front";
+import { IpsaeScFront } from "./pages/ipsae-sc-front";
 import { Referencias } from "./pages/referencias";
+import { ValidacionFlujo } from "./pages/validacion-flujo";
+import { ValidacionRuns } from "./pages/validacion-runs";
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 11;
+const TOTAL_SLIDES = 19;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -53,6 +60,14 @@ export default function App() {
     setBioRevealed(v);
   };
 
+  // Paso intra-slide: el bloque de temperatura variable se revela con avanzar.
+  const [tempRevealed, setTempRevealed] = useState(false);
+  const tempRef = useRef(false);
+  const revealTemp = (v: boolean) => {
+    tempRef.current = v;
+    setTempRevealed(v);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const isNext = NEXT_KEYS.includes(e.key);
@@ -76,16 +91,29 @@ export default function App() {
         }
       });
 
+      const step = slides[current]?.dataset.step;
+
       // Slide con paso intermedio (objetivo → importancia biológica).
-      const onStepSlide = slides[current]?.dataset.step === "bio";
-      if (onStepSlide && isNext && !bioRef.current) {
+      if (step === "bio" && isNext && !bioRef.current) {
         e.preventDefault();
         revealBio(true);
         return;
       }
-      if (onStepSlide && isPrev && bioRef.current) {
+      if (step === "bio" && isPrev && bioRef.current) {
         e.preventDefault();
         revealBio(false);
+        return;
+      }
+
+      // Slide de temperatura: revela el bloque de temperatura variable.
+      if (step === "temp" && isNext && !tempRef.current) {
+        e.preventDefault();
+        revealTemp(true);
+        return;
+      }
+      if (step === "temp" && isPrev && tempRef.current) {
+        e.preventDefault();
+        revealTemp(false);
         return;
       }
 
@@ -95,8 +123,9 @@ export default function App() {
 
       if (target !== current) {
         e.preventDefault();
-        // Al salir del slide de objetivo, reinicia el paso para poder repetirlo.
-        if (slides[current]?.dataset.step === "bio") revealBio(false);
+        // Al salir de un slide con paso, reinicia el paso para poder repetirlo.
+        if (step === "bio") revealBio(false);
+        if (step === "temp") revealTemp(false);
         slides[target].scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
@@ -279,20 +308,21 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={viewport}
+        viewport={{ amount: 0.12 }}
       >
-        <Temperatura />
+        <Operadores />
         <SlideNo n={6} />
       </motion.section>
 
       <motion.section
         className="showcase slide"
+        data-step="temp"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.15 }}
+        viewport={viewport}
       >
-        <ExperimentosTemp />
+        <Temperatura revealed={tempRevealed} />
         <SlideNo n={7} />
       </motion.section>
 
@@ -303,9 +333,11 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.15 }}
       >
-        <Multiobjetivo />
+        <ExperimentosTemp />
         <SlideNo n={8} />
       </motion.section>
+
+      
 
       <motion.section
         className="showcase slide"
@@ -315,7 +347,7 @@ export default function App() {
         viewport={viewport}
       >
         <DisenoAlgoritmo />
-        <SlideNo n={9} />
+        <SlideNo n={10} />
       </motion.section>
 
       <motion.section
@@ -326,7 +358,62 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Moeaud />
-        <SlideNo n={10} />
+        <SlideNo n={11} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.3 }}
+      >
+        <MecanismosDeck />
+        <SlideNo n={12} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.3 }}
+      >
+        <AblacionConvergencia />
+        <SlideNo n={13} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <Ablacion />
+        <SlideNo n={14} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <CompositeFront />
+        <SlideNo n={15} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <IpsaeScFront />
+        <SlideNo n={16} />
       </motion.section>
 
       <motion.section
@@ -337,7 +424,29 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={11} />
+        <SlideNo n={17} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <ValidacionFlujo />
+        <SlideNo n={18} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <ValidacionRuns />
+        <SlideNo n={19} />
       </motion.section>
     </main>
   );

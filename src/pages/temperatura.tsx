@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 
 const wrap: Variants = {
   hidden: { opacity: 0 },
@@ -83,8 +83,158 @@ const fmtPct = (p: number): string => {
   return Math.round(pct) + "%";
 };
 
-export function Temperatura() {
+// ---- Mecanismo: T como ESCALÓN que solo cambia cada N generaciones ----
+// La temperatura no varía en cada generación: cada N generaciones se evalúa la
+// tendencia de una métrica de calidad y se decide enfriar (hay progreso) o
+// recalentar (se estancó). El escalón de T se DERIVA de esa lógica.
+const GEN_MAX = 60;
+const N_UPDATE = 10; // T se actualiza cada N generaciones
+const CHECKPTS = Array.from({ length: GEN_MAX / N_UPDATE + 1 }, (_, i) => i * N_UPDATE);
+const METRIC_CP = [0.1, 0.4, 0.62, 0.64, 0.66, 0.82, 0.95];
+
+const TS_MIN = 0.05; // piso de T
+const TS_MAX = 0.5; // T inicial / techo
+const COOL = 0.9;
+const HEAT = 1.15;
+const SLOPE_THR = 0.005; // |pendiente| para distinguir progreso de estancamiento
+
+// Esquema de T simulado: una decisión por checkpoint (cada N gen).
+function simulateTemp() {
+  const temps = [TS_MAX];
+  const events: ("cool" | "reheat")[] = [];
+  let t = TS_MAX;
+  for (let i = 1; i <= GEN_MAX / N_UPDATE - 1; i++) {
+    const slope = (METRIC_CP[i] - METRIC_CP[i - 1]) / N_UPDATE;
+    if (slope > SLOPE_THR) {
+      t = Math.max(TS_MIN, t * COOL);
+      events.push("cool");
+    } else {
+      t = Math.min(TS_MAX, t * HEAT);
+      events.push("reheat");
+    }
+    temps.push(Math.round(t * 1000) / 1000);
+  }
+  return { temps, events };
+}
+const { temps: TEMPS, events: EVENTS } = simulateTemp();
+
+const MW = 380;
+const MH = 232;
+const MPAD = { left: 42, right: 16, top: 28, bottom: 36 };
+const MPLOT_W = MW - MPAD.left - MPAD.right;
+const MPLOT_H = MH - MPAD.top - MPAD.bottom;
+const MBASE_Y = MPAD.top + MPLOT_H;
+const mX = (gen: number): number => MPAD.left + (gen / GEN_MAX) * MPLOT_W;
+const mYT = (t: number): number =>
+  MPAD.top + (1 - (t - TS_MIN) / (TS_MAX - TS_MIN)) * MPLOT_H;
+const mYM = (m: number): number => MPAD.top + (1 - m) * MPLOT_H;
+
+function mSmooth(pts: Pt[]): string {
+  if (pts.length < 2) return "";
+  const clamp = (v: number) => Math.min(MBASE_Y, Math.max(MPAD.top, v));
+  const d: string[] = [`M ${pts[0].x.toFixed(2)} ${pts[0].y.toFixed(2)}`];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? p2;
+    const c1x = p1.x + (p2.x - p0.x) / 6;
+    const c1y = clamp(p1.y + (p2.y - p0.y) / 6);
+    const c2x = p2.x - (p3.x - p1.x) / 6;
+    const c2y = clamp(p2.y - (p3.y - p1.y) / 6);
+    d.push(
+      `C ${c1x.toFixed(2)} ${c1y.toFixed(2)} ${c2x.toFixed(2)} ${c2y.toFixed(
+        2
+      )} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`
+    );
+  }
+  return d.join(" ");
+}
+
+// Trazo escalonado de T: constante dentro de cada intervalo de N generaciones,
+// con un salto solo en los checkpoints (cada N gen).
+function stepPath(): string {
+  const d = [`M ${mX(0).toFixed(1)} ${mYT(TEMPS[0]).toFixed(1)}`];
+  for (let i = 1; i < TEMPS.length; i++) {
+    const xc = mX(CHECKPTS[i]);
+    d.push(`L ${xc.toFixed(1)} ${mYT(TEMPS[i - 1]).toFixed(1)}`); // tramo plano
+    d.push(`L ${xc.toFixed(1)} ${mYT(TEMPS[i]).toFixed(1)}`); // salto
+  }
+  d.push(`L ${mX(GEN_MAX).toFixed(1)} ${mYT(TEMPS[TEMPS.length - 1]).toFixed(1)}`);
+  return d.join(" ");
+}
+
+function MechanismChart({ step }: { step: number }) {
+  const metricPath = mSmooth(CHECKPTS.map((g, i) => ({ x: mX(g), y: mYM(METRIC_CP[i]) })));
+  const tPath = stepPath();
+  const g = CHECKPTS[step];
+  const gx = mX(g);
+  const my = mYM(METRIC_CP[step]);
+
+  return (
+    <svg
+      className="mech-chart"
+      viewBox={`0 0 ${MW} ${MH}`}
+      role="img"
+      aria-label="Temperatura en escalón: solo cambia cada N generaciones según la tendencia de la métrica"
+    >
+      {/* rejilla vertical: cada marca es un checkpoint (cada N generaciones) */}
+      {CHECKPTS.map((cg) => (
+        <line key={cg} x1={mX(cg)} y1={MPAD.top} x2={mX(cg)} y2={MBASE_Y} className="mech-grid" />
+      ))}
+
+      {/* guía del checkpoint activo */}
+      <line x1={gx} y1={MPAD.top} x2={gx} y2={MBASE_Y} className="mech-guide" />
+
+      {/* eje X + ticks de generación */}
+      <line x1={MPAD.left} y1={MBASE_Y} x2={MW - MPAD.right} y2={MBASE_Y} className="mech-axis" />
+      {[0, 20, 40, 60].map((t) => (
+        <text key={t} x={mX(t)} y={MBASE_Y + 14} className="mech-tick" textAnchor="middle">
+          {t}
+        </text>
+      ))}
+      <text x={MW - MPAD.right} y={MBASE_Y + 26} className="mech-axis-label" textAnchor="end">
+        generación →
+      </text>
+      <text x={MPAD.left - 6} y={MPAD.top + 2} className="mech-axis-label" textAnchor="end">
+        T
+      </text>
+      <text x={MPAD.left + MPLOT_W / 2} y={MPAD.top - 11} className="mech-note" textAnchor="middle">
+        T se actualiza solo en cada marca (cada N gen)
+      </text>
+
+      {/* métrica de calidad (referencia) */}
+      <path d={metricPath} className="mech-metric" />
+      {/* temperatura en escalón */}
+      <path d={tPath} className="mech-temp" />
+
+      {/* marcador de cada decisión (atenuado salvo el activo) */}
+      {EVENTS.map((ev, j) => {
+        const cg = CHECKPTS[j + 1];
+        const isActive = step === j + 1;
+        return (
+          <circle
+            key={cg}
+            cx={mX(cg)}
+            cy={mYT(TEMPS[j + 1])}
+            r={isActive ? 5.5 : 4}
+            className={"mech-step " + ev + (isActive ? " active" : "")}
+          />
+        );
+      })}
+
+      {/* punto y valor de la métrica en el checkpoint activo */}
+      <circle cx={gx} cy={my} r={4.5} className="mech-mcur" />
+      <text x={gx} y={my - 9} className="mech-mval" textAnchor="middle">
+        {METRIC_CP[step].toFixed(2)}
+      </text>
+    </svg>
+  );
+}
+
+export function Temperatura({ revealed = false }: { revealed?: boolean }) {
   const [T, setT] = useState(1);
+  const [mechStep, setMechStep] = useState(0); // checkpoint activo (0..CHECKPTS-1)
 
   const probs = useMemo(() => softmaxT(LOGITS.map((l) => l.z), T), [T]);
 
@@ -196,6 +346,16 @@ export function Temperatura() {
         </motion.div>
 
         <motion.div variants={fade} className="temp-demo">
+          <AnimatePresence mode="wait" initial={false}>
+          {!revealed ? (
+          <motion.div
+            key="demo"
+            className="temp-demo-inner"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
           {/* 1. Logits = preferencia de ProteinMPNN por cada aminoácido */}
           <div className="temp-chart">
             <div className="temp-chart-head">
@@ -317,6 +477,97 @@ export function Temperatura() {
               ))}
             </svg>
           </div>
+          </motion.div>
+          ) : (
+          <motion.div
+            key="mech"
+            className="tempvar"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="tempvar-head">
+              <h3 className="tempvar-title">¿Cómo se comporta el mecanismo?</h3>
+              <p className="tempvar-sub">
+                <span className="temp-T">T</span> se actualiza <strong>cada N generaciones</strong>. Si la
+                métrica mejora, <strong>enfría</strong> (explota); si se estanca,{" "}
+                <strong>recalienta</strong> (explora).
+              </p>
+            </div>
+
+            <MechanismChart step={mechStep} />
+
+            <div className="mech-slider">
+              <input
+                type="range"
+                min={0}
+                max={TEMPS.length - 1}
+                step={1}
+                value={mechStep}
+                onChange={(e) => setMechStep(Number(e.target.value))}
+                aria-label="Generación / checkpoint"
+              />
+            </div>
+
+            {(() => {
+              const i = mechStep;
+              const gen = CHECKPTS[i];
+              if (i === 0) {
+                return (
+                  <div className="mech-rd">
+                    <span className="mech-rd-gen">gen {gen}</span>
+                    <p className="mech-rd-txt">
+                      Inicio del esquema: <span className="temp-T">T</span> alta
+                      para explorar. Todavía no hay decisión.
+                    </p>
+                  </div>
+                );
+              }
+              const ev = EVENTS[i - 1];
+              return (
+                <div className="mech-rd">
+                  <div className="mech-rd-row">
+                    <span className="mech-rd-gen">gen {gen}</span>
+                    <span className={"mech-rd-chip " + ev}>
+                      {ev === "cool" ? "enfría" : "recalienta"}
+                    </span>
+                  </div>
+                  <p className="mech-rd-txt">
+                    {ev === "cool" ? (
+                      <>
+                        La métrica <strong>mejoró</strong>: conviene{" "}
+                        <strong>explotar</strong>, así que baja la{" "}
+                        <span className="temp-T">T</span>.
+                      </>
+                    ) : (
+                      <>
+                        La métrica <strong>se estancó</strong>: conviene{" "}
+                        <strong>explorar</strong>, así que sube la{" "}
+                        <span className="temp-T">T</span>.
+                      </>
+                    )}
+                  </p>
+                </div>
+              );
+            })()}
+
+            <div className="mech-legend">
+              <span className="mech-legend-item">
+                <span className="mech-swatch temp" /> Temperatura{" "}
+                <span className="temp-T">T</span> (escalón cada N gen)
+              </span>
+              <span className="mech-legend-item">
+                <span className="mech-swatch metric" /> Métrica de calidad
+              </span>
+              <span className="mech-legend-item">
+                <span className="mech-step-dot cool" /> enfría /{" "}
+                <span className="mech-step-dot reheat" /> recalienta
+              </span>
+            </div>
+          </motion.div>
+          )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </motion.div>

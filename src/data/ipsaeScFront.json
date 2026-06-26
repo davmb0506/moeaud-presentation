@@ -1,0 +1,276 @@
+{
+  "objectives": {
+    "x": "ipSAE",
+    "y": "SC (Shape Complementarity)"
+  },
+  "counts": {
+    "con": 8,
+    "sin": 25
+  },
+  "points": [
+    {
+      "id": "con_0",
+      "cond": "con",
+      "f1": 0.7131,
+      "f2": 0.2232,
+      "binder": "PTPLLSALERLARQEPPKSRQ",
+      "pdb": "/pdbs/ipsae_sc/con/con_0.pdb"
+    },
+    {
+      "id": "con_1",
+      "cond": "con",
+      "f1": 0.7206,
+      "f2": 0.1907,
+      "binder": "GPTLLAALETLANQEPPKSRQ",
+      "pdb": "/pdbs/ipsae_sc/con/con_1.pdb"
+    },
+    {
+      "id": "con_2",
+      "cond": "con",
+      "f1": 0.7249,
+      "f2": 0.1856,
+      "binder": "GPTLLAALETLANQEPPKKRQ",
+      "pdb": "/pdbs/ipsae_sc/con/con_2.pdb"
+    },
+    {
+      "id": "con_3",
+      "cond": "con",
+      "f1": 0.7308,
+      "f2": 0.1783,
+      "binder": "GTTLLSALEKLAAQKPPKSRQ",
+      "pdb": "/pdbs/ipsae_sc/con/con_3.pdb"
+    },
+    {
+      "id": "con_4",
+      "cond": "con",
+      "f1": 0.7499,
+      "f2": 0.1694,
+      "binder": "GTTLLSALEKLAAQKPPKSAA",
+      "pdb": "/pdbs/ipsae_sc/con/con_4.pdb"
+    },
+    {
+      "id": "con_5",
+      "cond": "con",
+      "f1": 0.8029,
+      "f2": 0.1647,
+      "binder": "DPSLLAALERLANQEPPQSRA",
+      "pdb": "/pdbs/ipsae_sc/con/con_5.pdb"
+    },
+    {
+      "id": "con_6",
+      "cond": "con",
+      "f1": 0.8184,
+      "f2": 0.1616,
+      "binder": "DPSLLAALERLANQEPPQGRA",
+      "pdb": "/pdbs/ipsae_sc/con/con_6.pdb"
+    },
+    {
+      "id": "con_7",
+      "cond": "con",
+      "f1": 0.8526,
+      "f2": 0.1542,
+      "binder": "DPSLLAALEKLAAQEPPQKHA",
+      "pdb": "/pdbs/ipsae_sc/con/con_7.pdb"
+    },
+    {
+      "id": "sin_0",
+      "cond": "sin",
+      "f1": 0.6745,
+      "f2": 0.295,
+      "binder": "KYPKIPGWKWVIVITYYVPPS",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_0.pdb"
+    },
+    {
+      "id": "sin_1",
+      "cond": "sin",
+      "f1": 0.681,
+      "f2": 0.2944,
+      "binder": "KYPRIPGWKWVIVITYYVPPS",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_1.pdb"
+    },
+    {
+      "id": "sin_2",
+      "cond": "sin",
+      "f1": 0.6812,
+      "f2": 0.279,
+      "binder": "RYPKIPGWKWVIVITYYVPPT",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_2.pdb"
+    },
+    {
+      "id": "sin_3",
+      "cond": "sin",
+      "f1": 0.7093,
+      "f2": 0.2643,
+      "binder": "RPQRIPGWKWVIFITYYVPQS",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_3.pdb"
+    },
+    {
+      "id": "sin_4",
+      "cond": "sin",
+      "f1": 0.7511,
+      "f2": 0.2627,
+      "binder": "DDVQYLVTFYVDGELVGSDIY",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_4.pdb"
+    },
+    {
+      "id": "sin_5",
+      "cond": "sin",
+      "f1": 0.7546,
+      "f2": 0.2509,
+      "binder": "PPQAGDKLTHEEAMDLLNSAQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_5.pdb"
+    },
+    {
+      "id": "sin_6",
+      "cond": "sin",
+      "f1": 0.7625,
+      "f2": 0.2269,
+      "binder": "PPQAGDKLTHQQAMDLLNSAQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_6.pdb"
+    },
+    {
+      "id": "sin_7",
+      "cond": "sin",
+      "f1": 0.7674,
+      "f2": 0.2252,
+      "binder": "PPQAGEKLTAQQAIALLQSAQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_7.pdb"
+    },
+    {
+      "id": "sin_8",
+      "cond": "sin",
+      "f1": 0.7685,
+      "f2": 0.2193,
+      "binder": "PPQAGEKLTHAEAIALLNSAQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_8.pdb"
+    },
+    {
+      "id": "sin_9",
+      "cond": "sin",
+      "f1": 0.776,
+      "f2": 0.2162,
+      "binder": "PPQAGEKLTHAQAIELLNSAQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_9.pdb"
+    },
+    {
+      "id": "sin_10",
+      "cond": "sin",
+      "f1": 0.7842,
+      "f2": 0.2113,
+      "binder": "KPTLMEALQAAGFLPPPAPSA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_10.pdb"
+    },
+    {
+      "id": "sin_11",
+      "cond": "sin",
+      "f1": 0.7899,
+      "f2": 0.2091,
+      "binder": "KPSLMEALQAAGFLPPKAPAP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_11.pdb"
+    },
+    {
+      "id": "sin_12",
+      "cond": "sin",
+      "f1": 0.7978,
+      "f2": 0.2072,
+      "binder": "KPTIIQALQAAGILPPFPWSA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_12.pdb"
+    },
+    {
+      "id": "sin_13",
+      "cond": "sin",
+      "f1": 0.799,
+      "f2": 0.2002,
+      "binder": "KPTLMEALQAAGFLPPPPPAA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_13.pdb"
+    },
+    {
+      "id": "sin_14",
+      "cond": "sin",
+      "f1": 0.7994,
+      "f2": 0.1869,
+      "binder": "KPTLMEALAAAGFLPPPAAPA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_14.pdb"
+    },
+    {
+      "id": "sin_15",
+      "cond": "sin",
+      "f1": 0.8303,
+      "f2": 0.1831,
+      "binder": "KPTLIEALQAAGILPPPPWSP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_15.pdb"
+    },
+    {
+      "id": "sin_16",
+      "cond": "sin",
+      "f1": 0.832,
+      "f2": 0.1815,
+      "binder": "KPSLIAALQAAGILPPPPWSQ",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_16.pdb"
+    },
+    {
+      "id": "sin_17",
+      "cond": "sin",
+      "f1": 0.8329,
+      "f2": 0.1684,
+      "binder": "KPSLMEALQAAGILPPPPPSA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_17.pdb"
+    },
+    {
+      "id": "sin_18",
+      "cond": "sin",
+      "f1": 0.8372,
+      "f2": 0.1673,
+      "binder": "KPSLMQALAAAGILPPPTPSP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_18.pdb"
+    },
+    {
+      "id": "sin_19",
+      "cond": "sin",
+      "f1": 0.8472,
+      "f2": 0.1649,
+      "binder": "KPTLREALAAAGFLPPPAASA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_19.pdb"
+    },
+    {
+      "id": "sin_20",
+      "cond": "sin",
+      "f1": 0.8486,
+      "f2": 0.1647,
+      "binder": "KPTLMQALYAAGVLPPPTWSA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_20.pdb"
+    },
+    {
+      "id": "sin_21",
+      "cond": "sin",
+      "f1": 0.8528,
+      "f2": 0.1549,
+      "binder": "KPSLMQALAAAGILPPPPPSP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_21.pdb"
+    },
+    {
+      "id": "sin_22",
+      "cond": "sin",
+      "f1": 0.894,
+      "f2": 0.1477,
+      "binder": "KPSLMEALQAAGILPPKTATP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_22.pdb"
+    },
+    {
+      "id": "sin_23",
+      "cond": "sin",
+      "f1": 0.897,
+      "f2": 0.1438,
+      "binder": "KPSLMEALQAAGILPPKTPAP",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_23.pdb"
+    },
+    {
+      "id": "sin_24",
+      "cond": "sin",
+      "f1": 0.9227,
+      "f2": 0.1411,
+      "binder": "KPSLMQALQAAGILDPSPATA",
+      "pdb": "/pdbs/ipsae_sc/sin/sin_24.pdb"
+    }
+  ]
+}

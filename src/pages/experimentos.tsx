@@ -54,7 +54,7 @@ export function Experimentos() {
       <motion.div variants={fade} className="exp-head">
         <h2 className="exp-title">Experimentos iniciales</h2>
         <p className="exp-sub">
-          Menor puntaje agregado = mejor solución. La variante con{" "}
+          La variante con{" "}
           <strong style={{ color: C_MC }}>mutación + cruza</strong> converge a
           valores más bajos que la versión{" "}
           <strong style={{ color: C_RAW }}>base</strong>.

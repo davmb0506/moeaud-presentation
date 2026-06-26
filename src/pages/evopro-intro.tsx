@@ -19,7 +19,7 @@ const introCopy = (
   <div className="eintro-copy">
     <h2 className="eintro-title">EvoPro</h2>
     <p className="eintro-text">
-      EvoPro es una metodología de diseño de proteínas basada en{" "}
+      EvoPro es una metodología de diseño computacional de proteínas basada en{" "}
       <em>deep learning</em> y en un{" "}
       <strong>algoritmo genético de optimización</strong>. Utiliza{" "}
       <strong>AlphaFold</strong> para el paso de evaluación de individuos y guía
