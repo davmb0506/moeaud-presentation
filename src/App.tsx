@@ -7,6 +7,7 @@ import { EvoproIntro } from "./pages/evopro-intro";
 import { Experimentos } from "./pages/experimentos";
 import { Temperatura } from "./pages/temperatura";
 import { ExperimentosTemp } from "./pages/experimentos-temp";
+import { VariantesEvoPro } from "./pages/variantes-evopro";
 import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 import { Moeaud } from "./pages/moeaud";
 import { AblacionConvergencia } from "./pages/ablacion-convergencia";
@@ -21,7 +22,7 @@ import { ValidacionRuns } from "./pages/validacion-runs";
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 19;
+const TOTAL_SLIDES = 20;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -336,7 +337,16 @@ export default function App() {
         <SlideNo n={8} />
       </motion.section>
 
-      
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <VariantesEvoPro />
+        <SlideNo n={9} />
+      </motion.section>
 
       <motion.section
         className="showcase slide"
@@ -426,6 +436,8 @@ export default function App() {
         <SlideNo n={17} />
       </motion.section>
 
+      
+
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -434,7 +446,7 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <ValidacionRuns />
-        <SlideNo n={18} />
+        <SlideNo n={19} />
       </motion.section>
       <motion.section
         className="refs-slide slide"
@@ -444,7 +456,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={19} />
+        <SlideNo n={20} />
       </motion.section>
 
       

@@ -1,0 +1,64 @@
+{
+  "examples": [
+    {
+      "id": "ipsae_sc_nomech__008_cand_0003",
+      "groupLabel": "ipSAE/SC no-mech",
+      "groupShort": "ipSAE/SC no-mech",
+      "repredId": "ipsae_sc_nomech__008_cand_0003",
+      "binder": "DDVQYLVTVYVNGELVSSQIY",
+      "iptm": 0.8318,
+      "interfacePae": 12.7812,
+      "binderPlddt": 73.3955,
+      "complexPlddt": 56.4491,
+      "pdb": "/pdbs/reprediction/ipsae_sc_nomech__008_cand_0003.pdb"
+    },
+    {
+      "id": "composite_tmscore_nomech__001_cand_0004",
+      "groupLabel": "Composite/TM-score no-mech",
+      "groupShort": "Composite/TM no-mech",
+      "repredId": "composite_tmscore_nomech__001_cand_0004",
+      "binder": "SISLTHSQVLSLLKQAQDNMN",
+      "iptm": 0.758,
+      "interfacePae": 9.7924,
+      "binderPlddt": 77.7354,
+      "complexPlddt": 71.4097,
+      "pdb": "/pdbs/reprediction/composite_tmscore_nomech__001_cand_0004.pdb"
+    },
+    {
+      "id": "composite_tmscore_mech__002_cand_0015",
+      "groupLabel": "Composite/TM-score mech",
+      "groupShort": "Composite/TM mech",
+      "repredId": "composite_tmscore_mech__002_cand_0015",
+      "binder": "KFTVYIYANSQARQLFNNQLN",
+      "iptm": 0.7228,
+      "interfacePae": 14.8803,
+      "binderPlddt": 67.0933,
+      "complexPlddt": 50.2258,
+      "pdb": "/pdbs/reprediction/composite_tmscore_mech__002_cand_0015.pdb"
+    },
+    {
+      "id": "interface_pae_plddt_mech__002_cand_0014",
+      "groupLabel": "Interface-PAE/pLDDT mech",
+      "groupShort": "Interface-PAE mech",
+      "repredId": "interface_pae_plddt_mech__002_cand_0014",
+      "binder": "SWTYYWFIHFNDDYWLIVVSS",
+      "iptm": 0.7324,
+      "interfacePae": 13.0383,
+      "binderPlddt": 65.4164,
+      "complexPlddt": 52.3514,
+      "pdb": "/pdbs/reprediction/interface_pae_plddt_mech__002_cand_0014.pdb"
+    },
+    {
+      "id": "ipsae_sc_mech__007_cand_0005",
+      "groupLabel": "ipSAE/SC mech",
+      "groupShort": "ipSAE/SC mech",
+      "repredId": "ipsae_sc_mech__007_cand_0005",
+      "binder": "TSRKDQDIDERLWRVMQILAS",
+      "iptm": 0.7969,
+      "interfacePae": 9.1077,
+      "binderPlddt": 50.0745,
+      "complexPlddt": 61.8683,
+      "pdb": "/pdbs/reprediction/ipsae_sc_mech__007_cand_0005.pdb"
+    }
+  ]
+}

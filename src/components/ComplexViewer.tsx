@@ -67,8 +67,10 @@ export function ComplexViewer({
   const tokenRef = useRef(0);
   const refCARef = useRef<number[][] | null>(null); // Cα de VEGF-A de referencia
   const cameraSetRef = useRef(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refReady, setRefReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [repr, setRepr] = useState<Repr>("cartoon");
   const reprRef = useRef<Repr>(repr);
   reprRef.current = repr;
@@ -76,6 +78,17 @@ export function ComplexViewer({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.05, rootMargin: "240px 0px" }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !isVisible || viewerRef.current) return;
     const bg =
       getComputedStyle(document.documentElement)
         .getPropertyValue("--viewer-bg")
@@ -87,19 +100,34 @@ export function ComplexViewer({
     viewer.setBackgroundColor(bg, 0);
     viewerRef.current = viewer;
     return () => {
+      if (!isVisible) return;
       viewer.clear();
-      if (container) container.innerHTML = "";
+      container.innerHTML = "";
       viewerRef.current = null;
     };
-  }, []);
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (isVisible) return;
+    const viewer = viewerRef.current;
+    const container = containerRef.current;
+    if (viewer) viewer.clear();
+    if (container) container.innerHTML = "";
+    viewerRef.current = null;
+    cameraSetRef.current = false;
+    refCARef.current = null;
+    setLoading(false);
+  }, [isVisible]);
 
   // Fija el marco de referencia (Cα de VEGF-A) desde una estructura canónica.
   useEffect(() => {
+    if (!isVisible) return;
     if (!referenceUrl) {
       setRefReady(true); // sin referencia: la primera estructura define el marco
       return;
     }
     let cancelled = false;
+    setRefReady(false);
     fetch(referenceUrl)
       .then((r) => (r.ok ? r.text() : Promise.reject()))
       .then((text) => {
@@ -114,18 +142,20 @@ export function ComplexViewer({
     return () => {
       cancelled = true;
     };
-  }, [referenceUrl]);
+  }, [isVisible, referenceUrl]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
-    if (!viewer || !refReady) return;
+    if (!isVisible || !viewer || !refReady) return;
     if (!pdbUrl) {
       viewer.removeAllModels();
       viewer.render();
+      setError(null);
       return;
     }
     const token = ++tokenRef.current;
     setLoading(true);
+    setError(null);
     fetch(pdbUrl)
       .then((r) => {
         if (!r.ok) throw new Error(`No se pudo cargar ${pdbUrl}`);
@@ -152,6 +182,7 @@ export function ComplexViewer({
         // objetivo, VEGF-A permanece en la misma orientación entre puntos.
         if (!cameraSetRef.current) {
           viewer.zoomTo({ chain: TARGET_CHAIN });
+          viewer.zoomTo();
           viewer.zoom(0.9);
           cameraSetRef.current = true;
         }
@@ -159,10 +190,13 @@ export function ComplexViewer({
         viewer.resize();
         setLoading(false);
       })
-      .catch(() => {
-        if (token === tokenRef.current) setLoading(false);
+      .catch((err) => {
+        if (token === tokenRef.current) {
+          setLoading(false);
+          setError(err instanceof Error ? err.message : "Error al cargar el complejo");
+        }
       });
-  }, [pdbUrl, refReady]);
+  }, [isVisible, pdbUrl, refReady]);
 
   // Re-aplica la representación al alternar cartoon/superficie (sin recargar).
   useEffect(() => {
@@ -183,6 +217,7 @@ export function ComplexViewer({
         {repr === "cartoon" ? "Superficie" : "Cartoon"}
       </button>
       {loading && <span className="cv-loading">cargando…</span>}
+      {error && <span className="cv-loading">{error}</span>}
     </div>
   );
 }
