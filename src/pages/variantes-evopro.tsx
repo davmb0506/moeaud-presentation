@@ -646,11 +646,7 @@ export function VariantesEvoPro() {
               </span>
             ))}
           </div>
-          <p className="op-legend-note">
-            Temp. variable mantiene visibles los puntos sin PDB documentado,
-            pero solo las corridas con estructura disponible actualizan el
-            visor molecular.
-          </p>
+          
         </section>
 
         <section className="ablacion-viewer">
