@@ -44,6 +44,7 @@ const H0_UNI =
   "MOEA-UD con mecanismos obtiene un HV acumulado final igual o menor que la versión sin mecanismos.";
 const H1_UNI =
   "MOEA-UD con mecanismos obtiene un HV acumulado final mayor que la versión sin mecanismos.";
+const ABLATION_FIGURE_VERSION = "median-v1";
 
 const SLIDES: SlideData[] = [
   {
@@ -51,10 +52,11 @@ const SLIDES: SlideData[] = [
     sub: (
       <>
         <B>Con mecanismos</B> alcanza un hipervolumen acumulado final medio mayor (
-        <B>1.003</B>) que la versión <O>sin mecanismos</O> (<O>0.915</O>).
+        <B>1.003</B>) y también una mediana final mayor (<B>1.011</B>) que la
+        versión <O>sin mecanismos</O> (<O>0.915</O>; mediana <O>0.921</O>).
       </>
     ),
-    img: "/figures/ablation_cumhv_interface_pae_plddt.png",
+    img: `/figures/ablation_cumhv_interface_pae_plddt.png?v=${ABLATION_FIGURE_VERSION}`,
     alt: "Curva de convergencia del hipervolumen acumulado — Interface-PAE / pLDDT: con mecanismos frente a sin mecanismos.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.00911", sig: "**", reject: true },
@@ -68,10 +70,12 @@ const SLIDES: SlideData[] = [
       <>
         <O>Sin mecanismos</O> termina ligeramente por encima en hipervolumen
         acumulado final (<O>1.203</O>) frente a <B>con mecanismos</B> (
-        <B>1.192</B>), pero la diferencia no es estadísticamente significativa.
+        <B>1.192</B>); las medianas finales permanecen muy cercanas (
+        <B>1.200</B> vs. <O>1.202</O>), sin evidencia de una diferencia
+        estadísticamente significativa.
       </>
     ),
-    img: "/figures/ablation_cumhv_composite_tmscore.png",
+    img: `/figures/ablation_cumhv_composite_tmscore.png?v=${ABLATION_FIGURE_VERSION}`,
     alt: "Curva de convergencia del hipervolumen acumulado — Composite / TM-score: con mecanismos frente a sin mecanismos.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2406", sig: "n.s.", reject: false },
@@ -85,10 +89,11 @@ const SLIDES: SlideData[] = [
       <>
         No se observa diferencia significativa en el hipervolumen acumulado final
         (<B>con mecanismos: media 1.190</B>;{" "}
-        <O>sin mecanismos: media 1.199</O>).
+        <O>sin mecanismos: media 1.199</O>; mediana <B>1.210</B> frente a{" "}
+        <O>1.203</O>).
       </>
     ), 
-    img: "/figures/ablation_cumhv_ipsae_sc.png",
+    img: `/figures/ablation_cumhv_ipsae_sc.png?v=${ABLATION_FIGURE_VERSION}`,
     alt: "Curva de convergencia del hipervolumen acumulado — ipSAE / SC: con mecanismos frente a sin mecanismos.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2755", sig: "n.s.", reject: false },
@@ -157,7 +162,8 @@ function SlideView({ data }: { data: SlideData }) {
         <p className="exp-foot">
           *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. = no significativo.
           Hipervolumen acumulado final por réplica; n = 10 réplicas
-          independientes por condición.
+          independientes por condición. Línea sólida: media; línea discontinua:
+          mediana; banda: variabilidad entre réplicas.
         </p>
       </div>
     </motion.div>

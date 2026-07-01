@@ -20,6 +20,8 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 REPO = Path(__file__).resolve().parents[1]
 RUN = REPO.parent / "EvoPro_Mod" / "evopro" / "run"
@@ -164,8 +166,10 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
     no_mech_mat = interpolate_group(no_mech, grid)
 
     mech_mean = mech_mat.mean(axis=0)
+    mech_median = np.median(mech_mat, axis=0)
     mech_std = mech_mat.std(axis=0, ddof=0)
     no_mech_mean = no_mech_mat.mean(axis=0)
+    no_mech_median = np.median(no_mech_mat, axis=0)
     no_mech_std = no_mech_mat.std(axis=0, ddof=0)
 
     fig, ax = plt.subplots(figsize=(8.6, 4.9), constrained_layout=True)
@@ -175,37 +179,57 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
     ax.fill_between(
         grid, no_mech_mean - no_mech_std, no_mech_mean + no_mech_std, color=NO_MECH, alpha=0.18
     )
-    ax.plot(grid, mech_mean, color=MECH, linewidth=2.5, label="Con mecanismos (mech)")
-    ax.plot(grid, no_mech_mean, color=NO_MECH, linewidth=2.5, label="Sin mecanismos (no-mech)")
+    ax.plot(grid, mech_mean, color=MECH, linewidth=2.5)
+    ax.plot(grid, mech_median, color=MECH, linewidth=2.2, linestyle=(0, (5, 4)))
+    ax.plot(grid, no_mech_mean, color=NO_MECH, linewidth=2.5)
+    ax.plot(grid, no_mech_median, color=NO_MECH, linewidth=2.2, linestyle=(0, (5, 4)))
 
     ax.set_title(f"Convergencia del hipervolumen acumulado — {spec.formulation}", fontsize=14, pad=14)
     ax.set_xlabel("Generación", fontsize=12)
     ax.set_ylabel("Hipervolumen acumulado (↑ mejor)", fontsize=12)
-    ax.legend(frameon=False, fontsize=10, loc="lower right")
-    ax.margins(x=0.03)
+    ax.legend(
+        handles=[
+            Line2D([0], [0], color=MECH, linewidth=2.5, label="Con mecanismos"),
+            Line2D([0], [0], color=NO_MECH, linewidth=2.5, label="Sin mecanismos"),
+            Line2D([0], [0], color=TEXT, linewidth=2.5, label="Media"),
+            Line2D([0], [0], color=TEXT, linewidth=2.2, linestyle=(0, (5, 4)), label="Mediana"),
+            Patch(facecolor=TEXT, edgecolor="none", alpha=0.18, label="Variabilidad (±1 DE)"),
+        ],
+        frameon=False,
+        fontsize=9.5,
+        loc="lower right",
+        ncol=2,
+        columnspacing=1.1,
+        handlelength=2.6,
+    )
+    ax.set_xlim(grid[0], grid[-1] + max(6, round((grid[-1] - grid[0]) * 0.05)))
 
     final_mech = float(mech_mean[-1])
+    final_mech_median = float(mech_median[-1])
     final_no_mech = float(no_mech_mean[-1])
-    mech_offset, no_mech_offset = end_offsets(final_mech, final_no_mech)
+    final_no_mech_median = float(no_mech_median[-1])
+    mech_anchor = float((final_mech + final_mech_median) / 2.0)
+    no_mech_anchor = float((final_no_mech + final_no_mech_median) / 2.0)
+    mech_offset, no_mech_offset = end_offsets(mech_anchor, no_mech_anchor)
 
     ax.annotate(
-        f"{final_mech:.3f}",
-        xy=(grid[-1], final_mech),
+        f"μ {final_mech:.3f}\nMe {final_mech_median:.3f}",
+        xy=(grid[-1], mech_anchor),
         xytext=mech_offset,
         textcoords="offset points",
         color=MECH,
-        fontsize=10,
+        fontsize=9.5,
         fontweight="bold",
         va="center",
         bbox={"boxstyle": "round,pad=0.2", "fc": "white", "ec": "none", "alpha": 0.85},
     )
     ax.annotate(
-        f"{final_no_mech:.3f}",
-        xy=(grid[-1], final_no_mech),
+        f"μ {final_no_mech:.3f}\nMe {final_no_mech_median:.3f}",
+        xy=(grid[-1], no_mech_anchor),
         xytext=no_mech_offset,
         textcoords="offset points",
         color=NO_MECH,
-        fontsize=10,
+        fontsize=9.5,
         fontweight="bold",
         va="center",
         bbox={"boxstyle": "round,pad=0.2", "fc": "white", "ec": "none", "alpha": 0.85},
@@ -216,7 +240,12 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
     fig.savefig(output, dpi=220, facecolor="white")
     plt.close(fig)
 
-    return output, {"mech": final_mech, "no_mech": final_no_mech}, {
+    return output, {
+        "mech_mean": final_mech,
+        "mech_median": final_mech_median,
+        "no_mech_mean": final_no_mech,
+        "no_mech_median": final_no_mech_median,
+    }, {
         "mech": len(mech),
         "no_mech": len(no_mech),
         "grid_start": int(grid[0]),
@@ -230,7 +259,8 @@ def main() -> None:
         print(
             f"{spec.formulation}: mech n={counts['mech']}, no-mech n={counts['no_mech']}, "
             f"grid={counts['grid_start']}-{counts['grid_end']}, "
-            f"finales=({finals['mech']:.3f}, {finals['no_mech']:.3f}) -> {output}"
+            f"finales media=({finals['mech_mean']:.3f}, {finals['no_mech_mean']:.3f}), "
+            f"mediana=({finals['mech_median']:.3f}, {finals['no_mech_median']:.3f}) -> {output}"
         )
 
 

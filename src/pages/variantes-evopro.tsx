@@ -400,8 +400,7 @@ export function VariantesEvoPro() {
       </h2>
       <p className="ablacion-sub">
         Comparación visual del mejor <strong>overall_score</strong> por
-        variante; los puntos con PDB documentado abren en el visor la
-        estructura molecular asociada a esa corrida.
+        variante.
       </p>
 
       <div className="ablacion-grid">
