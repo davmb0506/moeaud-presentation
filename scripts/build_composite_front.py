@@ -21,6 +21,10 @@ SOURCES = {
     "con": (RUN / "outputs_moeaud_composite_tmscore (2)", "outputs_moeaud_composite_tmscore_*"),
     "sin": (RUN / "outputs_moeaud_composite_tmscore_final_10_no_mech_v2", "run_*"),
 }
+PDB_SUBDIR = {
+    "con": "con_mech",
+    "sin": "sin",
+}
 
 
 def gather(base: Path, pat: str):
@@ -72,13 +76,14 @@ def non_dominated(pts):
 def main():
     points = []
     for cond, (base, pat) in SOURCES.items():
-        (PUB / cond).mkdir(parents=True, exist_ok=True)
+        pdb_subdir = PDB_SUBDIR[cond]
+        (PUB / pdb_subdir).mkdir(parents=True, exist_ok=True)
         front = non_dominated(gather(base, pat))
         # ordenar por f1 para una línea de frente limpia
         front.sort(key=lambda p: p["f1"])
         for k, p in enumerate(front):
             name = f"{cond}_{k}.pdb"
-            shutil.copyfile(p["pdb_src"], PUB / cond / name)
+            shutil.copyfile(p["pdb_src"], PUB / pdb_subdir / name)
             points.append(
                 {
                     "id": f"{cond}_{k}",
@@ -86,7 +91,7 @@ def main():
                     "f1": p["f1"],
                     "f2": p["f2"],
                     "binder": p["binder"],
-                    "pdb": f"/pdbs/composite/{cond}/{name}",
+                    "pdb": f"/pdbs/composite/{pdb_subdir}/{name}",
                 }
             )
 

@@ -14,7 +14,7 @@
       "f1": 0.7131,
       "f2": 0.2232,
       "binder": "PTPLLSALERLARQEPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con/con_0.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_0.pdb"
     },
     {
       "id": "con_1",
@@ -22,7 +22,7 @@
       "f1": 0.7206,
       "f2": 0.1907,
       "binder": "GPTLLAALETLANQEPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con/con_1.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_1.pdb"
     },
     {
       "id": "con_2",
@@ -30,7 +30,7 @@
       "f1": 0.7249,
       "f2": 0.1856,
       "binder": "GPTLLAALETLANQEPPKKRQ",
-      "pdb": "/pdbs/ipsae_sc/con/con_2.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_2.pdb"
     },
     {
       "id": "con_3",
@@ -38,7 +38,7 @@
       "f1": 0.7308,
       "f2": 0.1783,
       "binder": "GTTLLSALEKLAAQKPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con/con_3.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_3.pdb"
     },
     {
       "id": "con_4",
@@ -46,7 +46,7 @@
       "f1": 0.7499,
       "f2": 0.1694,
       "binder": "GTTLLSALEKLAAQKPPKSAA",
-      "pdb": "/pdbs/ipsae_sc/con/con_4.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_4.pdb"
     },
     {
       "id": "con_5",
@@ -54,7 +54,7 @@
       "f1": 0.8029,
       "f2": 0.1647,
       "binder": "DPSLLAALERLANQEPPQSRA",
-      "pdb": "/pdbs/ipsae_sc/con/con_5.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_5.pdb"
     },
     {
       "id": "con_6",
@@ -62,7 +62,7 @@
       "f1": 0.8184,
       "f2": 0.1616,
       "binder": "DPSLLAALERLANQEPPQGRA",
-      "pdb": "/pdbs/ipsae_sc/con/con_6.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_6.pdb"
     },
     {
       "id": "con_7",
@@ -70,7 +70,7 @@
       "f1": 0.8526,
       "f2": 0.1542,
       "binder": "DPSLLAALEKLAAQEPPQKHA",
-      "pdb": "/pdbs/ipsae_sc/con/con_7.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_7.pdb"
     },
     {
       "id": "sin_0",

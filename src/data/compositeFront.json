@@ -14,7 +14,7 @@
       "f1": 0.0,
       "f2": 0.2215,
       "binder": "WRQATTAEAIEVLHTMQKQRS",
-      "pdb": "/pdbs/composite/con/con_0.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_0.pdb"
     },
     {
       "id": "con_1",
@@ -22,7 +22,7 @@
       "f1": 0.0039,
       "f2": 0.2141,
       "binder": "WRQATHAEVIAVLQTMAKQYS",
-      "pdb": "/pdbs/composite/con/con_1.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_1.pdb"
     },
     {
       "id": "con_2",
@@ -30,7 +30,7 @@
       "f1": 0.0059,
       "f2": 0.2049,
       "binder": "WRQATHAEVIAVLQTMAKQVS",
-      "pdb": "/pdbs/composite/con/con_2.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_2.pdb"
     },
     {
       "id": "con_3",
@@ -38,7 +38,7 @@
       "f1": 0.0063,
       "f2": 0.1907,
       "binder": "WRQITHAEAIASLQTMQKQYS",
-      "pdb": "/pdbs/composite/con/con_3.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_3.pdb"
     },
     {
       "id": "con_4",
@@ -46,7 +46,7 @@
       "f1": 0.0072,
       "f2": 0.1856,
       "binder": "WRQITHAEAIASLQTMQKQRS",
-      "pdb": "/pdbs/composite/con/con_4.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_4.pdb"
     },
     {
       "id": "con_5",
@@ -54,7 +54,7 @@
       "f1": 0.015,
       "f2": 0.1598,
       "binder": "WRQITQAEAIAVLQTMAKQRS",
-      "pdb": "/pdbs/composite/con/con_5.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_5.pdb"
     },
     {
       "id": "con_6",
@@ -62,7 +62,7 @@
       "f1": 0.0299,
       "f2": 0.1237,
       "binder": "WRQITQAEAIAVLQTMAKQLS",
-      "pdb": "/pdbs/composite/con/con_6.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_6.pdb"
     },
     {
       "id": "con_7",
@@ -70,7 +70,7 @@
       "f1": 0.0399,
       "f2": 0.1017,
       "binder": "SPFHDKLMNALAEMMMANIAE",
-      "pdb": "/pdbs/composite/con/con_7.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_7.pdb"
     },
     {
       "id": "con_8",
@@ -78,7 +78,7 @@
       "f1": 0.0406,
       "f2": 0.101,
       "binder": "SRLYQHLQRFVKDADANLARN",
-      "pdb": "/pdbs/composite/con/con_8.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_8.pdb"
     },
     {
       "id": "con_9",
@@ -86,7 +86,7 @@
       "f1": 0.0416,
       "f2": 0.0974,
       "binder": "SPFHEKLMSALAQMMMANIAE",
-      "pdb": "/pdbs/composite/con/con_9.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_9.pdb"
     },
     {
       "id": "con_10",
@@ -94,7 +94,7 @@
       "f1": 0.0451,
       "f2": 0.097,
       "binder": "SRVWQAIMELASETTAARETA",
-      "pdb": "/pdbs/composite/con/con_10.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_10.pdb"
     },
     {
       "id": "con_11",
@@ -102,7 +102,7 @@
       "f1": 0.0473,
       "f2": 0.0928,
       "binder": "SPFHRKLMNALAEMMMANIAE",
-      "pdb": "/pdbs/composite/con/con_11.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_11.pdb"
     },
     {
       "id": "con_12",
@@ -110,7 +110,7 @@
       "f1": 0.0518,
       "f2": 0.059,
       "binder": "SRVWEAIMNLAKQTESARRDA",
-      "pdb": "/pdbs/composite/con/con_12.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_12.pdb"
     },
     {
       "id": "con_13",
@@ -118,7 +118,7 @@
       "f1": 0.0631,
       "f2": 0.0499,
       "binder": "SRVWHAIMNLAKETTAAREDA",
-      "pdb": "/pdbs/composite/con/con_13.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_13.pdb"
     },
     {
       "id": "con_14",
@@ -126,7 +126,7 @@
       "f1": 0.0832,
       "f2": 0.0492,
       "binder": "SRVWQAIMELAKETDSAREEA",
-      "pdb": "/pdbs/composite/con/con_14.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_14.pdb"
     },
     {
       "id": "con_15",
@@ -134,7 +134,7 @@
       "f1": 0.0922,
       "f2": 0.0487,
       "binder": "DKQKLHTEAIKLLQNMQEQLQ",
-      "pdb": "/pdbs/composite/con/con_15.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_15.pdb"
     },
     {
       "id": "con_16",
@@ -142,7 +142,7 @@
       "f1": 0.1275,
       "f2": 0.0485,
       "binder": "DAKKIHAETIKLLQTMQKQLS",
-      "pdb": "/pdbs/composite/con/con_16.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_16.pdb"
     },
     {
       "id": "con_17",
@@ -150,7 +150,7 @@
       "f1": 0.1592,
       "f2": 0.0424,
       "binder": "DAKKIHAEAIKLLQTMQKQLS",
-      "pdb": "/pdbs/composite/con/con_17.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_17.pdb"
     },
     {
       "id": "sin_0",
