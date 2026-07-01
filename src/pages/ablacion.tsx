@@ -115,8 +115,7 @@ export function Ablacion() {
       <h2 className="ablacion-title">Ablación de mecanismos adaptativos</h2>
       <p className="ablacion-sub">
         Frente de Pareto <strong>Interface-PAE / pLDDT</strong> de soluciones no
-        dominadas. Pasa el cursor sobre un punto para ver el{" "}
-        <strong>complejo predicho</strong> binder–VEGF-A.
+        dominadas. 
       </p>
 
       <div className="ablacion-grid">
