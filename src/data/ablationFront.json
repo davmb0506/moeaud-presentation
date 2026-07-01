@@ -25,7 +25,7 @@
       "plddt": 45.8,
       "p100": 54.24,
       "binder": "PTYYFRWITDWYTYVVKVIVP",
-      "pdb": "/fronts/con/a1.pdb"
+      "pdb": "/fronts/con_mech/a1.pdb"
     },
     {
       "id": "con_2",
@@ -34,7 +34,7 @@
       "plddt": 50.4,
       "p100": 49.62,
       "binder": "RTYYFVAITDEYLYVVKVIFP",
-      "pdb": "/fronts/con/a2.pdb"
+      "pdb": "/fronts/con_mech/a2.pdb"
     },
     {
       "id": "con_3",
@@ -43,7 +43,7 @@
       "plddt": 50.9,
       "p100": 49.12,
       "binder": "RTYYFKAITDWYTYVVKVIVP",
-      "pdb": "/fronts/con/a3.pdb"
+      "pdb": "/fronts/con_mech/a3.pdb"
     },
     {
       "id": "con_4",
@@ -52,7 +52,7 @@
       "plddt": 52.7,
       "p100": 47.33,
       "binder": "RTYYFGAITDWYTYVVKVIVP",
-      "pdb": "/fronts/con/a4.pdb"
+      "pdb": "/fronts/con_mech/a4.pdb"
     },
     {
       "id": "con_5",
@@ -61,7 +61,7 @@
       "plddt": 54.1,
       "p100": 45.88,
       "binder": "MTYYFQWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a5.pdb"
+      "pdb": "/fronts/con_mech/a5.pdb"
     },
     {
       "id": "con_6",
@@ -70,7 +70,7 @@
       "plddt": 54.7,
       "p100": 45.33,
       "binder": "MTYYYVWRTDEWYYVVQVRVK",
-      "pdb": "/fronts/con/a6.pdb"
+      "pdb": "/fronts/con_mech/a6.pdb"
     },
     {
       "id": "con_7",
@@ -79,7 +79,7 @@
       "plddt": 55.1,
       "p100": 44.86,
       "binder": "MTYYFVWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con/a7.pdb"
+      "pdb": "/fronts/con_mech/a7.pdb"
     },
     {
       "id": "con_8",
@@ -88,7 +88,7 @@
       "plddt": 56.9,
       "p100": 43.08,
       "binder": "MTYYVAWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a8.pdb"
+      "pdb": "/fronts/con_mech/a8.pdb"
     },
     {
       "id": "con_9",
@@ -97,7 +97,7 @@
       "plddt": 57.1,
       "p100": 42.92,
       "binder": "MTYYYVWRTDWWHYVVQVRVK",
-      "pdb": "/fronts/con/a9.pdb"
+      "pdb": "/fronts/con_mech/a9.pdb"
     },
     {
       "id": "con_10",
@@ -106,7 +106,7 @@
       "plddt": 59.0,
       "p100": 41.03,
       "binder": "MWWTNILTTPGYVYIVQIRFK",
-      "pdb": "/fronts/con/a10.pdb"
+      "pdb": "/fronts/con_mech/a10.pdb"
     },
     {
       "id": "con_11",
@@ -115,7 +115,7 @@
       "plddt": 59.1,
       "p100": 40.9,
       "binder": "MTYYFIWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a11.pdb"
+      "pdb": "/fronts/con_mech/a11.pdb"
     },
     {
       "id": "con_12",
@@ -124,7 +124,7 @@
       "plddt": 59.6,
       "p100": 40.38,
       "binder": "MTYYYVWRTDWYEYVVKVIVK",
-      "pdb": "/fronts/con/a12.pdb"
+      "pdb": "/fronts/con_mech/a12.pdb"
     },
     {
       "id": "con_13",
@@ -133,7 +133,7 @@
       "plddt": 60.1,
       "p100": 39.93,
       "binder": "PTYYFVWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con/a13.pdb"
+      "pdb": "/fronts/con_mech/a13.pdb"
     },
     {
       "id": "con_14",
@@ -142,7 +142,7 @@
       "plddt": 60.9,
       "p100": 39.09,
       "binder": "MTYYFAWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a14.pdb"
+      "pdb": "/fronts/con_mech/a14.pdb"
     },
     {
       "id": "con_15",
@@ -151,7 +151,7 @@
       "plddt": 61.2,
       "p100": 38.81,
       "binder": "MTYYYVWRTDWYYYVVQVKVK",
-      "pdb": "/fronts/con/a15.pdb"
+      "pdb": "/fronts/con_mech/a15.pdb"
     },
     {
       "id": "con_16",
@@ -160,7 +160,7 @@
       "plddt": 61.5,
       "p100": 38.46,
       "binder": "PTYYGIWTTPEDHYFWQVRIK",
-      "pdb": "/fronts/con/a16.pdb"
+      "pdb": "/fronts/con_mech/a16.pdb"
     },
     {
       "id": "con_17",
@@ -169,7 +169,7 @@
       "plddt": 62.0,
       "p100": 38.01,
       "binder": "ITWYYVAKHDGWHYMVQVRFK",
-      "pdb": "/fronts/con/a17.pdb"
+      "pdb": "/fronts/con_mech/a17.pdb"
     },
     {
       "id": "con_18",
@@ -178,7 +178,7 @@
       "plddt": 62.6,
       "p100": 37.43,
       "binder": "ITWYYVAKMDGWVYMVQVRFK",
-      "pdb": "/fronts/con/a18.pdb"
+      "pdb": "/fronts/con_mech/a18.pdb"
     },
     {
       "id": "con_19",
@@ -187,7 +187,7 @@
       "plddt": 63.0,
       "p100": 37.02,
       "binder": "PTYYYHARTPGYVYFVQVRIK",
-      "pdb": "/fronts/con/a19.pdb"
+      "pdb": "/fronts/con_mech/a19.pdb"
     },
     {
       "id": "con_20",
@@ -196,7 +196,7 @@
       "plddt": 63.2,
       "p100": 36.84,
       "binder": "ITWYYVAKIDGWVYMVQVRFK",
-      "pdb": "/fronts/con/a20.pdb"
+      "pdb": "/fronts/con_mech/a20.pdb"
     },
     {
       "id": "con_21",
@@ -205,7 +205,7 @@
       "plddt": 63.4,
       "p100": 36.6,
       "binder": "WYWRYVAIYDAWIYVVQVRFK",
-      "pdb": "/fronts/con/a21.pdb"
+      "pdb": "/fronts/con_mech/a21.pdb"
     },
     {
       "id": "con_22",
@@ -214,7 +214,7 @@
       "plddt": 63.6,
       "p100": 36.35,
       "binder": "ETPYHVAKMDGYVYMVQVRFK",
-      "pdb": "/fronts/con/a22.pdb"
+      "pdb": "/fronts/con_mech/a22.pdb"
     },
     {
       "id": "con_23",
@@ -223,7 +223,7 @@
       "plddt": 55.4,
       "p100": 44.58,
       "binder": "MTYYFVARTDWYTYVVKVIVP",
-      "pdb": "/fronts/con/a23.pdb"
+      "pdb": "/fronts/con_mech/a23.pdb"
     },
     {
       "id": "con_24",
@@ -232,7 +232,7 @@
       "plddt": 63.7,
       "p100": 36.26,
       "binder": "DGIYDIVFDMSFEYTFSWYGS",
-      "pdb": "/fronts/con/a24.pdb"
+      "pdb": "/fronts/con_mech/a24.pdb"
     },
     {
       "id": "con_25",
@@ -241,7 +241,7 @@
       "plddt": 51.0,
       "p100": 49.01,
       "binder": "RTYYMIAIGMGYVYVVKMIFP",
-      "pdb": "/fronts/con/a25.pdb"
+      "pdb": "/fronts/con_mech/a25.pdb"
     },
     {
       "id": "con_26",
@@ -250,7 +250,7 @@
       "plddt": 61.6,
       "p100": 38.45,
       "binder": "MTYYYVWRTDWYIYVVQVKVK",
-      "pdb": "/fronts/con/a26.pdb"
+      "pdb": "/fronts/con_mech/a26.pdb"
     },
     {
       "id": "con_27",
@@ -259,7 +259,7 @@
       "plddt": 53.7,
       "p100": 46.29,
       "binder": "MWYYYIWRDPWYMYFVKVIVK",
-      "pdb": "/fronts/con/a27.pdb"
+      "pdb": "/fronts/con_mech/a27.pdb"
     },
     {
       "id": "con_28",
@@ -268,7 +268,7 @@
       "plddt": 63.7,
       "p100": 36.27,
       "binder": "DGSYIIVFDMSFEYTFSWYNS",
-      "pdb": "/fronts/con/a28.pdb"
+      "pdb": "/fronts/con_mech/a28.pdb"
     },
     {
       "id": "con_29",
@@ -277,7 +277,7 @@
       "plddt": 62.5,
       "p100": 37.5,
       "binder": "PTYYFVWRTPEYIYFVQVRVK",
-      "pdb": "/fronts/con/a29.pdb"
+      "pdb": "/fronts/con_mech/a29.pdb"
     },
     {
       "id": "con_30",
@@ -286,7 +286,7 @@
       "plddt": 58.2,
       "p100": 41.8,
       "binder": "PTYYSVWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con/a30.pdb"
+      "pdb": "/fronts/con_mech/a30.pdb"
     },
     {
       "id": "con_31",
@@ -295,7 +295,7 @@
       "plddt": 49.3,
       "p100": 50.73,
       "binder": "MTYYFVWRHPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a31.pdb"
+      "pdb": "/fronts/con_mech/a31.pdb"
     },
     {
       "id": "con_32",
@@ -304,7 +304,7 @@
       "plddt": 53.4,
       "p100": 46.6,
       "binder": "MTYYYVWRTDWYYYVVQVKHK",
-      "pdb": "/fronts/con/a32.pdb"
+      "pdb": "/fronts/con_mech/a32.pdb"
     },
     {
       "id": "con_33",
@@ -313,7 +313,7 @@
       "plddt": 57.6,
       "p100": 42.43,
       "binder": "PTYYFVWRSDEYIYFVQVRLK",
-      "pdb": "/fronts/con/a33.pdb"
+      "pdb": "/fronts/con_mech/a33.pdb"
     },
     {
       "id": "con_34",
@@ -322,7 +322,7 @@
       "plddt": 45.6,
       "p100": 54.41,
       "binder": "MTYYFRWRTDWYYYVVKVIVP",
-      "pdb": "/fronts/con/a34.pdb"
+      "pdb": "/fronts/con_mech/a34.pdb"
     },
     {
       "id": "con_35",
@@ -331,7 +331,7 @@
       "plddt": 52.8,
       "p100": 47.16,
       "binder": "MTYYFIWRSPWYMYFVKVIVK",
-      "pdb": "/fronts/con/a35.pdb"
+      "pdb": "/fronts/con_mech/a35.pdb"
     },
     {
       "id": "con_36",
@@ -340,7 +340,7 @@
       "plddt": 63.2,
       "p100": 36.83,
       "binder": "ETPYSVAKMDGYVYMVQVRFK",
-      "pdb": "/fronts/con/a36.pdb"
+      "pdb": "/fronts/con_mech/a36.pdb"
     },
     {
       "id": "con_37",
@@ -349,7 +349,7 @@
       "plddt": 51.0,
       "p100": 49.05,
       "binder": "MTYYFFWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con/a37.pdb"
+      "pdb": "/fronts/con_mech/a37.pdb"
     },
     {
       "id": "con_38",
@@ -358,7 +358,7 @@
       "plddt": 55.9,
       "p100": 44.12,
       "binder": "MTYYFVWRFPEYYYFVQVRVK",
-      "pdb": "/fronts/con/a38.pdb"
+      "pdb": "/fronts/con_mech/a38.pdb"
     },
     {
       "id": "con_39",
@@ -367,7 +367,7 @@
       "plddt": 64.5,
       "p100": 35.53,
       "binder": "DGNYDWVIDMSFWYTFSWRNS",
-      "pdb": "/fronts/con/a39.pdb"
+      "pdb": "/fronts/con_mech/a39.pdb"
     },
     {
       "id": "con_40",
@@ -376,7 +376,7 @@
       "plddt": 59.2,
       "p100": 40.8,
       "binder": "PTYYITWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con/a40.pdb"
+      "pdb": "/fronts/con_mech/a40.pdb"
     },
     {
       "id": "con_41",
@@ -385,7 +385,7 @@
       "plddt": 56.4,
       "p100": 43.62,
       "binder": "MTYYFSWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con/a41.pdb"
+      "pdb": "/fronts/con_mech/a41.pdb"
     },
     {
       "id": "con_42",
@@ -394,7 +394,7 @@
       "plddt": 52.6,
       "p100": 47.42,
       "binder": "MTYYFSWRTDEYYYFVQVRVK",
-      "pdb": "/fronts/con/a42.pdb"
+      "pdb": "/fronts/con_mech/a42.pdb"
     },
     {
       "id": "con_43",
@@ -403,7 +403,7 @@
       "plddt": 48.4,
       "p100": 51.59,
       "binder": "MTYYYMWRTDWYYYVVQVKVK",
-      "pdb": "/fronts/con/a43.pdb"
+      "pdb": "/fronts/con_mech/a43.pdb"
     },
     {
       "id": "con_44",
@@ -412,7 +412,7 @@
       "plddt": 59.6,
       "p100": 40.36,
       "binder": "PTYYFVWRTPHYGYFVQVRLK",
-      "pdb": "/fronts/con/a44.pdb"
+      "pdb": "/fronts/con_mech/a44.pdb"
     },
     {
       "id": "sin_1",

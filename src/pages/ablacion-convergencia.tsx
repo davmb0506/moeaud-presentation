@@ -44,7 +44,7 @@ const H0_UNI =
   "MOEA-UD con mecanismos obtiene un HV acumulado final igual o menor que la versión sin mecanismos.";
 const H1_UNI =
   "MOEA-UD con mecanismos obtiene un HV acumulado final mayor que la versión sin mecanismos.";
-const ABLATION_FIGURE_VERSION = "median-v1";
+const ABLATION_FIGURE_VERSION = "iqr-v1";
 
 const SLIDES: SlideData[] = [
   {
@@ -163,7 +163,7 @@ function SlideView({ data }: { data: SlideData }) {
           *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. = no significativo.
           Hipervolumen acumulado final por réplica; n = 10 réplicas
           independientes por condición. Línea sólida: media; línea discontinua:
-          mediana; banda: variabilidad entre réplicas.
+          mediana; banda sombreada: rango intercuartil (Q1–Q3) entre réplicas.
         </p>
       </div>
     </motion.div>

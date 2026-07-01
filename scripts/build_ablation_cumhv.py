@@ -167,18 +167,18 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
 
     mech_mean = mech_mat.mean(axis=0)
     mech_median = np.median(mech_mat, axis=0)
-    mech_std = mech_mat.std(axis=0, ddof=0)
+    mech_q1 = np.quantile(mech_mat, 0.25, axis=0)
+    mech_q3 = np.quantile(mech_mat, 0.75, axis=0)
     no_mech_mean = no_mech_mat.mean(axis=0)
     no_mech_median = np.median(no_mech_mat, axis=0)
-    no_mech_std = no_mech_mat.std(axis=0, ddof=0)
+    no_mech_q1 = np.quantile(no_mech_mat, 0.25, axis=0)
+    no_mech_q3 = np.quantile(no_mech_mat, 0.75, axis=0)
 
     fig, ax = plt.subplots(figsize=(8.6, 4.9), constrained_layout=True)
     style_axes(ax)
 
-    ax.fill_between(grid, mech_mean - mech_std, mech_mean + mech_std, color=MECH, alpha=0.18)
-    ax.fill_between(
-        grid, no_mech_mean - no_mech_std, no_mech_mean + no_mech_std, color=NO_MECH, alpha=0.18
-    )
+    ax.fill_between(grid, mech_q1, mech_q3, color=MECH, alpha=0.18)
+    ax.fill_between(grid, no_mech_q1, no_mech_q3, color=NO_MECH, alpha=0.18)
     ax.plot(grid, mech_mean, color=MECH, linewidth=2.5)
     ax.plot(grid, mech_median, color=MECH, linewidth=2.2, linestyle=(0, (5, 4)))
     ax.plot(grid, no_mech_mean, color=NO_MECH, linewidth=2.5)
@@ -193,7 +193,7 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
             Line2D([0], [0], color=NO_MECH, linewidth=2.5, label="Sin mecanismos"),
             Line2D([0], [0], color=TEXT, linewidth=2.5, label="Media"),
             Line2D([0], [0], color=TEXT, linewidth=2.2, linestyle=(0, (5, 4)), label="Mediana"),
-            Patch(facecolor=TEXT, edgecolor="none", alpha=0.18, label="Variabilidad (±1 DE)"),
+            Patch(facecolor=TEXT, edgecolor="none", alpha=0.18, label="RIC (Q1–Q3)"),
         ],
         frameon=False,
         fontsize=9.5,

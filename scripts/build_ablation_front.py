@@ -21,6 +21,10 @@ SOURCES = {
     "con": RUN / "outputs_moeaud_interface_pae_plddt/outputs_moeaud_interface_pae_plddt_02/outputs",
     "sin": RUN / "outputs_moeaud_interface_pae_plddt_10_no_mech/run_09/outputs",
 }
+PDB_SUBDIR = {
+    "con": "con_mech",
+    "sin": "sin",
+}
 
 # Estadísticas globales (todas las réplicas) para la leyenda.
 STATS = {
@@ -54,7 +58,8 @@ def main():
 
     points = []
     for cond, outputs in SOURCES.items():
-        (PUB / cond).mkdir(parents=True, exist_ok=True)
+        pdb_subdir = PDB_SUBDIR[cond]
+        (PUB / pdb_subdir).mkdir(parents=True, exist_ok=True)
         archive = outputs / "final_pdbs" / "archive"
         for row in read_archive(outputs):
             src_pdb = archive / f"archive_{row['idx']}_pred1.pdb"
@@ -62,7 +67,7 @@ def main():
                 print(f"  WARN: falta {src_pdb}")
                 continue
             dst_name = f"a{row['idx']}.pdb"
-            shutil.copyfile(src_pdb, PUB / cond / dst_name)
+            shutil.copyfile(src_pdb, PUB / pdb_subdir / dst_name)
             binder_seq = row["seq"].split(",")[0]
             # Conversión a la convención corregida e interpretable (minimización).
             # OLD_interface_pae (suma negada) -> PAE medio de interfaz en Å.
@@ -78,7 +83,7 @@ def main():
                     "plddt": round(plddt, 1),
                     "p100": round(p100, 2),
                     "binder": binder_seq,
-                    "pdb": f"/fronts/{cond}/{dst_name}",
+                    "pdb": f"/fronts/{pdb_subdir}/{dst_name}",
                 }
             )
 
