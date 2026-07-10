@@ -60,9 +60,9 @@ GROUP_LABELS = {
 }
 
 FOCUS_TAB_TITLES = [
-    "Mejor caso dual",
-    "Único caso sin sitio",
-    "Segundo caso dual",
+    "Cumple ambos criterios",
+    "Solo RMSD, sin sitio",
+    "También cumple ambos",
 ]
 
 

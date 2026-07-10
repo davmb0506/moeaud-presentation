@@ -32,7 +32,7 @@ const funnel = [
   },
   {
     label: "Evaluación detallada",
-    value: "12",
+    value: "24",
     note: "casos llevados a simulación local",
   },
 ];

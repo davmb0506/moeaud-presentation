@@ -32,7 +32,7 @@ const mainFlow = [
   },
   {
     label: "Panel local",
-    value: "12",
+    value: "24",
     note: "Candidatos ejecutados en HADDOCK local guiado.",
   },
 ];
@@ -134,7 +134,7 @@ export function ValidacionFlujo() {
           <h3 className="vdeck-title">Panel local guiado</h3>
           <p className="vflow-card-copy">
             Primero se generó un PDB de referencia del complejo péptido
-            diseñado - VEGFA y luego se compararon 12 candidatos con docking
+            diseñado - VEGFA y luego se compararon 24 candidatos con docking
             local.
           </p>
           <code className="vflow-card-id">interface_pae_plddt_mech__002_cand_0014</code>

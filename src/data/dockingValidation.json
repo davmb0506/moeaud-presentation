@@ -60,7 +60,7 @@
   "focusCases": [
     {
       "id": "focus-1",
-      "tabTitle": "Mejor caso dual",
+      "tabTitle": "Cumple ambos criterios",
       "formulationLabel": "ipPAE + mecanismos",
       "repredId": "interface_pae_plddt_mech__004_cand_0015",
       "tag": "RMSD ≤25 Å: sí · Sitio ≥20%: sí",
@@ -77,7 +77,7 @@
     },
     {
       "id": "focus-2",
-      "tabTitle": "Único caso sin sitio",
+      "tabTitle": "Solo RMSD, sin sitio",
       "formulationLabel": "Composite + mecanismos",
       "repredId": "composite_tmscore_mech__003_cand_0014",
       "tag": "RMSD ≤25 Å: sí · Sitio ≥20%: no",
@@ -94,7 +94,7 @@
     },
     {
       "id": "focus-3",
-      "tabTitle": "Segundo caso dual",
+      "tabTitle": "También cumple ambos",
       "formulationLabel": "ipPAE sin mecanismos",
       "repredId": "interface_pae_plddt_nomech__019_cand_0028",
       "tag": "RMSD ≤25 Å: sí · Sitio ≥20%: sí",

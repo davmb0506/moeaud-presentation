@@ -8,8 +8,8 @@ export const validationDeck = {
       },
       {
         label: "Panel principal",
-        value: "12",
-        note: "12 candidatos del panel final corridos con HADDOCK local guiado por AF2",
+        value: "24",
+        note: "24 candidatos del panel final corridos con HADDOCK local guiado por AF2",
       },
       {
         label: "Panel complementario",
@@ -18,7 +18,7 @@ export const validationDeck = {
       },
       {
         label: "Blind docking nativo",
-        value: "12/12",
+        value: "24/24",
         note: "el panel principal ya quedó contrastado sobre VEGFA nativo; además hay cohortes adicionales fuera del panel",
       },
     ],
@@ -47,9 +47,9 @@ export const validationDeck = {
         step: "Etapa 3",
         tone: "local",
         title: "Repredicción y panel local",
-        evidence: "150 -> 150 -> 12",
+        evidence: "150 -> 24",
         summary:
-          "La repredicción AF2 fue una capa de robustez estructural y terminó fijando un panel final de 12 candidatos para docking local.",
+          "La repredicción AF2 fue una capa de robustez estructural y terminó fijando un panel final de 24 candidatos para docking local.",
         question: "¿Qué diseños sostienen una hipótesis estructural comparable?",
         limit: "Todavía no prueba recuperación espontánea sobre VEGFA.",
       },
@@ -57,9 +57,9 @@ export const validationDeck = {
         step: "Etapa 4",
         tone: "orthogonal",
         title: "Refinamiento y contraste no guiado",
-        evidence: "12/12 + 16/16 + blind docking nativo",
+        evidence: "24/24 + blind docking nativo",
         summary:
-          "El panel base cerró en HADDOCK, la rama no redundante quedó completa de forma efectiva y el contraste no guiado relevante se concentró sobre VEGFA nativo.",
+          "El panel base cerró en HADDOCK y el contraste no guiado relevante se concentró sobre VEGFA nativo.",
         question: "¿Qué tanto resiste la conclusión fuera del panel principal?",
         limit: "Las métricas de screening, HADDOCK y blind docking no son intercambiables.",
       },

@@ -68,8 +68,8 @@ export function ValidacionDocking() {
           </ul>
 
           <p className="dockstory-scope">
-            Por candidato se calculan dos métricas — RMSD del péptido y cobertura
-            del epitopo VEGFR2 — y se evalúan con criterios fijos (≤25 Å y ≥20%).
+            Por candidato se calculan el RMSD del péptido y la cobertura del
+            epitopo VEGFR2, y se evalúan con criterios fijos (≤25 Å y ≥20%).
           </p>
 
           <span className="dockstory-section-title">Cumplimiento de criterios</span>
@@ -156,11 +156,11 @@ export function ValidacionDocking() {
           <div className="dockstory-case-summary">
             <div className="dockstory-case-metrics">
               <div className="dockstory-case-metric">
-                <span>Métrica · RMSD al local</span>
+                <span>RMSD al local</span>
                 <strong>{active.rmsd}</strong>
               </div>
               <div className="dockstory-case-metric">
-                <span>Métrica · epitopo VEGFR2</span>
+                <span>Cobertura epitopo VEGFR2</span>
                 <strong>{active.site}</strong>
               </div>
             </div>
