@@ -19,21 +19,165 @@ const {
   kpis,
   outcomeBands,
   focusCases,
+  candidates,
 } = dockingData;
 
 const NATIVE_VEGFA_PDB = "/pdbs/docking-validation/vegfa_A_native.pdb";
+
+type DockingOutcome = "dual" | "close" | "site" | "weak";
+
+type DockingCandidate = {
+  repred_id: string;
+  group: string;
+  blind_cluster: string;
+  close_to_local: boolean;
+  covers_expected_site: boolean;
+  outcome: DockingOutcome;
+  rmsd_to_haddock: number | null;
+  site_coverage: number | null;
+};
+
+type DockingCase = {
+  id: string;
+  tabTitle: string;
+  formulationLabel: string;
+  repredId: string;
+  outcomeLabel: string;
+  poseMatch: boolean;
+  siteMatch: boolean;
+  localPdb: string | null;
+  blindPdb: string | null;
+  rmsd: string;
+  site: string;
+  tone: "success" | "mixed" | "site" | "weak";
+};
+
+const GROUP_LABELS: Record<string, string> = {
+  interface_pae_plddt_mech: "ipPAE + mecanismos",
+  composite_tmscore_mech: "Composite + mecanismos",
+  interface_pae_plddt_nomech: "ipPAE sin mecanismos",
+  composite_tmscore_nomech: "Composite sin mecanismos",
+  ipsae_sc_mech: "ipSAE/SC + mecanismos",
+  ipsae_sc_nomech: "ipSAE/SC sin mecanismos",
+};
+
+const OUTCOME_TAB_LABELS: Record<DockingOutcome, string> = {
+  dual: "Cumple ambos criterios",
+  close: "Solo RMSD, sin sitio",
+  site: "Solo sitio, sin RMSD",
+  weak: "No cumple criterios",
+};
+
+const OUTCOME_BADGE_LABELS: Record<DockingOutcome, string> = {
+  dual: "Replica el acomodo local y cubre el sitio VEGFR2",
+  close: "Replica el acomodo local, pero no cubre el sitio VEGFR2",
+  site: "No replica el acomodo local, pero cubre el sitio VEGFR2",
+  weak: "No replica el acomodo local ni cubre el sitio VEGFR2",
+};
+
+const OUTCOME_TONES: Record<DockingOutcome, DockingCase["tone"]> = {
+  dual: "success",
+  close: "mixed",
+  site: "site",
+  weak: "weak",
+};
+
+const focusByRepredId = new Map(
+  focusCases.map((item) => [item.repredId, item] as const),
+);
+
+function formatRmsd(value: number | null): string {
+  return value == null ? "N/D" : `${value.toFixed(2)} Å`;
+}
+
+function formatSiteCoverage(value: number | null): string {
+  return value == null ? "N/D" : `${(value * 100).toFixed(1)}%`;
+}
+
+function compactCluster(cluster: string): string {
+  if (!cluster) return "";
+  return cluster.replace(/^cluster_/, "cluster");
+}
+
+function localPdbUrl(repredId: string): string {
+  return `/pdbs/docking-validation/${repredId}_local.pdb`;
+}
+
+function blindPdbUrl(repredId: string, blindCluster: string): string | null {
+  const compact = compactCluster(blindCluster);
+  if (!compact) return null;
+  return `/pdbs/docking-validation/${repredId}_blind_${compact}.pdb`;
+}
+
+const allCases: DockingCase[] = (candidates as DockingCandidate[]).map(
+  (candidate, index) => {
+    const focus = focusByRepredId.get(candidate.repred_id);
+    return {
+      id: `candidate-${index + 1}`,
+      tabTitle: OUTCOME_TAB_LABELS[candidate.outcome],
+      formulationLabel: GROUP_LABELS[candidate.group] ?? candidate.group,
+      repredId: candidate.repred_id,
+      outcomeLabel: OUTCOME_BADGE_LABELS[candidate.outcome],
+      poseMatch: candidate.close_to_local,
+      siteMatch: candidate.covers_expected_site,
+      localPdb: focus?.localPdb ?? localPdbUrl(candidate.repred_id),
+      blindPdb:
+        focus?.blindPdb ?? blindPdbUrl(candidate.repred_id, candidate.blind_cluster),
+      rmsd: formatRmsd(candidate.rmsd_to_haddock),
+      site: formatSiteCoverage(candidate.site_coverage),
+      tone: OUTCOME_TONES[candidate.outcome],
+    };
+  },
+);
+
+const fallbackCases: DockingCase[] = focusCases.map((item: any, index) => ({
+  id: item.id ?? `focus-${index + 1}`,
+  tabTitle: item.tabTitle ?? item.shortLabel ?? "Caso destacado",
+  formulationLabel: item.formulationLabel ?? "",
+  repredId: item.repredId ?? "",
+  outcomeLabel:
+    item.outcomeLabel ??
+    item.badge ??
+    item.reading ??
+    "Clasificación sin etiqueta disponible",
+  poseMatch: Boolean(item.poseMatch),
+  siteMatch: Boolean(item.siteMatch),
+  localPdb: item.localPdb ?? null,
+  blindPdb: item.blindPdb ?? null,
+  rmsd: item.rmsd ?? "N/D",
+  site: item.site ?? "N/D",
+  tone:
+    item.tone === "success" || item.tone === "mixed" || item.tone === "site"
+      ? item.tone
+      : "weak",
+}));
 
 function criteriaLabel(match: boolean): string {
   return match ? "sí" : "no";
 }
 
 export function ValidacionDocking() {
-  const [activeId, setActiveId] = useState(focusCases[0]?.id ?? "");
-  const active = focusCases.find((item) => item.id === activeId) ?? focusCases[0];
+  const cases = allCases.length > 0 ? allCases : fallbackCases;
+  const [activeId, setActiveId] = useState(cases[0]?.id ?? "");
+  const activeIndex = Math.max(
+    cases.findIndex((item) => item.id === activeId),
+    0,
+  );
+  const active = cases[activeIndex];
 
   if (!active) {
     return null;
   }
+
+  const previousCase = () => {
+    const nextIndex = (activeIndex - 1 + cases.length) % cases.length;
+    setActiveId(cases[nextIndex].id);
+  };
+
+  const nextCase = () => {
+    const nextIndex = (activeIndex + 1) % cases.length;
+    setActiveId(cases[nextIndex].id);
+  };
 
   return (
     <motion.div
@@ -89,9 +233,9 @@ export function ValidacionDocking() {
             </span>
 
             <div className="dockstory-outcome-bar" aria-hidden>
-              {outcomeBands.map((band) => (
+              {outcomeBands.map((band, index) => (
                 <span
-                  key={band.key ?? band.label}
+                  key={`${band.label}-${index}`}
                   className={`dockstory-outcome-segment dockstory-outcome-segment-${band.tone}`}
                   style={{ width: band.width }}
                 />
@@ -99,8 +243,8 @@ export function ValidacionDocking() {
             </div>
 
             <div className="dockstory-outcome-grid">
-              {outcomeBands.map((band) => (
-                <div key={band.key ?? band.label} className="dockstory-outcome-item">
+              {outcomeBands.map((band, index) => (
+                <div key={`${band.label}-${index}`} className="dockstory-outcome-item">
                   <span
                     className={`dockstory-outcome-dot dockstory-outcome-dot-${band.tone}`}
                     aria-hidden
@@ -116,21 +260,45 @@ export function ValidacionDocking() {
         </motion.div>
 
         <motion.div variants={fade} className="dockstory-panel dockstory-panel-visual">
-          <div className="dockstory-case-tabs">
-            {focusCases.map((item) => {
-              const isActive = item.id === active.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`dockstory-case-tab${isActive ? " active" : ""}`}
-                  onClick={() => setActiveId(item.id)}
-                >
-                  <span className="dockstory-case-tab-title">{item.tabTitle}</span>
-                  <span className="dockstory-case-tab-meta">{item.formulationLabel}</span>
-                </button>
-              );
-            })}
+          <div className="dockstory-case-controls">
+            <span className="dockstory-case-counter">
+              Candidato {activeIndex + 1} de {cases.length}
+            </span>
+            <div className="dockstory-case-nav">
+              <button
+                type="button"
+                className="dockstory-case-nav-btn"
+                onClick={previousCase}
+              >
+                Anterior
+              </button>
+              <button
+                type="button"
+                className="dockstory-case-nav-btn"
+                onClick={nextCase}
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+
+          <label className="dockstory-case-select-wrap">
+            <select
+              className="dockstory-case-select"
+              value={active.id}
+              onChange={(event) => setActiveId(event.target.value)}
+            >
+              {cases.map((item, index) => (
+                <option key={item.id} value={item.id}>
+                  {index + 1}. {item.repredId} · {item.tabTitle}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="dockstory-case-headline">
+            <span className="dockstory-case-tab-title">{active.tabTitle}</span>
+            <span className="dockstory-case-tab-meta">{active.formulationLabel}</span>
           </div>
 
           <div className="dockstory-viewer-grid">
@@ -140,7 +308,11 @@ export function ValidacionDocking() {
                 <span className="dockstory-viewer-role">Pose de referencia</span>
               </div>
               <div className="dockstory-viewer-frame">
-                <ComplexViewer pdbUrl={active.localPdb} referenceUrl={active.localPdb} />
+                {active.localPdb ? (
+                  <ComplexViewer pdbUrl={active.localPdb} referenceUrl={active.localPdb} />
+                ) : (
+                  <div className="dockstory-viewer-missing">PDB local no disponible</div>
+                )}
               </div>
             </article>
 
@@ -150,11 +322,17 @@ export function ValidacionDocking() {
                 <span className="dockstory-viewer-role">Sobre VEGFA nativo</span>
               </div>
               <div className="dockstory-viewer-frame">
-                <ComplexViewer
-                  pdbUrl={active.blindPdb}
-                  referenceUrl={NATIVE_VEGFA_PDB}
-                  fixTargetFromReference
-                />
+                {active.blindPdb ? (
+                  <ComplexViewer
+                    pdbUrl={active.blindPdb}
+                    referenceUrl={NATIVE_VEGFA_PDB}
+                    fixTargetFromReference
+                  />
+                ) : (
+                  <div className="dockstory-viewer-missing">
+                    PDB de docking sobre VEGFA nativo no disponible
+                  </div>
+                )}
               </div>
             </article>
           </div>
@@ -168,6 +346,10 @@ export function ValidacionDocking() {
               <div className="dockstory-case-metric">
                 <span>Cobertura epitopo VEGFR2</span>
                 <strong>{active.site}</strong>
+              </div>
+              <div className="dockstory-case-metric dockstory-case-metric-id">
+                <span>Repredicción</span>
+                <strong>{active.repredId}</strong>
               </div>
             </div>
 

@@ -16,8 +16,8 @@
     },
     {
       "label": "Criterio sitio ≥20%",
-      "value": "79.2%",
-      "count": "19/24",
+      "value": "83.3%",
+      "count": "20/24",
       "note": "candidatos cuya cobertura del epitopo VEGFR2 cumple el umbral"
     },
     {
@@ -45,15 +45,15 @@
     {
       "key": "site",
       "label": "No replica el acomodo local, pero cubre el sitio VEGFR2",
-      "count": "14/24",
-      "width": "58.3%",
+      "count": "15/24",
+      "width": "62.5%",
       "tone": "site"
     },
     {
       "key": "weak",
       "label": "No replica el acomodo local ni cubre el sitio VEGFR2",
-      "count": "4/24",
-      "width": "16.7%",
+      "count": "3/24",
+      "width": "12.5%",
       "tone": "weak"
     }
   ],
@@ -298,13 +298,13 @@
       "local_pdb": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/validation/cascade/haddock3_backup_wave_hybrid_blended/13_composite_tmscore_mech__002_cand_0015/run_rigid_target/4_emref/emref_1.pdb",
       "local_score": -115.429,
       "blind_status": "completed",
-      "blind_cluster": "",
-      "blind_pdb": "",
-      "rmsd_to_haddock": null,
-      "site_coverage": null,
+      "blind_cluster": "cluster_7",
+      "blind_pdb": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/validation/cascade/cabsdock_phase2_native_vegfa_backup12/01_composite_tmscore_mech__002_cand_0015/output/run_blind_native_vegfa/output_pdbs/cluster_7_medoid_all_atom.pdb",
+      "rmsd_to_haddock": 29.81,
+      "site_coverage": 0.3,
       "close_to_local": false,
-      "covers_expected_site": false,
-      "outcome": "weak"
+      "covers_expected_site": true,
+      "outcome": "site"
     },
     {
       "repred_id": "composite_tmscore_mech__003_cand_0014",
