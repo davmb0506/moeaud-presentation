@@ -8,7 +8,11 @@ solución no dominada a public/fronts/ y genera src/data/ablationFront.json.
 import csv
 import json
 import shutil
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from pdb_metrics import compute_metrics
 
 RUN = Path("/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run")
 PRES = Path("/home/david/Documents/Dev/Tesis/moeaud-presentation")
@@ -84,6 +88,7 @@ def main():
                     "p100": round(p100, 2),
                     "binder": binder_seq,
                     "pdb": f"/fronts/{pdb_subdir}/{dst_name}",
+                    **compute_metrics(src_pdb, binder_seq),
                 }
             )
 

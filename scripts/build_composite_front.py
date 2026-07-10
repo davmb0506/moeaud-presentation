@@ -10,7 +10,11 @@ import glob
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from pdb_metrics import compute_metrics
 
 RUN = Path("/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run")
 PRES = Path("/home/david/Documents/Dev/Tesis/moeaud-presentation")
@@ -92,6 +96,7 @@ def main():
                     "f2": p["f2"],
                     "binder": p["binder"],
                     "pdb": f"/pdbs/composite/{pdb_subdir}/{name}",
+                    **compute_metrics(p["pdb_src"], p["binder"]),
                 }
             )
 

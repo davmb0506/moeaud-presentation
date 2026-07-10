@@ -19,7 +19,19 @@ type Point = {
   f2: number; // 1 - SC (↓ mejor)
   binder: string;
   pdb: string;
+  rg: number | null;
+  if_contacts: number | null;
+  bsa: number | null;
+  charge: number | null;
+  pi: number | null;
+  gravy: number | null;
+  mw_kda: number | null;
+  aromaticity: number | null;
+  instability: number | null;
 };
+
+const fmt = (v: number | null, d = 1): string =>
+  v === null ? "—" : v.toFixed(d);
 
 const POINTS = frontData.points as Point[];
 const COUNTS = frontData.counts as Record<string, number>;
@@ -102,8 +114,7 @@ export function IpsaeScFront() {
       </h2>
       <p className="ablacion-sub">
         Frente no dominado <strong>agregado</strong> (10 réplicas por condición).
-        Haz clic en una solución para ver el <strong>complejo predicho</strong>{" "}
-        binder–VEGF-A.
+        
       </p>
 
       <div className="ablacion-grid">
@@ -201,6 +212,44 @@ export function IpsaeScFront() {
                   1−ipSAE <strong>{active.f1.toFixed(3)}</strong> · 1−SC{" "}
                   <strong>{active.f2.toFixed(3)}</strong>
                 </span>
+              </div>
+              <div className="op-metrics">
+                <div className="op-metric">
+                  <span className="op-metric-k">Radio de giro</span>
+                  <span className="op-metric-v">{fmt(active.rg, 1)} Å</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">Contactos IF</span>
+                  <span className="op-metric-v">{fmt(active.if_contacts, 0)}</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">ΔSASA</span>
+                  <span className="op-metric-v">{fmt(active.bsa, 1)} Å²</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">Carga neta</span>
+                  <span className="op-metric-v">{fmt(active.charge, 1)}</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">pI</span>
+                  <span className="op-metric-v">{fmt(active.pi, 2)}</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">GRAVY</span>
+                  <span className="op-metric-v">{fmt(active.gravy, 3)}</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">Masa</span>
+                  <span className="op-metric-v">{fmt(active.mw_kda, 2)} kDa</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">Aromaticidad</span>
+                  <span className="op-metric-v">{fmt(active.aromaticity, 3)}</span>
+                </div>
+                <div className="op-metric">
+                  <span className="op-metric-k">Inestabilidad</span>
+                  <span className="op-metric-v">{fmt(active.instability, 1)}</span>
+                </div>
               </div>
               <code className="ablacion-info-seq">{active.binder}</code>
               <p className="ablacion-info-note">

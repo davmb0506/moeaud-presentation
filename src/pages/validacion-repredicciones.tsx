@@ -41,25 +41,25 @@ export function ValidacionRepredicciones() {
       viewport={{ amount: 0.15 }}
     >
       <h2 className="validacion-title">
-        Repredicciones estructurales independientes
+        Nuevos PDBs del complejo péptido diseñado - VEGFA
       </h2>
       <p className="validacion-sub">
-        La etapa 5 reevalúa candidatos seleccionados con una corrida
-        independiente de AlphaFold para verificar reproducibilidad estructural
-        fuera del proceso de optimización.
+        La etapa 5 vuelve a generar PDBs del complejo péptido diseñado - VEGFA
+        con una corrida independiente de AlphaFold, para comprobar si los
+        candidatos se sostienen fuera del proceso de optimización.
       </p>
 
       <div className="repred-grid">
         <aside className="repred-sidebar">
           <section className="validacion-card repred-card repred-context">
             <p className="repred-context-lead">
-              Complejos binder–VEGF-A repredichos a partir de candidatos
-              priorizados tras la validación en cascada.
+              PDBs del complejo péptido diseñado - VEGFA generados otra vez a
+              partir de candidatos priorizados tras la validación en cascada.
             </p>
             <p className="repred-context-note">
-              Las repredicciones independientes recuperan complejos con métricas
-              estructurales compatibles con una interfaz plausible, lo que
-              respalda la robustez de los candidatos priorizados.
+              Esta repetición permite ver si el complejo vuelve a aparecer con
+              una forma parecida, lo que respalda la solidez de los candidatos
+              priorizados.
             </p>
           </section>
 
@@ -136,9 +136,9 @@ export function ValidacionRepredicciones() {
             <span className="ablacion-chip binder" /> binder diseñado
           </p>
           <p className="repred-viewer-note">
-            Las repredicciones permiten evaluar si la interfaz propuesta se
-            recupera con una corrida independiente, reduciendo el riesgo de
-            sobreinterpretar una sola predicción estructural.
+            Estos nuevos PDBs permiten ver si el complejo vuelve a aparecer de
+            forma parecida en una corrida independiente, en lugar de apoyarnos
+            en una sola predicción.
           </p>
         </section>
       </div>

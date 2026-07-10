@@ -1,0 +1,6 @@
+candidate_id	parent_id	variant_id	kind	pdb_path	binder_chain	receptor_chain
+cand_0017	cand_0017	cand_0017_design	design	/path/to/cand_0017_complex.pdb	A	B
+cand_0017	cand_0017	cand_0017_scramble_1	scrambled	/path/to/cand_0017_scramble_1.pdb	A	B
+cand_0017	cand_0017	cand_0017_scramble_2	scrambled	/path/to/cand_0017_scramble_2.pdb	A	B
+cand_0028	cand_0028	cand_0028_design	design	/path/to/cand_0028_complex.pdb	A	B
+cand_0028	cand_0028	cand_0028_scramble_1	scrambled	/path/to/cand_0028_scramble_1.pdb	A	B

@@ -15,9 +15,10 @@ import { Operadores } from "./pages/operadores";
 import { Ablacion } from "./pages/ablacion";
 import { CompositeFront } from "./pages/composite-front";
 import { IpsaeScFront } from "./pages/ipsae-sc-front";
+import { ValidacionSintesis } from "./pages/validacion-sintesis";
+import { ValidacionHerramientasDocking } from "./pages/validacion-herramientas-docking";
+import { ValidacionDocking } from "./pages/validacion-docking";
 import { Referencias } from "./pages/referencias";
-import { ValidacionFlujo } from "./pages/validacion-flujo";
-import { ValidacionRuns } from "./pages/validacion-runs";
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
@@ -430,24 +431,34 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.12 }}
+        viewport={{ amount: 0.18 }}
       >
-        <ValidacionFlujo />
+        <ValidacionSintesis />
         <SlideNo n={17} />
       </motion.section>
-
-      
 
       <motion.section
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.12 }}
+        viewport={{ amount: 0.18 }}
       >
-        <ValidacionRuns />
+        <ValidacionHerramientasDocking />
+        <SlideNo n={18} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.18 }}
+      >
+        <ValidacionDocking />
         <SlideNo n={19} />
       </motion.section>
+
       <motion.section
         className="refs-slide slide"
         variants={slideContainer}

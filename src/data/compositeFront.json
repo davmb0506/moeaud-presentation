@@ -14,7 +14,16 @@
       "f1": 0.0,
       "f2": 0.2215,
       "binder": "WRQATTAEAIEVLHTMQKQRS",
-      "pdb": "/pdbs/composite/con_mech/con_0.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_0.pdb",
+      "rg": 10.06,
+      "if_contacts": 46,
+      "bsa": 1787.9,
+      "charge": 0.9,
+      "pi": 8.75,
+      "gravy": -0.838,
+      "mw_kda": 2.48,
+      "aromaticity": 0.048,
+      "instability": 64.6
     },
     {
       "id": "con_1",
@@ -22,7 +31,16 @@
       "f1": 0.0039,
       "f2": 0.2141,
       "binder": "WRQATHAEVIAVLQTMAKQYS",
-      "pdb": "/pdbs/composite/con_mech/con_1.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_1.pdb",
+      "rg": 10.12,
+      "if_contacts": 51,
+      "bsa": 1841.1,
+      "charge": 0.8,
+      "pi": 8.6,
+      "gravy": -0.2,
+      "mw_kda": 2.43,
+      "aromaticity": 0.095,
+      "instability": 47.8
     },
     {
       "id": "con_2",
@@ -30,7 +48,16 @@
       "f1": 0.0059,
       "f2": 0.2049,
       "binder": "WRQATHAEVIAVLQTMAKQVS",
-      "pdb": "/pdbs/composite/con_mech/con_2.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_2.pdb",
+      "rg": 10.07,
+      "if_contacts": 49,
+      "bsa": 1734.2,
+      "charge": 0.8,
+      "pi": 8.76,
+      "gravy": 0.062,
+      "mw_kda": 2.37,
+      "aromaticity": 0.048,
+      "instability": 47.8
     },
     {
       "id": "con_3",
@@ -38,7 +65,16 @@
       "f1": 0.0063,
       "f2": 0.1907,
       "binder": "WRQITHAEAIASLQTMQKQYS",
-      "pdb": "/pdbs/composite/con_mech/con_3.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_3.pdb",
+      "rg": 9.97,
+      "if_contacts": 52,
+      "bsa": 1762.9,
+      "charge": 0.8,
+      "pi": 8.6,
+      "gravy": -0.676,
+      "mw_kda": 2.49,
+      "aromaticity": 0.095,
+      "instability": 38.3
     },
     {
       "id": "con_4",
@@ -46,7 +82,16 @@
       "f1": 0.0072,
       "f2": 0.1856,
       "binder": "WRQITHAEAIASLQTMQKQRS",
-      "pdb": "/pdbs/composite/con_mech/con_4.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_4.pdb",
+      "rg": 10.01,
+      "if_contacts": 47,
+      "bsa": 1746.8,
+      "charge": 1.8,
+      "pi": 10.84,
+      "gravy": -0.829,
+      "mw_kda": 2.48,
+      "aromaticity": 0.048,
+      "instability": 62.8
     },
     {
       "id": "con_5",
@@ -54,7 +99,16 @@
       "f1": 0.015,
       "f2": 0.1598,
       "binder": "WRQITQAEAIAVLQTMAKQRS",
-      "pdb": "/pdbs/composite/con_mech/con_5.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_5.pdb",
+      "rg": 10.05,
+      "if_contacts": 47,
+      "bsa": 1704.0,
+      "charge": 1.8,
+      "pi": 10.84,
+      "gravy": -0.352,
+      "mw_kda": 2.43,
+      "aromaticity": 0.048,
+      "instability": 68.7
     },
     {
       "id": "con_6",
@@ -62,7 +116,16 @@
       "f1": 0.0299,
       "f2": 0.1237,
       "binder": "WRQITQAEAIAVLQTMAKQLS",
-      "pdb": "/pdbs/composite/con_mech/con_6.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_6.pdb",
+      "rg": 9.97,
+      "if_contacts": 45,
+      "bsa": 1590.6,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.043,
+      "mw_kda": 2.39,
+      "aromaticity": 0.048,
+      "instability": 47.8
     },
     {
       "id": "con_7",
@@ -70,7 +133,16 @@
       "f1": 0.0399,
       "f2": 0.1017,
       "binder": "SPFHDKLMNALAEMMMANIAE",
-      "pdb": "/pdbs/composite/con_mech/con_7.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_7.pdb",
+      "rg": 9.75,
+      "if_contacts": 38,
+      "bsa": 1528.7,
+      "charge": -2.4,
+      "pi": 4.89,
+      "gravy": 0.129,
+      "mw_kda": 2.36,
+      "aromaticity": 0.048,
+      "instability": 55.6
     },
     {
       "id": "con_8",
@@ -78,7 +150,16 @@
       "f1": 0.0406,
       "f2": 0.101,
       "binder": "SRLYQHLQRFVKDADANLARN",
-      "pdb": "/pdbs/composite/con_mech/con_8.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_8.pdb",
+      "rg": 9.88,
+      "if_contacts": 35,
+      "bsa": 1560.0,
+      "charge": 1.5,
+      "pi": 9.98,
+      "gravy": -0.948,
+      "mw_kda": 2.52,
+      "aromaticity": 0.095,
+      "instability": 34.7
     },
     {
       "id": "con_9",
@@ -86,7 +167,16 @@
       "f1": 0.0416,
       "f2": 0.0974,
       "binder": "SPFHEKLMSALAQMMMANIAE",
-      "pdb": "/pdbs/composite/con_mech/con_9.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_9.pdb",
+      "rg": 9.77,
+      "if_contacts": 38,
+      "bsa": 1538.9,
+      "charge": -1.4,
+      "pi": 5.53,
+      "gravy": 0.257,
+      "mw_kda": 2.35,
+      "aromaticity": 0.048,
+      "instability": 80.6
     },
     {
       "id": "con_10",
@@ -94,7 +184,16 @@
       "f1": 0.0451,
       "f2": 0.097,
       "binder": "SRVWQAIMELASETTAARETA",
-      "pdb": "/pdbs/composite/con_mech/con_10.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_10.pdb",
+      "rg": 9.96,
+      "if_contacts": 42,
+      "bsa": 1522.3,
+      "charge": -1.5,
+      "pi": 4.78,
+      "gravy": -0.2,
+      "mw_kda": 2.32,
+      "aromaticity": 0.048,
+      "instability": 27.9
     },
     {
       "id": "con_11",
@@ -102,7 +201,16 @@
       "f1": 0.0473,
       "f2": 0.0928,
       "binder": "SPFHRKLMNALAEMMMANIAE",
-      "pdb": "/pdbs/composite/con_mech/con_11.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_11.pdb",
+      "rg": 9.77,
+      "if_contacts": 37,
+      "bsa": 1607.3,
+      "charge": -0.4,
+      "pi": 6.5,
+      "gravy": 0.081,
+      "mw_kda": 2.41,
+      "aromaticity": 0.048,
+      "instability": 59.6
     },
     {
       "id": "con_12",
@@ -110,7 +218,16 @@
       "f1": 0.0518,
       "f2": 0.059,
       "binder": "SRVWEAIMNLAKQTESARRDA",
-      "pdb": "/pdbs/composite/con_mech/con_12.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_12.pdb",
+      "rg": 9.97,
+      "if_contacts": 39,
+      "bsa": 1463.8,
+      "charge": 0.5,
+      "pi": 8.46,
+      "gravy": -0.786,
+      "mw_kda": 2.43,
+      "aromaticity": 0.048,
+      "instability": 75.6
     },
     {
       "id": "con_13",
@@ -118,7 +235,16 @@
       "f1": 0.0631,
       "f2": 0.0499,
       "binder": "SRVWHAIMNLAKETTAAREDA",
-      "pdb": "/pdbs/composite/con_mech/con_13.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_13.pdb",
+      "rg": 10.02,
+      "if_contacts": 38,
+      "bsa": 1388.2,
+      "charge": -0.4,
+      "pi": 6.48,
+      "gravy": -0.467,
+      "mw_kda": 2.37,
+      "aromaticity": 0.048,
+      "instability": 39.1
     },
     {
       "id": "con_14",
@@ -126,7 +252,16 @@
       "f1": 0.0832,
       "f2": 0.0492,
       "binder": "SRVWQAIMELAKETDSAREEA",
-      "pdb": "/pdbs/composite/con_mech/con_14.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_14.pdb",
+      "rg": 10.01,
+      "if_contacts": 35,
+      "bsa": 1378.7,
+      "charge": -2.5,
+      "pi": 4.58,
+      "gravy": -0.738,
+      "mw_kda": 2.42,
+      "aromaticity": 0.048,
+      "instability": 43.4
     },
     {
       "id": "con_15",
@@ -134,7 +269,16 @@
       "f1": 0.0922,
       "f2": 0.0487,
       "binder": "DKQKLHTEAIKLLQNMQEQLQ",
-      "pdb": "/pdbs/composite/con_mech/con_15.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_15.pdb",
+      "rg": 9.93,
+      "if_contacts": 36,
+      "bsa": 1411.5,
+      "charge": -0.1,
+      "pi": 6.76,
+      "gravy": -1.129,
+      "mw_kda": 2.54,
+      "aromaticity": 0.0,
+      "instability": 56.0
     },
     {
       "id": "con_16",
@@ -142,7 +286,16 @@
       "f1": 0.1275,
       "f2": 0.0485,
       "binder": "DAKKIHAETIKLLQTMQKQLS",
-      "pdb": "/pdbs/composite/con_mech/con_16.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_16.pdb",
+      "rg": 9.74,
+      "if_contacts": 35,
+      "bsa": 1369.4,
+      "charge": 1.8,
+      "pi": 9.53,
+      "gravy": -0.6,
+      "mw_kda": 2.42,
+      "aromaticity": 0.0,
+      "instability": 26.5
     },
     {
       "id": "con_17",
@@ -150,7 +303,16 @@
       "f1": 0.1592,
       "f2": 0.0424,
       "binder": "DAKKIHAEAIKLLQTMQKQLS",
-      "pdb": "/pdbs/composite/con_mech/con_17.pdb"
+      "pdb": "/pdbs/composite/con_mech/con_17.pdb",
+      "rg": 9.84,
+      "if_contacts": 36,
+      "bsa": 1413.0,
+      "charge": 1.8,
+      "pi": 9.53,
+      "gravy": -0.481,
+      "mw_kda": 2.39,
+      "aromaticity": 0.0,
+      "instability": 26.5
     },
     {
       "id": "sin_0",
@@ -158,7 +320,16 @@
       "f1": 0.0,
       "f2": 0.1993,
       "binder": "WQRISHQEAIAFLKTTQDDMN",
-      "pdb": "/pdbs/composite/sin/sin_0.pdb"
+      "pdb": "/pdbs/composite/sin/sin_0.pdb",
+      "rg": 10.2,
+      "if_contacts": 46,
+      "bsa": 1809.9,
+      "charge": -1.1,
+      "pi": 5.38,
+      "gravy": -0.862,
+      "mw_kda": 2.53,
+      "aromaticity": 0.095,
+      "instability": 20.2
     },
     {
       "id": "sin_1",
@@ -166,7 +337,16 @@
       "f1": 0.0069,
       "f2": 0.1692,
       "binder": "SWIRLTHDEALSVLHQMMADQ",
-      "pdb": "/pdbs/composite/sin/sin_1.pdb"
+      "pdb": "/pdbs/composite/sin/sin_1.pdb",
+      "rg": 9.85,
+      "if_contacts": 47,
+      "bsa": 1729.2,
+      "charge": -2.4,
+      "pi": 5.2,
+      "gravy": -0.195,
+      "mw_kda": 2.48,
+      "aromaticity": 0.048,
+      "instability": 10.0
     },
     {
       "id": "sin_2",
@@ -174,7 +354,16 @@
       "f1": 0.0096,
       "f2": 0.1631,
       "binder": "EYIKLSHNEAIGLLQHMAQQR",
-      "pdb": "/pdbs/composite/sin/sin_2.pdb"
+      "pdb": "/pdbs/composite/sin/sin_2.pdb",
+      "rg": 10.04,
+      "if_contacts": 50,
+      "bsa": 1724.5,
+      "charge": 0.0,
+      "pi": 7.02,
+      "gravy": -0.59,
+      "mw_kda": 2.48,
+      "aromaticity": 0.048,
+      "instability": 43.3
     },
     {
       "id": "sin_3",
@@ -182,7 +371,16 @@
       "f1": 0.0099,
       "f2": 0.1465,
       "binder": "MWIRLTHDEALTLLHQMLADQ",
-      "pdb": "/pdbs/composite/sin/sin_3.pdb"
+      "pdb": "/pdbs/composite/sin/sin_3.pdb",
+      "rg": 9.85,
+      "if_contacts": 48,
+      "bsa": 1756.2,
+      "charge": -2.3,
+      "pi": 5.2,
+      "gravy": 0.01,
+      "mw_kda": 2.54,
+      "aromaticity": 0.048,
+      "instability": 5.5
     },
     {
       "id": "sin_4",
@@ -190,7 +388,16 @@
       "f1": 0.0178,
       "f2": 0.1373,
       "binder": "YPAWEKLLRVNRQLTQEMNRN",
-      "pdb": "/pdbs/composite/sin/sin_4.pdb"
+      "pdb": "/pdbs/composite/sin/sin_4.pdb",
+      "rg": 10.0,
+      "if_contacts": 40,
+      "bsa": 1659.4,
+      "charge": 1.8,
+      "pi": 9.98,
+      "gravy": -1.29,
+      "mw_kda": 2.66,
+      "aromaticity": 0.095,
+      "instability": 50.3
     },
     {
       "id": "sin_5",
@@ -198,7 +405,16 @@
       "f1": 0.0179,
       "f2": 0.1136,
       "binder": "TTALRKLQDLGRNWQNEIASQ",
-      "pdb": "/pdbs/composite/sin/sin_5.pdb"
+      "pdb": "/pdbs/composite/sin/sin_5.pdb",
+      "rg": 9.64,
+      "if_contacts": 42,
+      "bsa": 1691.2,
+      "charge": 0.4,
+      "pi": 8.41,
+      "gravy": -1.019,
+      "mw_kda": 2.44,
+      "aromaticity": 0.048,
+      "instability": 58.6
     },
     {
       "id": "sin_6",
@@ -206,7 +422,16 @@
       "f1": 0.0193,
       "f2": 0.1113,
       "binder": "TWIRLTHDEALTILQQAMADQ",
-      "pdb": "/pdbs/composite/sin/sin_6.pdb"
+      "pdb": "/pdbs/composite/sin/sin_6.pdb",
+      "rg": 10.05,
+      "if_contacts": 46,
+      "bsa": 1690.4,
+      "charge": -2.5,
+      "pi": 4.53,
+      "gravy": -0.19,
+      "mw_kda": 2.45,
+      "aromaticity": 0.048,
+      "instability": 38.1
     },
     {
       "id": "sin_7",
@@ -214,7 +439,16 @@
       "f1": 0.0216,
       "f2": 0.0806,
       "binder": "SPAWEKLLRLNRQLTQEVNRN",
-      "pdb": "/pdbs/composite/sin/sin_7.pdb"
+      "pdb": "/pdbs/composite/sin/sin_7.pdb",
+      "rg": 9.66,
+      "if_contacts": 42,
+      "bsa": 1830.5,
+      "charge": 1.5,
+      "pi": 10.74,
+      "gravy": -1.176,
+      "mw_kda": 2.57,
+      "aromaticity": 0.048,
+      "instability": 65.4
     },
     {
       "id": "sin_8",
@@ -222,7 +456,16 @@
       "f1": 0.0436,
       "f2": 0.0784,
       "binder": "SEAWEKLLRLYQQLTSEWERN",
-      "pdb": "/pdbs/composite/sin/sin_8.pdb"
+      "pdb": "/pdbs/composite/sin/sin_8.pdb",
+      "rg": 9.86,
+      "if_contacts": 41,
+      "bsa": 1636.0,
+      "charge": -1.5,
+      "pi": 4.94,
+      "gravy": -1.229,
+      "mw_kda": 2.68,
+      "aromaticity": 0.143,
+      "instability": 40.9
     },
     {
       "id": "sin_9",
@@ -230,7 +473,16 @@
       "f1": 0.048,
       "f2": 0.0704,
       "binder": "SEAWEKLLRLNQNLHQEWERN",
-      "pdb": "/pdbs/composite/sin/sin_9.pdb"
+      "pdb": "/pdbs/composite/sin/sin_9.pdb",
+      "rg": 9.96,
+      "if_contacts": 37,
+      "bsa": 1507.6,
+      "charge": -1.4,
+      "pi": 5.54,
+      "gravy": -1.581,
+      "mw_kda": 2.69,
+      "aromaticity": 0.095,
+      "instability": 28.1
     },
     {
       "id": "sin_10",
@@ -238,7 +490,16 @@
       "f1": 0.0487,
       "f2": 0.07,
       "binder": "SEAWEKLLRLNRQLTQEWERN",
-      "pdb": "/pdbs/composite/sin/sin_10.pdb"
+      "pdb": "/pdbs/composite/sin/sin_10.pdb",
+      "rg": 9.86,
+      "if_contacts": 38,
+      "bsa": 1515.3,
+      "charge": -0.5,
+      "pi": 6.02,
+      "gravy": -1.51,
+      "mw_kda": 2.7,
+      "aromaticity": 0.095,
+      "instability": 37.3
     },
     {
       "id": "sin_11",
@@ -246,7 +507,16 @@
       "f1": 0.0498,
       "f2": 0.066,
       "binder": "SEAWEKLLRLNHQLTQEWERN",
-      "pdb": "/pdbs/composite/sin/sin_11.pdb"
+      "pdb": "/pdbs/composite/sin/sin_11.pdb",
+      "rg": 9.86,
+      "if_contacts": 39,
+      "bsa": 1526.0,
+      "charge": -1.4,
+      "pi": 5.54,
+      "gravy": -1.448,
+      "mw_kda": 2.68,
+      "aromaticity": 0.095,
+      "instability": 28.1
     },
     {
       "id": "sin_12",
@@ -254,7 +524,16 @@
       "f1": 0.0517,
       "f2": 0.0654,
       "binder": "SEAWDKLLRLNQNLTQEWERN",
-      "pdb": "/pdbs/composite/sin/sin_12.pdb"
+      "pdb": "/pdbs/composite/sin/sin_12.pdb",
+      "rg": 9.9,
+      "if_contacts": 38,
+      "bsa": 1487.6,
+      "charge": -1.5,
+      "pi": 4.87,
+      "gravy": -1.462,
+      "mw_kda": 2.64,
+      "aromaticity": 0.095,
+      "instability": 20.5
     },
     {
       "id": "sin_13",
@@ -262,7 +541,16 @@
       "f1": 0.0522,
       "f2": 0.0625,
       "binder": "SEAWEKLLRLNQNLASEWERN",
-      "pdb": "/pdbs/composite/sin/sin_13.pdb"
+      "pdb": "/pdbs/composite/sin/sin_13.pdb",
+      "rg": 10.0,
+      "if_contacts": 37,
+      "bsa": 1472.2,
+      "charge": -1.5,
+      "pi": 4.94,
+      "gravy": -1.214,
+      "mw_kda": 2.59,
+      "aromaticity": 0.095,
+      "instability": 28.1
     },
     {
       "id": "sin_14",
@@ -270,7 +558,16 @@
       "f1": 0.0524,
       "f2": 0.0396,
       "binder": "SEAWEKLLRLNRNLHQEVERN",
-      "pdb": "/pdbs/composite/sin/sin_14.pdb"
+      "pdb": "/pdbs/composite/sin/sin_14.pdb",
+      "rg": 9.73,
+      "if_contacts": 37,
+      "bsa": 1488.4,
+      "charge": -0.4,
+      "pi": 6.5,
+      "gravy": -1.386,
+      "mw_kda": 2.63,
+      "aromaticity": 0.048,
+      "instability": 44.7
     }
   ]
 }

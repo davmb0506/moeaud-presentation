@@ -1,7 +1,7 @@
 {
   "objectives": {
-    "x": "ipSAE",
-    "y": "SC (Shape Complementarity)"
+    "x": "1 − ipSAE",
+    "y": "1 − SC (Shape Complementarity)"
   },
   "counts": {
     "con": 8,
@@ -14,7 +14,16 @@
       "f1": 0.7131,
       "f2": 0.2232,
       "binder": "PTPLLSALERLARQEPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_0.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_0.pdb",
+      "rg": 11.76,
+      "if_contacts": 41,
+      "bsa": 1386.3,
+      "charge": 2.0,
+      "pi": 10.74,
+      "gravy": -1.014,
+      "mw_kda": 2.39,
+      "aromaticity": 0.0,
+      "instability": 64.6
     },
     {
       "id": "con_1",
@@ -22,7 +31,16 @@
       "f1": 0.7206,
       "f2": 0.1907,
       "binder": "GPTLLAALETLANQEPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_1.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_1.pdb",
+      "rg": 11.77,
+      "if_contacts": 42,
+      "bsa": 1368.7,
+      "charge": -0.2,
+      "pi": 6.14,
+      "gravy": -0.605,
+      "mw_kda": 2.23,
+      "aromaticity": 0.0,
+      "instability": 51.8
     },
     {
       "id": "con_2",
@@ -30,7 +48,16 @@
       "f1": 0.7249,
       "f2": 0.1856,
       "binder": "GPTLLAALETLANQEPPKKRQ",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_2.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_2.pdb",
+      "rg": 11.86,
+      "if_contacts": 40,
+      "bsa": 1342.2,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": -0.752,
+      "mw_kda": 2.28,
+      "aromaticity": 0.0,
+      "instability": 58.1
     },
     {
       "id": "con_3",
@@ -38,7 +65,16 @@
       "f1": 0.7308,
       "f2": 0.1783,
       "binder": "GTTLLSALEKLAAQKPPKSRQ",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_3.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_3.pdb",
+      "rg": 11.76,
+      "if_contacts": 40,
+      "bsa": 1327.2,
+      "charge": 2.8,
+      "pi": 10.29,
+      "gravy": -0.605,
+      "mw_kda": 2.24,
+      "aromaticity": 0.0,
+      "instability": 25.4
     },
     {
       "id": "con_4",
@@ -46,7 +82,16 @@
       "f1": 0.7499,
       "f2": 0.1694,
       "binder": "GTTLLSALEKLAAQKPPKSAA",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_4.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_4.pdb",
+      "rg": 10.91,
+      "if_contacts": 41,
+      "bsa": 1323.5,
+      "charge": 1.8,
+      "pi": 9.7,
+      "gravy": -0.052,
+      "mw_kda": 2.1,
+      "aromaticity": 0.0,
+      "instability": 7.0
     },
     {
       "id": "con_5",
@@ -54,7 +99,16 @@
       "f1": 0.8029,
       "f2": 0.1647,
       "binder": "DPSLLAALERLANQEPPQSRA",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_5.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_5.pdb",
+      "rg": 11.35,
+      "if_contacts": 43,
+      "bsa": 1373.0,
+      "charge": -1.2,
+      "pi": 4.68,
+      "gravy": -0.667,
+      "mw_kda": 2.28,
+      "aromaticity": 0.0,
+      "instability": 81.9
     },
     {
       "id": "con_6",
@@ -62,7 +116,16 @@
       "f1": 0.8184,
       "f2": 0.1616,
       "binder": "DPSLLAALERLANQEPPQGRA",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_6.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_6.pdb",
+      "rg": 11.51,
+      "if_contacts": 44,
+      "bsa": 1362.2,
+      "charge": -1.2,
+      "pi": 4.68,
+      "gravy": -0.648,
+      "mw_kda": 2.25,
+      "aromaticity": 0.0,
+      "instability": 51.8
     },
     {
       "id": "con_7",
@@ -70,7 +133,16 @@
       "f1": 0.8526,
       "f2": 0.1542,
       "binder": "DPSLLAALEKLAAQEPPQKHA",
-      "pdb": "/pdbs/ipsae_sc/con_mech/con_7.pdb"
+      "pdb": "/pdbs/ipsae_sc/con_mech/con_7.pdb",
+      "rg": 11.52,
+      "if_contacts": 41,
+      "bsa": 1333.5,
+      "charge": -1.1,
+      "pi": 5.45,
+      "gravy": -0.471,
+      "mw_kda": 2.23,
+      "aromaticity": 0.0,
+      "instability": 51.3
     },
     {
       "id": "sin_0",
@@ -78,7 +150,16 @@
       "f1": 0.6745,
       "f2": 0.295,
       "binder": "KYPKIPGWKWVIVITYYVPPS",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_0.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_0.pdb",
+      "rg": 15.36,
+      "if_contacts": 86,
+      "bsa": 2894.8,
+      "charge": 2.8,
+      "pi": 9.7,
+      "gravy": 0.019,
+      "mw_kda": 2.54,
+      "aromaticity": 0.238,
+      "instability": 41.2
     },
     {
       "id": "sin_1",
@@ -86,7 +167,16 @@
       "f1": 0.681,
       "f2": 0.2944,
       "binder": "KYPRIPGWKWVIVITYYVPPS",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_1.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_1.pdb",
+      "rg": 15.23,
+      "if_contacts": 87,
+      "bsa": 2937.5,
+      "charge": 2.8,
+      "pi": 9.82,
+      "gravy": -0.01,
+      "mw_kda": 2.56,
+      "aromaticity": 0.238,
+      "instability": 41.6
     },
     {
       "id": "sin_2",
@@ -94,7 +184,16 @@
       "f1": 0.6812,
       "f2": 0.279,
       "binder": "RYPKIPGWKWVIVITYYVPPT",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_2.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_2.pdb",
+      "rg": 15.44,
+      "if_contacts": 86,
+      "bsa": 2918.9,
+      "charge": 2.8,
+      "pi": 9.82,
+      "gravy": -0.005,
+      "mw_kda": 2.58,
+      "aromaticity": 0.238,
+      "instability": 28.4
     },
     {
       "id": "sin_3",
@@ -102,7 +201,16 @@
       "f1": 0.7093,
       "f2": 0.2643,
       "binder": "RPQRIPGWKWVIFITYYVPQS",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_3.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_3.pdb",
+      "rg": 15.44,
+      "if_contacts": 87,
+      "bsa": 3000.0,
+      "charge": 2.8,
+      "pi": 10.28,
+      "gravy": -0.3,
+      "mw_kda": 2.64,
+      "aromaticity": 0.238,
+      "instability": 73.5
     },
     {
       "id": "sin_4",
@@ -110,7 +218,16 @@
       "f1": 0.7511,
       "f2": 0.2627,
       "binder": "DDVQYLVTFYVDGELVGSDIY",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_4.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_4.pdb",
+      "rg": 10.89,
+      "if_contacts": 40,
+      "bsa": 1422.6,
+      "charge": -5.2,
+      "pi": 4.05,
+      "gravy": 0.214,
+      "mw_kda": 2.41,
+      "aromaticity": 0.19,
+      "instability": 8.5
     },
     {
       "id": "sin_5",
@@ -118,7 +235,16 @@
       "f1": 0.7546,
       "f2": 0.2509,
       "binder": "PPQAGDKLTHEEAMDLLNSAQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_5.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_5.pdb",
+      "rg": 8.7,
+      "if_contacts": 40,
+      "bsa": 1277.6,
+      "charge": -2.9,
+      "pi": 4.31,
+      "gravy": -0.857,
+      "mw_kda": 2.27,
+      "aromaticity": 0.0,
+      "instability": 35.3
     },
     {
       "id": "sin_6",
@@ -126,7 +252,16 @@
       "f1": 0.7625,
       "f2": 0.2269,
       "binder": "PPQAGDKLTHQQAMDLLNSAQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_6.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_6.pdb",
+      "rg": 8.66,
+      "if_contacts": 39,
+      "bsa": 1313.1,
+      "charge": -1.0,
+      "pi": 5.22,
+      "gravy": -0.857,
+      "mw_kda": 2.26,
+      "aromaticity": 0.0,
+      "instability": 29.0
     },
     {
       "id": "sin_7",
@@ -134,7 +269,16 @@
       "f1": 0.7674,
       "f2": 0.2252,
       "binder": "PPQAGEKLTAQQAIALLQSAQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_7.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_7.pdb",
+      "rg": 8.59,
+      "if_contacts": 41,
+      "bsa": 1356.5,
+      "charge": -0.0,
+      "pi": 6.43,
+      "gravy": -0.243,
+      "mw_kda": 2.16,
+      "aromaticity": 0.0,
+      "instability": 65.9
     },
     {
       "id": "sin_8",
@@ -142,7 +286,16 @@
       "f1": 0.7685,
       "f2": 0.2193,
       "binder": "PPQAGEKLTHAEAIALLNSAQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_8.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_8.pdb",
+      "rg": 8.6,
+      "if_contacts": 42,
+      "bsa": 1387.9,
+      "charge": -0.9,
+      "pi": 5.41,
+      "gravy": -0.229,
+      "mw_kda": 2.16,
+      "aromaticity": 0.0,
+      "instability": 20.2
     },
     {
       "id": "sin_9",
@@ -150,7 +303,16 @@
       "f1": 0.776,
       "f2": 0.2162,
       "binder": "PPQAGEKLTHAQAIELLNSAQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_9.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_9.pdb",
+      "rg": 8.54,
+      "if_contacts": 40,
+      "bsa": 1353.1,
+      "charge": -0.9,
+      "pi": 5.41,
+      "gravy": -0.481,
+      "mw_kda": 2.22,
+      "aromaticity": 0.0,
+      "instability": 41.2
     },
     {
       "id": "sin_10",
@@ -158,7 +320,16 @@
       "f1": 0.7842,
       "f2": 0.2113,
       "binder": "KPTLMEALQAAGFLPPPAPSA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_10.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_10.pdb",
+      "rg": 8.46,
+      "if_contacts": 31,
+      "bsa": 1227.7,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.205,
+      "mw_kda": 2.11,
+      "aromaticity": 0.048,
+      "instability": 76.5
     },
     {
       "id": "sin_11",
@@ -166,7 +337,16 @@
       "f1": 0.7899,
       "f2": 0.2091,
       "binder": "KPSLMEALQAAGFLPPKAPAP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_11.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_11.pdb",
+      "rg": 8.54,
+      "if_contacts": 34,
+      "bsa": 1244.6,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": 0.052,
+      "mw_kda": 2.13,
+      "aromaticity": 0.048,
+      "instability": 76.5
     },
     {
       "id": "sin_12",
@@ -174,7 +354,16 @@
       "f1": 0.7978,
       "f2": 0.2072,
       "binder": "KPTIIQALQAAGILPPFPWSA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_12.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_12.pdb",
+      "rg": 8.66,
+      "if_contacts": 42,
+      "bsa": 1268.1,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.524,
+      "mw_kda": 2.22,
+      "aromaticity": 0.095,
+      "instability": 61.9
     },
     {
       "id": "sin_13",
@@ -182,7 +371,16 @@
       "f1": 0.799,
       "f2": 0.2002,
       "binder": "KPTLMEALQAAGFLPPPPPAA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_13.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_13.pdb",
+      "rg": 8.39,
+      "if_contacts": 32,
+      "bsa": 1210.6,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.167,
+      "mw_kda": 2.12,
+      "aromaticity": 0.048,
+      "instability": 76.5
     },
     {
       "id": "sin_14",
@@ -190,7 +388,16 @@
       "f1": 0.7994,
       "f2": 0.1869,
       "binder": "KPTLMEALAAAGFLPPPAAPA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_14.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_14.pdb",
+      "rg": 8.74,
+      "if_contacts": 35,
+      "bsa": 1292.6,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.581,
+      "mw_kda": 2.03,
+      "aromaticity": 0.048,
+      "instability": 61.0
     },
     {
       "id": "sin_15",
@@ -198,7 +405,16 @@
       "f1": 0.8303,
       "f2": 0.1831,
       "binder": "KPTLIEALQAAGILPPPPWSP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_15.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_15.pdb",
+      "rg": 8.91,
+      "if_contacts": 32,
+      "bsa": 1134.6,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.119,
+      "mw_kda": 2.2,
+      "aromaticity": 0.048,
+      "instability": 103.7
     },
     {
       "id": "sin_16",
@@ -206,7 +422,16 @@
       "f1": 0.832,
       "f2": 0.1815,
       "binder": "KPSLIAALQAAGILPPPPWSQ",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_16.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_16.pdb",
+      "rg": 8.62,
+      "if_contacts": 36,
+      "bsa": 1227.2,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.276,
+      "mw_kda": 2.16,
+      "aromaticity": 0.048,
+      "instability": 80.2
     },
     {
       "id": "sin_17",
@@ -214,7 +439,16 @@
       "f1": 0.8329,
       "f2": 0.1684,
       "binder": "KPSLMEALQAAGILPPPPPSA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_17.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_17.pdb",
+      "rg": 8.34,
+      "if_contacts": 32,
+      "bsa": 1071.1,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.119,
+      "mw_kda": 2.09,
+      "aromaticity": 0.0,
+      "instability": 90.8
     },
     {
       "id": "sin_18",
@@ -222,7 +456,16 @@
       "f1": 0.8372,
       "f2": 0.1673,
       "binder": "KPSLMQALAAAGILPPPTPSP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_18.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_18.pdb",
+      "rg": 8.44,
+      "if_contacts": 32,
+      "bsa": 1103.0,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.252,
+      "mw_kda": 2.06,
+      "aromaticity": 0.0,
+      "instability": 74.3
     },
     {
       "id": "sin_19",
@@ -230,7 +473,16 @@
       "f1": 0.8472,
       "f2": 0.1649,
       "binder": "KPTLREALAAAGFLPPPAASA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_19.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_19.pdb",
+      "rg": 8.37,
+      "if_contacts": 40,
+      "bsa": 1392.0,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.314,
+      "mw_kda": 2.05,
+      "aromaticity": 0.048,
+      "instability": 51.8
     },
     {
       "id": "sin_20",
@@ -238,7 +490,16 @@
       "f1": 0.8486,
       "f2": 0.1647,
       "binder": "KPTLMQALYAAGVLPPPTWSA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_20.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_20.pdb",
+      "rg": 8.7,
+      "if_contacts": 36,
+      "bsa": 1170.0,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": 0.29,
+      "mw_kda": 2.21,
+      "aromaticity": 0.095,
+      "instability": 34.0
     },
     {
       "id": "sin_21",
@@ -246,7 +507,16 @@
       "f1": 0.8528,
       "f2": 0.1549,
       "binder": "KPSLMQALAAAGILPPPPPSP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_21.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_21.pdb",
+      "rg": 8.25,
+      "if_contacts": 31,
+      "bsa": 1074.9,
+      "charge": 0.8,
+      "pi": 8.75,
+      "gravy": 0.21,
+      "mw_kda": 2.05,
+      "aromaticity": 0.0,
+      "instability": 92.6
     },
     {
       "id": "sin_22",
@@ -254,7 +524,16 @@
       "f1": 0.894,
       "f2": 0.1477,
       "binder": "KPSLMEALQAAGILPPKTATP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_22.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_22.pdb",
+      "rg": 8.56,
+      "if_contacts": 30,
+      "bsa": 1017.0,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": 0.057,
+      "mw_kda": 2.13,
+      "aromaticity": 0.0,
+      "instability": 54.1
     },
     {
       "id": "sin_23",
@@ -262,7 +541,16 @@
       "f1": 0.897,
       "f2": 0.1438,
       "binder": "KPSLMEALQAAGILPPKTPAP",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_23.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_23.pdb",
+      "rg": 8.46,
+      "if_contacts": 30,
+      "bsa": 1055.7,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": 0.014,
+      "mw_kda": 2.13,
+      "aromaticity": 0.0,
+      "instability": 72.4
     },
     {
       "id": "sin_24",
@@ -270,7 +558,16 @@
       "f1": 0.9227,
       "f2": 0.1411,
       "binder": "KPSLMQALQAAGILDPSPATA",
-      "pdb": "/pdbs/ipsae_sc/sin/sin_24.pdb"
+      "pdb": "/pdbs/ipsae_sc/sin/sin_24.pdb",
+      "rg": 8.76,
+      "if_contacts": 32,
+      "bsa": 1054.6,
+      "charge": -0.2,
+      "pi": 5.84,
+      "gravy": 0.233,
+      "mw_kda": 2.08,
+      "aromaticity": 0.0,
+      "instability": 71.4
     }
   ]
 }

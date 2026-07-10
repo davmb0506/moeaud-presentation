@@ -134,8 +134,7 @@ export function Slide5() {
         <span className="mec-kicker">Parte B · inyección de diversidad</span>
         <h2 className="mec-title">5 movimientos sobre el frente</h2>
         <p className="mec-lead">
-          Cada estrategia aborda una causa distinta de estancamiento. Haz clic
-          para ver la región del frente que modifica.
+          Cada estrategia aborda una causa distinta de estancamiento.
         </p>
       </div>
 

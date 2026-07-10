@@ -131,6 +131,11 @@ export function chainCA(pdbText: string, chain: string): number[][] {
 
 const fmt8 = (v: number): string => v.toFixed(3).padStart(8);
 
+export type ChainRoles = {
+  targetChain: string;
+  binderChain: string | null;
+};
+
 // Aplica R·p + t a todas las coordenadas atómicas del PDB.
 export function transformPdb(pdbText: string, R: Mat3, t: Vec3): string {
   const out: string[] = [];
@@ -148,4 +153,53 @@ export function transformPdb(pdbText: string, R: Mat3, t: Vec3): string {
     }
   }
   return out.join("\n");
+}
+
+// Mantiene VEGF-A fijo desde la referencia y solo traslada el binder del PDB evaluado.
+export function composeRefTargetWithEvalBinder(
+  refPdb: string,
+  evalPdb: string,
+  refRoles: ChainRoles,
+  evalRoles: ChainRoles,
+  binderChainOut = "B",
+): { pdb: string; roles: ChainRoles } {
+  const refTarget = refRoles.targetChain;
+  const evalTarget = evalRoles.targetChain;
+  const evalBinder = evalRoles.binderChain;
+  if (!evalBinder) {
+    return { pdb: refPdb, roles: refRoles };
+  }
+
+  const refCA = chainCA(refPdb, refTarget);
+  const evalCA = chainCA(evalPdb, evalTarget);
+  let R: Mat3 = [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+  ];
+  let t: Vec3 = [0, 0, 0];
+  if (evalCA.length === refCA.length && evalCA.length >= 3) {
+    ({ R, t } = kabsch(evalCA, refCA));
+  }
+
+  const out: string[] = [];
+  for (const line of refPdb.split("\n")) {
+    if (line.startsWith("ATOM") && line[21] === refTarget) out.push(line);
+  }
+  for (const line of evalPdb.split("\n")) {
+    if (!line.startsWith("ATOM") || line[21] !== evalBinder) continue;
+    const x = parseFloat(line.substring(30, 38));
+    const y = parseFloat(line.substring(38, 46));
+    const z = parseFloat(line.substring(46, 54));
+    const nx = R[0][0] * x + R[0][1] * y + R[0][2] * z + t[0];
+    const ny = R[1][0] * x + R[1][1] * y + R[1][2] * z + t[1];
+    const nz = R[2][0] * x + R[2][1] * y + R[2][2] * z + t[2];
+    const relabeled = line.substring(0, 21) + binderChainOut + line.substring(22);
+    out.push(relabeled.substring(0, 30) + fmt8(nx) + fmt8(ny) + fmt8(nz) + relabeled.substring(54));
+  }
+
+  return {
+    pdb: out.join("\n"),
+    roles: { targetChain: refTarget, binderChain: binderChainOut },
+  };
 }

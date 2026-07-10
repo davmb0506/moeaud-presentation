@@ -25,7 +25,16 @@
       "plddt": 45.8,
       "p100": 54.24,
       "binder": "PTYYFRWITDWYTYVVKVIVP",
-      "pdb": "/fronts/con_mech/a1.pdb"
+      "pdb": "/fronts/con_mech/a1.pdb",
+      "rg": 10.81,
+      "if_contacts": 51,
+      "bsa": 1773.8,
+      "charge": 1.0,
+      "pi": 8.77,
+      "gravy": 0.21,
+      "mw_kda": 2.71,
+      "aromaticity": 0.333,
+      "instability": 38.3
     },
     {
       "id": "con_2",
@@ -34,7 +43,16 @@
       "plddt": 50.4,
       "p100": 49.62,
       "binder": "RTYYFVAITDEYLYVVKVIFP",
-      "pdb": "/fronts/con_mech/a2.pdb"
+      "pdb": "/fronts/con_mech/a2.pdb",
+      "rg": 10.98,
+      "if_contacts": 47,
+      "bsa": 1554.3,
+      "charge": -0.2,
+      "pi": 6.07,
+      "gravy": 0.638,
+      "mw_kda": 2.6,
+      "aromaticity": 0.286,
+      "instability": 19.2
     },
     {
       "id": "con_3",
@@ -43,7 +61,16 @@
       "plddt": 50.9,
       "p100": 49.12,
       "binder": "RTYYFKAITDWYTYVVKVIVP",
-      "pdb": "/fronts/con_mech/a3.pdb"
+      "pdb": "/fronts/con_mech/a3.pdb",
+      "rg": 11.03,
+      "if_contacts": 49,
+      "bsa": 1576.1,
+      "charge": 1.8,
+      "pi": 9.31,
+      "gravy": 0.229,
+      "mw_kda": 2.63,
+      "aromaticity": 0.286,
+      "instability": 3.9
     },
     {
       "id": "con_4",
@@ -52,7 +79,16 @@
       "plddt": 52.7,
       "p100": 47.33,
       "binder": "RTYYFGAITDWYTYVVKVIVP",
-      "pdb": "/fronts/con_mech/a4.pdb"
+      "pdb": "/fronts/con_mech/a4.pdb",
+      "rg": 11.21,
+      "if_contacts": 61,
+      "bsa": 1859.8,
+      "charge": 0.8,
+      "pi": 8.38,
+      "gravy": 0.395,
+      "mw_kda": 2.55,
+      "aromaticity": 0.286,
+      "instability": 7.0
     },
     {
       "id": "con_5",
@@ -61,7 +97,16 @@
       "plddt": 54.1,
       "p100": 45.88,
       "binder": "MTYYFQWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a5.pdb"
+      "pdb": "/fronts/con_mech/a5.pdb",
+      "rg": 10.8,
+      "if_contacts": 42,
+      "bsa": 1417.4,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.652,
+      "mw_kda": 2.87,
+      "aromaticity": 0.381,
+      "instability": 29.1
     },
     {
       "id": "con_6",
@@ -70,7 +115,16 @@
       "plddt": 54.7,
       "p100": 45.33,
       "binder": "MTYYYVWRTDEWYYVVQVRVK",
-      "pdb": "/fronts/con_mech/a6.pdb"
+      "pdb": "/fronts/con_mech/a6.pdb",
+      "rg": 11.03,
+      "if_contacts": 35,
+      "bsa": 1339.6,
+      "charge": 0.5,
+      "pi": 8.1,
+      "gravy": -0.486,
+      "mw_kda": 2.85,
+      "aromaticity": 0.333,
+      "instability": 13.7
     },
     {
       "id": "con_7",
@@ -79,7 +133,16 @@
       "plddt": 55.1,
       "p100": 44.86,
       "binder": "MTYYFVWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a7.pdb"
+      "pdb": "/fronts/con_mech/a7.pdb",
+      "rg": 10.96,
+      "if_contacts": 35,
+      "bsa": 1351.7,
+      "charge": 0.5,
+      "pi": 8.1,
+      "gravy": -0.381,
+      "mw_kda": 2.84,
+      "aromaticity": 0.381,
+      "instability": 41.7
     },
     {
       "id": "con_8",
@@ -88,7 +151,16 @@
       "plddt": 56.9,
       "p100": 43.08,
       "binder": "MTYYVAWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a8.pdb"
+      "pdb": "/fronts/con_mech/a8.pdb",
+      "rg": 10.89,
+      "if_contacts": 46,
+      "bsa": 1635.1,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.333,
+      "mw_kda": 2.76,
+      "aromaticity": 0.333,
+      "instability": 29.1
     },
     {
       "id": "con_9",
@@ -97,7 +169,16 @@
       "plddt": 57.1,
       "p100": 42.92,
       "binder": "MTYYYVWRTDWWHYVVQVRVK",
-      "pdb": "/fronts/con_mech/a9.pdb"
+      "pdb": "/fronts/con_mech/a9.pdb",
+      "rg": 11.27,
+      "if_contacts": 46,
+      "bsa": 1611.3,
+      "charge": 1.6,
+      "pi": 9.4,
+      "gravy": -0.452,
+      "mw_kda": 2.88,
+      "aromaticity": 0.333,
+      "instability": 47.1
     },
     {
       "id": "con_10",
@@ -106,7 +187,16 @@
       "plddt": 59.0,
       "p100": 41.03,
       "binder": "MWWTNILTTPGYVYIVQIRFK",
-      "pdb": "/fronts/con_mech/a10.pdb"
+      "pdb": "/fronts/con_mech/a10.pdb",
+      "rg": 10.38,
+      "if_contacts": 37,
+      "bsa": 1555.6,
+      "charge": 1.5,
+      "pi": 9.7,
+      "gravy": 0.31,
+      "mw_kda": 2.63,
+      "aromaticity": 0.238,
+      "instability": 6.5
     },
     {
       "id": "con_11",
@@ -115,7 +205,16 @@
       "plddt": 59.1,
       "p100": 40.9,
       "binder": "MTYYFIWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a11.pdb"
+      "pdb": "/fronts/con_mech/a11.pdb",
+      "rg": 10.99,
+      "if_contacts": 34,
+      "bsa": 1382.9,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.271,
+      "mw_kda": 2.85,
+      "aromaticity": 0.381,
+      "instability": 29.1
     },
     {
       "id": "con_12",
@@ -124,7 +223,16 @@
       "plddt": 59.6,
       "p100": 40.38,
       "binder": "MTYYYVWRTDWYEYVVKVIVK",
-      "pdb": "/fronts/con_mech/a12.pdb"
+      "pdb": "/fronts/con_mech/a12.pdb",
+      "rg": 10.98,
+      "if_contacts": 51,
+      "bsa": 1695.8,
+      "charge": 0.5,
+      "pi": 8.06,
+      "gravy": -0.076,
+      "mw_kda": 2.81,
+      "aromaticity": 0.333,
+      "instability": 5.5
     },
     {
       "id": "con_13",
@@ -133,7 +241,16 @@
       "plddt": 60.1,
       "p100": 39.93,
       "binder": "PTYYFVWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con_mech/a13.pdb"
+      "pdb": "/fronts/con_mech/a13.pdb",
+      "rg": 10.69,
+      "if_contacts": 34,
+      "bsa": 1234.2,
+      "charge": 2.0,
+      "pi": 9.44,
+      "gravy": -0.162,
+      "mw_kda": 2.77,
+      "aromaticity": 0.333,
+      "instability": 16.0
     },
     {
       "id": "con_14",
@@ -142,7 +259,16 @@
       "plddt": 60.9,
       "p100": 39.09,
       "binder": "MTYYFAWRTPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a14.pdb"
+      "pdb": "/fronts/con_mech/a14.pdb",
+      "rg": 10.95,
+      "if_contacts": 71,
+      "bsa": 2510.2,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.4,
+      "mw_kda": 2.81,
+      "aromaticity": 0.381,
+      "instability": 29.1
     },
     {
       "id": "con_15",
@@ -151,7 +277,16 @@
       "plddt": 61.2,
       "p100": 38.81,
       "binder": "MTYYYVWRTDWYYYVVQVKVK",
-      "pdb": "/fronts/con_mech/a15.pdb"
+      "pdb": "/fronts/con_mech/a15.pdb",
+      "rg": 11.32,
+      "if_contacts": 76,
+      "bsa": 2013.9,
+      "charge": 1.5,
+      "pi": 9.16,
+      "gravy": -0.352,
+      "mw_kda": 2.85,
+      "aromaticity": 0.381,
+      "instability": 21.3
     },
     {
       "id": "con_16",
@@ -160,7 +295,16 @@
       "plddt": 61.5,
       "p100": 38.46,
       "binder": "PTYYGIWTTPEDHYFWQVRIK",
-      "pdb": "/fronts/con_mech/a16.pdb"
+      "pdb": "/fronts/con_mech/a16.pdb",
+      "rg": 10.8,
+      "if_contacts": 36,
+      "bsa": 1728.2,
+      "charge": 0.0,
+      "pi": 7.16,
+      "gravy": -0.833,
+      "mw_kda": 2.7,
+      "aromaticity": 0.286,
+      "instability": 30.9
     },
     {
       "id": "con_17",
@@ -169,7 +313,16 @@
       "plddt": 62.0,
       "p100": 38.01,
       "binder": "ITWYYVAKHDGWHYMVQVRFK",
-      "pdb": "/fronts/con_mech/a17.pdb"
+      "pdb": "/fronts/con_mech/a17.pdb",
+      "rg": 10.62,
+      "if_contacts": 71,
+      "bsa": 2064.4,
+      "charge": 1.9,
+      "pi": 9.4,
+      "gravy": -0.424,
+      "mw_kda": 2.73,
+      "aromaticity": 0.286,
+      "instability": 56.5
     },
     {
       "id": "con_18",
@@ -178,7 +331,16 @@
       "plddt": 62.6,
       "p100": 37.43,
       "binder": "ITWYYVAKMDGWVYMVQVRFK",
-      "pdb": "/fronts/con_mech/a18.pdb"
+      "pdb": "/fronts/con_mech/a18.pdb",
+      "rg": 10.7,
+      "if_contacts": 14,
+      "bsa": 1067.8,
+      "charge": 1.8,
+      "pi": 9.4,
+      "gravy": 0.171,
+      "mw_kda": 2.68,
+      "aromaticity": 0.286,
+      "instability": 32.2
     },
     {
       "id": "con_19",
@@ -187,7 +349,16 @@
       "plddt": 63.0,
       "p100": 37.02,
       "binder": "PTYYYHARTPGYVYFVQVRIK",
-      "pdb": "/fronts/con_mech/a19.pdb"
+      "pdb": "/fronts/con_mech/a19.pdb",
+      "rg": 10.66,
+      "if_contacts": 64,
+      "bsa": 1903.9,
+      "charge": 3.0,
+      "pi": 9.71,
+      "gravy": -0.448,
+      "mw_kda": 2.62,
+      "aromaticity": 0.286,
+      "instability": 11.9
     },
     {
       "id": "con_20",
@@ -196,7 +367,16 @@
       "plddt": 63.2,
       "p100": 36.84,
       "binder": "ITWYYVAKIDGWVYMVQVRFK",
-      "pdb": "/fronts/con_mech/a20.pdb"
+      "pdb": "/fronts/con_mech/a20.pdb",
+      "rg": 10.67,
+      "if_contacts": 26,
+      "bsa": 1117.7,
+      "charge": 1.8,
+      "pi": 9.4,
+      "gravy": 0.295,
+      "mw_kda": 2.67,
+      "aromaticity": 0.286,
+      "instability": 12.6
     },
     {
       "id": "con_21",
@@ -205,7 +385,16 @@
       "plddt": 63.4,
       "p100": 36.6,
       "binder": "WYWRYVAIYDAWIYVVQVRFK",
-      "pdb": "/fronts/con_mech/a21.pdb"
+      "pdb": "/fronts/con_mech/a21.pdb",
+      "rg": 10.95,
+      "if_contacts": 78,
+      "bsa": 2263.3,
+      "charge": 1.8,
+      "pi": 9.4,
+      "gravy": 0.21,
+      "mw_kda": 2.83,
+      "aromaticity": 0.381,
+      "instability": 1.5
     },
     {
       "id": "con_22",
@@ -214,7 +403,16 @@
       "plddt": 63.6,
       "p100": 36.35,
       "binder": "ETPYHVAKMDGYVYMVQVRFK",
-      "pdb": "/fronts/con_mech/a22.pdb"
+      "pdb": "/fronts/con_mech/a22.pdb",
+      "rg": 10.36,
+      "if_contacts": 18,
+      "bsa": 908.5,
+      "charge": 0.9,
+      "pi": 8.48,
+      "gravy": -0.352,
+      "mw_kda": 2.56,
+      "aromaticity": 0.19,
+      "instability": 33.5
     },
     {
       "id": "con_23",
@@ -223,7 +421,16 @@
       "plddt": 55.4,
       "p100": 44.58,
       "binder": "MTYYFVARTDWYTYVVKVIVP",
-      "pdb": "/fronts/con_mech/a23.pdb"
+      "pdb": "/fronts/con_mech/a23.pdb",
+      "rg": 11.09,
+      "if_contacts": 48,
+      "bsa": 1694.9,
+      "charge": 0.5,
+      "pi": 8.14,
+      "gravy": 0.49,
+      "mw_kda": 2.62,
+      "aromaticity": 0.286,
+      "instability": 9.7
     },
     {
       "id": "con_24",
@@ -232,7 +439,16 @@
       "plddt": 63.7,
       "p100": 36.26,
       "binder": "DGIYDIVFDMSFEYTFSWYGS",
-      "pdb": "/fronts/con_mech/a24.pdb"
+      "pdb": "/fronts/con_mech/a24.pdb",
+      "rg": 13.93,
+      "if_contacts": 61,
+      "bsa": 1836.7,
+      "charge": -4.2,
+      "pi": 4.05,
+      "gravy": 0.038,
+      "mw_kda": 2.54,
+      "aromaticity": 0.333,
+      "instability": 37.3
     },
     {
       "id": "con_25",
@@ -241,7 +457,16 @@
       "plddt": 51.0,
       "p100": 49.01,
       "binder": "RTYYMIAIGMGYVYVVKMIFP",
-      "pdb": "/fronts/con_mech/a25.pdb"
+      "pdb": "/fronts/con_mech/a25.pdb",
+      "rg": 10.36,
+      "if_contacts": 51,
+      "bsa": 1808.0,
+      "charge": 1.8,
+      "pi": 9.4,
+      "gravy": 0.938,
+      "mw_kda": 2.52,
+      "aromaticity": 0.238,
+      "instability": 52.0
     },
     {
       "id": "con_26",
@@ -250,7 +475,16 @@
       "plddt": 61.6,
       "p100": 38.45,
       "binder": "MTYYYVWRTDWYIYVVQVKVK",
-      "pdb": "/fronts/con_mech/a26.pdb"
+      "pdb": "/fronts/con_mech/a26.pdb",
+      "rg": 11.28,
+      "if_contacts": 31,
+      "bsa": 1577.9,
+      "charge": 1.5,
+      "pi": 9.22,
+      "gravy": -0.076,
+      "mw_kda": 2.8,
+      "aromaticity": 0.333,
+      "instability": 9.5
     },
     {
       "id": "con_27",
@@ -259,7 +493,16 @@
       "plddt": 53.7,
       "p100": 46.29,
       "binder": "MWYYYIWRDPWYMYFVKVIVK",
-      "pdb": "/fronts/con_mech/a27.pdb"
+      "pdb": "/fronts/con_mech/a27.pdb",
+      "rg": 11.11,
+      "if_contacts": 59,
+      "bsa": 1949.2,
+      "charge": 1.5,
+      "pi": 9.22,
+      "gravy": 0.076,
+      "mw_kda": 2.95,
+      "aromaticity": 0.429,
+      "instability": 41.3
     },
     {
       "id": "con_28",
@@ -268,7 +511,16 @@
       "plddt": 63.7,
       "p100": 36.27,
       "binder": "DGSYIIVFDMSFEYTFSWYNS",
-      "pdb": "/fronts/con_mech/a28.pdb"
+      "pdb": "/fronts/con_mech/a28.pdb",
+      "rg": 10.53,
+      "if_contacts": 68,
+      "bsa": 1562.1,
+      "charge": -3.2,
+      "pi": 4.05,
+      "gravy": 0.019,
+      "mw_kda": 2.57,
+      "aromaticity": 0.333,
+      "instability": 34.1
     },
     {
       "id": "con_29",
@@ -277,7 +529,16 @@
       "plddt": 62.5,
       "p100": 37.5,
       "binder": "PTYYFVWRTPEYIYFVQVRVK",
-      "pdb": "/fronts/con_mech/a29.pdb"
+      "pdb": "/fronts/con_mech/a29.pdb",
+      "rg": 10.56,
+      "if_contacts": 66,
+      "bsa": 1806.6,
+      "charge": 2.0,
+      "pi": 9.44,
+      "gravy": -0.176,
+      "mw_kda": 2.76,
+      "aromaticity": 0.333,
+      "instability": 18.7
     },
     {
       "id": "con_30",
@@ -286,7 +547,16 @@
       "plddt": 58.2,
       "p100": 41.8,
       "binder": "PTYYSVWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con_mech/a30.pdb"
+      "pdb": "/fronts/con_mech/a30.pdb",
+      "rg": 11.0,
+      "if_contacts": 59,
+      "bsa": 1757.8,
+      "charge": 2.0,
+      "pi": 9.44,
+      "gravy": -0.333,
+      "mw_kda": 2.71,
+      "aromaticity": 0.286,
+      "instability": 16.0
     },
     {
       "id": "con_31",
@@ -295,7 +565,16 @@
       "plddt": 49.3,
       "p100": 50.73,
       "binder": "MTYYFVWRHPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a31.pdb"
+      "pdb": "/fronts/con_mech/a31.pdb",
+      "rg": 10.87,
+      "if_contacts": 46,
+      "bsa": 1816.2,
+      "charge": 1.6,
+      "pi": 9.3,
+      "gravy": -0.405,
+      "mw_kda": 2.88,
+      "aromaticity": 0.381,
+      "instability": 36.9
     },
     {
       "id": "con_32",
@@ -304,7 +583,16 @@
       "plddt": 53.4,
       "p100": 46.6,
       "binder": "MTYYYVWRTDWYYYVVQVKHK",
-      "pdb": "/fronts/con_mech/a32.pdb"
+      "pdb": "/fronts/con_mech/a32.pdb",
+      "rg": 11.24,
+      "if_contacts": 62,
+      "bsa": 1959.0,
+      "charge": 1.6,
+      "pi": 9.16,
+      "gravy": -0.705,
+      "mw_kda": 2.89,
+      "aromaticity": 0.381,
+      "instability": 38.0
     },
     {
       "id": "con_33",
@@ -313,7 +601,16 @@
       "plddt": 57.6,
       "p100": 42.43,
       "binder": "PTYYFVWRSDEYIYFVQVRLK",
-      "pdb": "/fronts/con_mech/a33.pdb"
+      "pdb": "/fronts/con_mech/a33.pdb",
+      "rg": 10.95,
+      "if_contacts": 58,
+      "bsa": 1765.1,
+      "charge": 1.0,
+      "pi": 8.77,
+      "gravy": -0.29,
+      "mw_kda": 2.77,
+      "aromaticity": 0.333,
+      "instability": 28.7
     },
     {
       "id": "con_34",
@@ -322,7 +619,16 @@
       "plddt": 45.6,
       "p100": 54.41,
       "binder": "MTYYFRWRTDWYYYVVKVIVP",
-      "pdb": "/fronts/con_mech/a34.pdb"
+      "pdb": "/fronts/con_mech/a34.pdb",
+      "rg": 11.0,
+      "if_contacts": 51,
+      "bsa": 1794.8,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.081,
+      "mw_kda": 2.85,
+      "aromaticity": 0.381,
+      "instability": 52.8
     },
     {
       "id": "con_35",
@@ -331,7 +637,16 @@
       "plddt": 52.8,
       "p100": 47.16,
       "binder": "MTYYFIWRSPWYMYFVKVIVK",
-      "pdb": "/fronts/con_mech/a35.pdb"
+      "pdb": "/fronts/con_mech/a35.pdb",
+      "rg": 10.85,
+      "if_contacts": 38,
+      "bsa": 1720.1,
+      "charge": 2.5,
+      "pi": 9.7,
+      "gravy": 0.41,
+      "mw_kda": 2.82,
+      "aromaticity": 0.381,
+      "instability": 75.9
     },
     {
       "id": "con_36",
@@ -340,7 +655,16 @@
       "plddt": 63.2,
       "p100": 36.83,
       "binder": "ETPYSVAKMDGYVYMVQVRFK",
-      "pdb": "/fronts/con_mech/a36.pdb"
+      "pdb": "/fronts/con_mech/a36.pdb",
+      "rg": 10.59,
+      "if_contacts": 40,
+      "bsa": 1607.7,
+      "charge": 0.8,
+      "pi": 8.47,
+      "gravy": -0.238,
+      "mw_kda": 2.51,
+      "aromaticity": 0.19,
+      "instability": 27.6
     },
     {
       "id": "con_37",
@@ -349,7 +673,16 @@
       "plddt": 51.0,
       "p100": 49.05,
       "binder": "MTYYFFWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a37.pdb"
+      "pdb": "/fronts/con_mech/a37.pdb",
+      "rg": 10.88,
+      "if_contacts": 39,
+      "bsa": 1595.6,
+      "charge": 0.5,
+      "pi": 8.1,
+      "gravy": -0.448,
+      "mw_kda": 2.89,
+      "aromaticity": 0.429,
+      "instability": 41.7
     },
     {
       "id": "con_38",
@@ -358,7 +691,16 @@
       "plddt": 55.9,
       "p100": 44.12,
       "binder": "MTYYFVWRFPEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a38.pdb"
+      "pdb": "/fronts/con_mech/a38.pdb",
+      "rg": 10.86,
+      "if_contacts": 47,
+      "bsa": 1786.1,
+      "charge": 1.5,
+      "pi": 9.3,
+      "gravy": -0.119,
+      "mw_kda": 2.89,
+      "aromaticity": 0.429,
+      "instability": 38.3
     },
     {
       "id": "con_39",
@@ -367,7 +709,16 @@
       "plddt": 64.5,
       "p100": 35.53,
       "binder": "DGNYDWVIDMSFWYTFSWRNS",
-      "pdb": "/fronts/con_mech/a39.pdb"
+      "pdb": "/fronts/con_mech/a39.pdb",
+      "rg": 13.36,
+      "if_contacts": 30,
+      "bsa": 906.0,
+      "charge": -2.2,
+      "pi": 4.05,
+      "gravy": -0.695,
+      "mw_kda": 2.69,
+      "aromaticity": 0.333,
+      "instability": 41.3
     },
     {
       "id": "con_40",
@@ -376,7 +727,16 @@
       "plddt": 59.2,
       "p100": 40.8,
       "binder": "PTYYITWRTPEYIYFVQVRIK",
-      "pdb": "/fronts/con_mech/a40.pdb"
+      "pdb": "/fronts/con_mech/a40.pdb",
+      "rg": 10.98,
+      "if_contacts": 76,
+      "bsa": 2200.2,
+      "charge": 2.0,
+      "pi": 9.44,
+      "gravy": -0.314,
+      "mw_kda": 2.74,
+      "aromaticity": 0.286,
+      "instability": 8.9
     },
     {
       "id": "con_41",
@@ -385,7 +745,16 @@
       "plddt": 56.4,
       "p100": 43.62,
       "binder": "MTYYFSWRSDEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a41.pdb"
+      "pdb": "/fronts/con_mech/a41.pdb",
+      "rg": 10.96,
+      "if_contacts": 93,
+      "bsa": 1838.2,
+      "charge": 0.5,
+      "pi": 8.1,
+      "gravy": -0.619,
+      "mw_kda": 2.83,
+      "aromaticity": 0.381,
+      "instability": 41.7
     },
     {
       "id": "con_42",
@@ -394,7 +763,16 @@
       "plddt": 52.6,
       "p100": 47.42,
       "binder": "MTYYFSWRTDEYYYFVQVRVK",
-      "pdb": "/fronts/con_mech/a42.pdb"
+      "pdb": "/fronts/con_mech/a42.pdb",
+      "rg": 10.93,
+      "if_contacts": 88,
+      "bsa": 1998.6,
+      "charge": 0.5,
+      "pi": 8.1,
+      "gravy": -0.614,
+      "mw_kda": 2.85,
+      "aromaticity": 0.381,
+      "instability": 20.8
     },
     {
       "id": "con_43",
@@ -403,7 +781,16 @@
       "plddt": 48.4,
       "p100": 51.59,
       "binder": "MTYYYMWRTDWYYYVVQVKVK",
-      "pdb": "/fronts/con_mech/a43.pdb"
+      "pdb": "/fronts/con_mech/a43.pdb",
+      "rg": 11.12,
+      "if_contacts": 52,
+      "bsa": 1929.1,
+      "charge": 1.5,
+      "pi": 9.16,
+      "gravy": -0.462,
+      "mw_kda": 2.89,
+      "aromaticity": 0.381,
+      "instability": 42.2
     },
     {
       "id": "con_44",
@@ -412,7 +799,16 @@
       "plddt": 59.6,
       "p100": 40.36,
       "binder": "PTYYFVWRTPHYGYFVQVRLK",
-      "pdb": "/fronts/con_mech/a44.pdb"
+      "pdb": "/fronts/con_mech/a44.pdb",
+      "rg": 10.82,
+      "if_contacts": 95,
+      "bsa": 2289.4,
+      "charge": 3.0,
+      "pi": 9.83,
+      "gravy": -0.414,
+      "mw_kda": 2.72,
+      "aromaticity": 0.333,
+      "instability": 20.6
     },
     {
       "id": "sin_1",
@@ -421,7 +817,16 @@
       "plddt": 62.9,
       "p100": 37.07,
       "binder": "SSSLYSKKKRTLEPLKLVVQR",
-      "pdb": "/fronts/sin/a1.pdb"
+      "pdb": "/fronts/sin/a1.pdb",
+      "rg": 14.78,
+      "if_contacts": 16,
+      "bsa": 691.3,
+      "charge": 4.5,
+      "pi": 10.56,
+      "gravy": -0.705,
+      "mw_kda": 2.46,
+      "aromaticity": 0.048,
+      "instability": 44.5
     },
     {
       "id": "sin_2",
@@ -430,7 +835,16 @@
       "plddt": 56.2,
       "p100": 43.75,
       "binder": "FLFVNLKSNKVVDILANIGQA",
-      "pdb": "/fronts/sin/a2.pdb"
+      "pdb": "/fronts/sin/a2.pdb",
+      "rg": 9.67,
+      "if_contacts": 65,
+      "bsa": 2367.3,
+      "charge": 0.8,
+      "pi": 8.59,
+      "gravy": 0.748,
+      "mw_kda": 2.3,
+      "aromaticity": 0.095,
+      "instability": 35.7
     },
     {
       "id": "sin_3",
@@ -439,7 +853,16 @@
       "plddt": 62.8,
       "p100": 37.2,
       "binder": "PSTWLEIVLILPENLKGVKSQ",
-      "pdb": "/fronts/sin/a3.pdb"
+      "pdb": "/fronts/sin/a3.pdb",
+      "rg": 13.11,
+      "if_contacts": 19,
+      "bsa": 1205.2,
+      "charge": -0.0,
+      "pi": 6.56,
+      "gravy": 0.19,
+      "mw_kda": 2.36,
+      "aromaticity": 0.048,
+      "instability": 48.9
     },
     {
       "id": "sin_4",
@@ -448,7 +871,16 @@
       "plddt": 58.5,
       "p100": 41.48,
       "binder": "ALYIFFKNNNILEKILSYQKS",
-      "pdb": "/fronts/sin/a4.pdb"
+      "pdb": "/fronts/sin/a4.pdb",
+      "rg": 9.69,
+      "if_contacts": 76,
+      "bsa": 2533.7,
+      "charge": 1.8,
+      "pi": 9.41,
+      "gravy": -0.052,
+      "mw_kda": 2.55,
+      "aromaticity": 0.19,
+      "instability": 37.6
     },
     {
       "id": "sin_5",
@@ -457,7 +889,16 @@
       "plddt": 55.7,
       "p100": 44.3,
       "binder": "VPPILISPQQAIQILQNAAKL",
-      "pdb": "/fronts/sin/a5.pdb"
+      "pdb": "/fronts/sin/a5.pdb",
+      "rg": 9.48,
+      "if_contacts": 36,
+      "bsa": 1377.9,
+      "charge": 0.7,
+      "pi": 8.72,
+      "gravy": 0.571,
+      "mw_kda": 2.26,
+      "aromaticity": 0.0,
+      "instability": 97.0
     },
     {
       "id": "sin_6",
@@ -466,7 +907,16 @@
       "plddt": 54.0,
       "p100": 46.05,
       "binder": "MLVIKSNSDIVINKITQLVNS",
-      "pdb": "/fronts/sin/a6.pdb"
+      "pdb": "/fronts/sin/a6.pdb",
+      "rg": 8.49,
+      "if_contacts": 69,
+      "bsa": 2275.8,
+      "charge": 0.5,
+      "pi": 8.34,
+      "gravy": 0.557,
+      "mw_kda": 2.33,
+      "aromaticity": 0.0,
+      "instability": 5.1
     },
     {
       "id": "sin_7",
@@ -475,7 +925,16 @@
       "plddt": 57.3,
       "p100": 42.72,
       "binder": "ALYIFFKSNNILEKILNIGQS",
-      "pdb": "/fronts/sin/a7.pdb"
+      "pdb": "/fronts/sin/a7.pdb",
+      "rg": 9.45,
+      "if_contacts": 67,
+      "bsa": 2330.2,
+      "charge": 0.8,
+      "pi": 8.54,
+      "gravy": 0.39,
+      "mw_kda": 2.43,
+      "aromaticity": 0.143,
+      "instability": 79.4
     },
     {
       "id": "sin_8",
@@ -484,7 +943,16 @@
       "plddt": 53.2,
       "p100": 46.82,
       "binder": "VPPILISPQQAILILQNANKA",
-      "pdb": "/fronts/sin/a8.pdb"
+      "pdb": "/fronts/sin/a8.pdb",
+      "rg": 9.73,
+      "if_contacts": 40,
+      "bsa": 1424.3,
+      "charge": 0.7,
+      "pi": 8.72,
+      "gravy": 0.571,
+      "mw_kda": 2.24,
+      "aromaticity": 0.0,
+      "instability": 121.4
     },
     {
       "id": "sin_9",
@@ -493,7 +961,16 @@
       "plddt": 54.0,
       "p100": 45.99,
       "binder": "TPYQTIAPQQAYALLQASAAH",
-      "pdb": "/fronts/sin/a9.pdb"
+      "pdb": "/fronts/sin/a9.pdb",
+      "rg": 9.83,
+      "if_contacts": 37,
+      "bsa": 1482.2,
+      "charge": -0.5,
+      "pi": 6.4,
+      "gravy": -0.11,
+      "mw_kda": 2.24,
+      "aromaticity": 0.095,
+      "instability": 59.8
     },
     {
       "id": "sin_10",
@@ -502,7 +979,16 @@
       "plddt": 62.3,
       "p100": 37.67,
       "binder": "DLTIFFKNNNAIELILTAGFS",
-      "pdb": "/fronts/sin/a10.pdb"
+      "pdb": "/fronts/sin/a10.pdb",
+      "rg": 10.16,
+      "if_contacts": 21,
+      "bsa": 1074.2,
+      "charge": -1.2,
+      "pi": 4.37,
+      "gravy": 0.614,
+      "mw_kda": 2.34,
+      "aromaticity": 0.143,
+      "instability": 32.5
     },
     {
       "id": "sin_11",
@@ -511,7 +997,16 @@
       "plddt": 61.5,
       "p100": 38.46,
       "binder": "KPLYIIGIGIPNFYHVYTFVG",
-      "pdb": "/fronts/sin/a11.pdb"
+      "pdb": "/fronts/sin/a11.pdb",
+      "rg": 9.89,
+      "if_contacts": 18,
+      "bsa": 886.9,
+      "charge": 0.8,
+      "pi": 8.44,
+      "gravy": 0.771,
+      "mw_kda": 2.41,
+      "aromaticity": 0.238,
+      "instability": 4.9
     },
     {
       "id": "sin_12",
@@ -520,7 +1015,16 @@
       "plddt": 54.6,
       "p100": 45.42,
       "binder": "DVIIHLSTAQVIYLLNSELAQ",
-      "pdb": "/fronts/sin/a12.pdb"
+      "pdb": "/fronts/sin/a12.pdb",
+      "rg": 9.98,
+      "if_contacts": 46,
+      "bsa": 1521.5,
+      "charge": -2.1,
+      "pi": 4.35,
+      "gravy": 0.781,
+      "mw_kda": 2.34,
+      "aromaticity": 0.048,
+      "instability": 21.0
     },
     {
       "id": "sin_13",
@@ -529,7 +1033,16 @@
       "plddt": 50.3,
       "p100": 49.69,
       "binder": "MPPQVLSTSQAIKFLNYLAAA",
-      "pdb": "/fronts/sin/a13.pdb"
+      "pdb": "/fronts/sin/a13.pdb",
+      "rg": 9.38,
+      "if_contacts": 35,
+      "bsa": 1415.2,
+      "charge": 0.5,
+      "pi": 8.34,
+      "gravy": 0.514,
+      "mw_kda": 2.26,
+      "aromaticity": 0.095,
+      "instability": 50.3
     },
     {
       "id": "sin_14",
@@ -538,7 +1051,16 @@
       "plddt": 62.1,
       "p100": 37.85,
       "binder": "LPVGLLLVGNGYDALLGVGVG",
-      "pdb": "/fronts/sin/a14.pdb"
+      "pdb": "/fronts/sin/a14.pdb",
+      "rg": 9.48,
+      "if_contacts": 86,
+      "bsa": 1562.4,
+      "charge": -1.2,
+      "pi": 4.05,
+      "gravy": 1.386,
+      "mw_kda": 2.0,
+      "aromaticity": 0.048,
+      "instability": 7.7
     },
     {
       "id": "sin_15",
@@ -547,7 +1069,16 @@
       "plddt": 61.6,
       "p100": 38.43,
       "binder": "KWLYIIGIGIPNFYHVYTYVW",
-      "pdb": "/fronts/sin/a15.pdb"
+      "pdb": "/fronts/sin/a15.pdb",
+      "rg": 10.77,
+      "if_contacts": 36,
+      "bsa": 1309.2,
+      "charge": 0.8,
+      "pi": 8.39,
+      "gravy": 0.586,
+      "mw_kda": 2.65,
+      "aromaticity": 0.333,
+      "instability": 12.6
     },
     {
       "id": "sin_16",
@@ -556,7 +1087,16 @@
       "plddt": 52.1,
       "p100": 47.91,
       "binder": "PAGIKISTAEAITLLKELATR",
-      "pdb": "/fronts/sin/a16.pdb"
+      "pdb": "/fronts/sin/a16.pdb",
+      "rg": 9.41,
+      "if_contacts": 44,
+      "bsa": 1531.2,
+      "charge": 1.0,
+      "pi": 9.0,
+      "gravy": 0.376,
+      "mw_kda": 2.2,
+      "aromaticity": 0.0,
+      "instability": 2.5
     },
     {
       "id": "sin_17",
@@ -565,7 +1105,16 @@
       "plddt": 55.6,
       "p100": 44.36,
       "binder": "PLEVVLSASHAINLLQTALSL",
-      "pdb": "/fronts/sin/a17.pdb"
+      "pdb": "/fronts/sin/a17.pdb",
+      "rg": 9.68,
+      "if_contacts": 41,
+      "bsa": 1349.8,
+      "charge": -1.0,
+      "pi": 5.25,
+      "gravy": 1.081,
+      "mw_kda": 2.19,
+      "aromaticity": 0.0,
+      "instability": 25.0
     },
     {
       "id": "sin_18",
@@ -574,7 +1123,16 @@
       "plddt": 52.1,
       "p100": 47.87,
       "binder": "NASVYLSGREALQFLSSLGFH",
-      "pdb": "/fronts/sin/a18.pdb"
+      "pdb": "/fronts/sin/a18.pdb",
+      "rg": 9.35,
+      "if_contacts": 45,
+      "bsa": 1420.1,
+      "charge": -0.2,
+      "pi": 6.75,
+      "gravy": 0.243,
+      "mw_kda": 2.3,
+      "aromaticity": 0.143,
+      "instability": 27.0
     },
     {
       "id": "sin_19",
@@ -583,7 +1141,16 @@
       "plddt": 56.9,
       "p100": 43.12,
       "binder": "NASVYLSGREALQFLSSLGFH",
-      "pdb": "/fronts/sin/a19.pdb"
+      "pdb": "/fronts/sin/a19.pdb",
+      "rg": 9.45,
+      "if_contacts": 30,
+      "bsa": 1274.0,
+      "charge": -0.2,
+      "pi": 6.75,
+      "gravy": 0.243,
+      "mw_kda": 2.3,
+      "aromaticity": 0.143,
+      "instability": 27.0
     },
     {
       "id": "sin_20",
@@ -592,7 +1159,16 @@
       "plddt": 59.4,
       "p100": 40.61,
       "binder": "YPNIVLSNKEVINIIVKAQSI",
-      "pdb": "/fronts/sin/a20.pdb"
+      "pdb": "/fronts/sin/a20.pdb",
+      "rg": 10.12,
+      "if_contacts": 32,
+      "bsa": 1347.9,
+      "charge": 0.8,
+      "pi": 8.5,
+      "gravy": 0.519,
+      "mw_kda": 2.36,
+      "aromaticity": 0.048,
+      "instability": 80.0
     },
     {
       "id": "sin_21",
@@ -601,7 +1177,16 @@
       "plddt": 55.4,
       "p100": 44.61,
       "binder": "GPYQVLSTDEAVGTLQKVLAQ",
-      "pdb": "/fronts/sin/a21.pdb"
+      "pdb": "/fronts/sin/a21.pdb",
+      "rg": 9.52,
+      "if_contacts": 39,
+      "bsa": 1433.8,
+      "charge": -1.2,
+      "pi": 4.37,
+      "gravy": 0.014,
+      "mw_kda": 2.22,
+      "aromaticity": 0.048,
+      "instability": 9.3
     },
     {
       "id": "sin_22",
@@ -610,7 +1195,16 @@
       "plddt": 54.7,
       "p100": 45.29,
       "binder": "NPSVYLSSREAIQLLSSLISH",
-      "pdb": "/fronts/sin/a22.pdb"
+      "pdb": "/fronts/sin/a22.pdb",
+      "rg": 9.63,
+      "if_contacts": 48,
+      "bsa": 1408.7,
+      "charge": -0.2,
+      "pi": 6.75,
+      "gravy": 0.205,
+      "mw_kda": 2.31,
+      "aromaticity": 0.048,
+      "instability": 41.2
     },
     {
       "id": "sin_23",
@@ -619,7 +1213,16 @@
       "plddt": 55.3,
       "p100": 44.68,
       "binder": "NILVKLSAREAINLLKSFLSR",
-      "pdb": "/fronts/sin/a23.pdb"
+      "pdb": "/fronts/sin/a23.pdb",
+      "rg": 9.63,
+      "if_contacts": 42,
+      "bsa": 1494.6,
+      "charge": 2.8,
+      "pi": 11.0,
+      "gravy": 0.424,
+      "mw_kda": 2.39,
+      "aromaticity": 0.048,
+      "instability": 39.3
     },
     {
       "id": "sin_24",
@@ -628,7 +1231,16 @@
       "plddt": 55.4,
       "p100": 44.63,
       "binder": "NILVKLSAREAINLLKSFLSR",
-      "pdb": "/fronts/sin/a24.pdb"
+      "pdb": "/fronts/sin/a24.pdb",
+      "rg": 9.65,
+      "if_contacts": 37,
+      "bsa": 1457.0,
+      "charge": 2.8,
+      "pi": 11.0,
+      "gravy": 0.424,
+      "mw_kda": 2.39,
+      "aromaticity": 0.048,
+      "instability": 39.3
     },
     {
       "id": "sin_25",
@@ -637,7 +1249,16 @@
       "plddt": 55.6,
       "p100": 44.43,
       "binder": "QTSVYLSTREAIQLLSSFISH",
-      "pdb": "/fronts/sin/a25.pdb"
+      "pdb": "/fronts/sin/a25.pdb",
+      "rg": 10.23,
+      "if_contacts": 32,
+      "bsa": 1308.8,
+      "charge": -0.2,
+      "pi": 6.75,
+      "gravy": 0.205,
+      "mw_kda": 2.38,
+      "aromaticity": 0.095,
+      "instability": 15.1
     },
     {
       "id": "sin_26",
@@ -646,7 +1267,16 @@
       "plddt": 56.5,
       "p100": 43.45,
       "binder": "YPNIVLSGKEAINLIVKLQSI",
-      "pdb": "/fronts/sin/a26.pdb"
+      "pdb": "/fronts/sin/a26.pdb",
+      "rg": 9.42,
+      "if_contacts": 36,
+      "bsa": 1297.6,
+      "charge": 0.8,
+      "pi": 8.5,
+      "gravy": 0.614,
+      "mw_kda": 2.31,
+      "aromaticity": 0.048,
+      "instability": 55.2
     },
     {
       "id": "sin_27",
@@ -655,7 +1285,16 @@
       "plddt": 48.3,
       "p100": 51.75,
       "binder": "GPLLRLSAVEAIALLQWIAHG",
-      "pdb": "/fronts/sin/a27.pdb"
+      "pdb": "/fronts/sin/a27.pdb",
+      "rg": 9.33,
+      "if_contacts": 40,
+      "bsa": 1477.8,
+      "charge": -0.1,
+      "pi": 6.75,
+      "gravy": 0.981,
+      "mw_kda": 2.23,
+      "aromaticity": 0.048,
+      "instability": 25.2
     },
     {
       "id": "sin_28",
@@ -664,7 +1303,16 @@
       "plddt": 61.7,
       "p100": 38.31,
       "binder": "GPYQVFLIAGEVGGPFKVLFQ",
-      "pdb": "/fronts/sin/a28.pdb"
+      "pdb": "/fronts/sin/a28.pdb",
+      "rg": 10.05,
+      "if_contacts": 23,
+      "bsa": 863.6,
+      "charge": -0.2,
+      "pi": 6.0,
+      "gravy": 0.686,
+      "mw_kda": 2.27,
+      "aromaticity": 0.19,
+      "instability": 2.1
     },
     {
       "id": "sin_29",
@@ -673,7 +1321,16 @@
       "plddt": 51.5,
       "p100": 48.46,
       "binder": "FPQIHLTPNQALSLLLNQLAL",
-      "pdb": "/fronts/sin/a29.pdb"
+      "pdb": "/fronts/sin/a29.pdb",
+      "rg": 9.73,
+      "if_contacts": 41,
+      "bsa": 1483.4,
+      "charge": -0.2,
+      "pi": 6.74,
+      "gravy": 0.576,
+      "mw_kda": 2.34,
+      "aromaticity": 0.048,
+      "instability": 26.6
     },
     {
       "id": "sin_30",
@@ -682,7 +1339,16 @@
       "plddt": 62.6,
       "p100": 37.42,
       "binder": "GATVVIAIFLGNVGFYIVIIL",
-      "pdb": "/fronts/sin/a30.pdb"
+      "pdb": "/fronts/sin/a30.pdb",
+      "rg": 9.6,
+      "if_contacts": 29,
+      "bsa": 829.0,
+      "charge": -0.2,
+      "pi": 5.52,
+      "gravy": 2.352,
+      "mw_kda": 2.19,
+      "aromaticity": 0.143,
+      "instability": 18.0
     }
   ]
 }

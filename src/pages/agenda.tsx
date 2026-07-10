@@ -48,9 +48,6 @@ export function Agenda() {
           Actividades subsecuentes (Abril 2026 - Agosto 2026).
           <ol className="agenda-sublist">
             <li>Experimentos finales con objetivos selectos.</li>
-            <li>
-              Validación de diseños <em>in silico</em>.
-            </li>
           </ol>
         </motion.li>
 

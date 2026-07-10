@@ -1,4 +1,5 @@
 import { motion, type Variants } from "framer-motion";
+import { validationDeck } from "../data/validationDeckData";
 
 const fade: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -9,144 +10,139 @@ const fade: Variants = {
   },
 };
 
-const METRICS = [
-  {
-    label: "Pool agregado",
-    value: "1,208",
-    note: "candidatos extraídos de archivos finales",
-  },
-  {
-    label: "Pasan ProtParam",
-    value: "739",
-    note: "61.2% del pool inicial",
-  },
-  {
-    label: "PRODIGY ≤ nativo",
-    value: "249",
-    note: "33.8% post-interfaz (ΔG ≤ -9.35 kcal/mol)",
-  },
-] as const;
-
-const GROUPS = [
-  {
-    name: "Interface-PAE/pLDDT mech",
-    runs: "10",
-    pool: "439",
-    protparam: "251 (57%)",
-    interface: "251",
-    energy: "158 (63%)",
-  },
-  {
-    name: "Interface-PAE/pLDDT no-mech",
-    runs: "10",
-    pool: "284",
-    protparam: "142 (50%)",
-    interface: "142",
-    energy: "37 (26%)",
-  },
-  {
-    name: "Composite/TM-score mech",
-    runs: "10",
-    pool: "155",
-    protparam: "120 (77%)",
-    interface: "120",
-    energy: "26 (22%)",
-  },
-  {
-    name: "Composite/TM-score no-mech",
-    runs: "10",
-    pool: "109",
-    protparam: "81 (74%)",
-    interface: "81",
-    energy: "12 (15%)",
-  },
-  {
-    name: "ipSAE/SC mech",
-    runs: "10",
-    pool: "105",
-    protparam: "70 (67%)",
-    interface: "69",
-    energy: "5 (7%)",
-  },
-  {
-    name: "ipSAE/SC no-mech",
-    runs: "10",
-    pool: "116",
-    protparam: "75 (65%)",
-    interface: "73",
-    energy: "11 (15%)",
-  },
-] as const;
-
-const FINDINGS = [
-  "Composite/TM-score muestra la mayor retención inicial tras ProtParam (74-77%).",
-  "Interface-PAE/pLDDT mech genera el mayor pool y la interfaz más robusta (mediana ΔSASA = 1819 Å²; 16 contactos).",
-  "PRODIGY: 249 candidatos (33.8% post-interfaz) muestran ΔG ≤ -9.35 kcal/mol, igual o más favorable que el complejo nativo VEGF-A–VEGFR-2.",
-] as const;
-
 export function ValidacionRuns() {
+  const { panel } = validationDeck;
+
   return (
     <motion.div
-      className="validacion"
+      className="validacion vseq"
       variants={fade}
       initial="hidden"
       whileInView="visible"
       viewport={{ amount: 0.15 }}
     >
-      <h2 className="validacion-title">Primeras fases de validación</h2>
+      <h2 className="validacion-title">Qué sí quedó cerrado en el panel principal</h2>
       <p className="validacion-sub">
-        Se consolidaron <strong>60 runs</strong> ejecutados en{" "}
-        <strong>6 grupos experimentales</strong> (10 réplicas por grupo) para
-        aplicar el cribado inicial de validación en cascada.
+        El tramo central del flujo sí quedó resuelto en el repositorio: el{" "}
+        <strong>panel base 12/12</strong> completó HADDOCK local, el blind
+        docking nativo del panel también quedó corrido y el{" "}
+        <strong>control nativo VEGFA-VEGFR2</strong> quedó disponible como
+        chequeo interno del protocolo.
       </p>
 
-      <div className="validacion-metrics">
-        {METRICS.map((metric) => (
-          <article key={metric.label} className="validacion-metric">
-            <span className="validacion-metric-label">{metric.label}</span>
-            <strong className="validacion-metric-value">{metric.value}</strong>
-            <span className="validacion-metric-note">{metric.note}</span>
+      <div className="vdeck-strip">
+        {panel.strip.map((item) => (
+          <article key={item.label} className="validacion-card vdeck-stat">
+            <span className="vdeck-stat-label">{item.label}</span>
+            <strong className="vdeck-stat-value">{item.value}</strong>
+            <p className="vdeck-stat-note">{item.note}</p>
           </article>
         ))}
       </div>
 
-      <div className="validacion-grid">
-        <div className="validacion-card validacion-table-card">
-          <table className="validacion-table">
+      <div className="vdeck-grid vdeck-grid-two">
+        <section className="validacion-card vdeck-card">
+          <h3 className="vdeck-title">Cómo se ejecutó este bloque</h3>
+          <div className="vdeck-mini-metrics">
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Piloto</span>
+              <strong>2/2</strong>
+              <p>casos con criterios más estrictos</p>
+            </div>
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Ola primaria</span>
+              <strong>10/10</strong>
+              <p>resto del panel final</p>
+            </div>
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Backups</span>
+              <strong>0/12</strong>
+              <p>no se ejecutaron</p>
+            </div>
+          </div>
+
+          <ul className="vdeck-list">
+            {panel.notes.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="validacion-card vdeck-table-card">
+          <h3 className="vdeck-title">Mejor candidato por grupo experimental</h3>
+          <table className="vdeck-table">
             <thead>
               <tr>
                 <th>Grupo</th>
-                <th>Runs</th>
-                <th>Pool</th>
-                <th>ProtParam</th>
-                <th>Interfaz</th>
-                <th>Energía</th>
+                <th>Candidato</th>
+                <th>Mejor HADDOCK</th>
               </tr>
             </thead>
             <tbody>
-              {GROUPS.map((group) => (
-                <tr key={group.name}>
-                  <td>{group.name}</td>
-                  <td>{group.runs}</td>
-                  <td>{group.pool}</td>
-                  <td>{group.protparam}</td>
-                  <td>{group.interface}</td>
-                  <td>{group.energy}</td>
+              {panel.byGroup.map((row) => (
+                <tr key={row.group}>
+                  <td>{row.group}</td>
+                  <td>
+                    <code>{row.repredId}</code>
+                  </td>
+                  <td>{row.score}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </section>
+      </div>
 
-        <aside className="validacion-card validacion-findings">
-          <h3 className="validacion-findings-title">Hallazgos</h3>
-          <ul className="validacion-findings-list">
-            {FINDINGS.map((finding) => (
-              <li key={finding}>{finding}</li>
+      <div className="vdeck-grid vdeck-grid-two">
+        <section className="validacion-card vdeck-card">
+          <h3 className="vdeck-title">Top del panel base</h3>
+          <ol className="vdeck-rank-list">
+            {panel.topPanel.slice(0, 4).map((row, index) => (
+              <li key={row.repredId} className="vdeck-rank-item">
+                <span className="vdeck-rank-index">0{index + 1}</span>
+                <div className="vdeck-rank-copy">
+                  <code>{row.repredId}</code>
+                  <p>
+                    {row.group} · <strong>{row.score}</strong>
+                  </p>
+                </div>
+              </li>
             ))}
-          </ul>
+          </ol>
+        </section>
+
+        <aside className="validacion-card vdeck-card vdeck-card-highlight">
+          <h3 className="vdeck-title">Control nativo VEGFA-VEGFR2</h3>
+          <div className="vdeck-mini-metrics">
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Mejor score</span>
+              <strong>{panel.control.bestScore}</strong>
+              <p>mismo protocolo local</p>
+            </div>
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Distancia de interfaz</span>
+              <strong>{panel.control.interfaceRmsd}</strong>
+              <p>sobre VEGFR2</p>
+            </div>
+            <div className="vdeck-mini-metric">
+              <span className="vdeck-mini-label">Distancia del VEGFA</span>
+              <strong>{panel.control.alignmentRmsd}</strong>
+              <p>alineamiento del target</p>
+            </div>
+          </div>
+          <p className="vdeck-copy">{panel.control.note}</p>
         </aside>
       </div>
+
+      <p className="vdeck-meta">
+        Base documental:{" "}
+        {panel.sources.map((item, index) => (
+          <span key={item}>
+            <code>{item}</code>
+            {index < panel.sources.length - 1 ? " · " : ""}
+          </span>
+        ))}
+      </p>
     </motion.div>
   );
 }
