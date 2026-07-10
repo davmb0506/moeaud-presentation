@@ -9290,6 +9290,25 @@
   gap: 8px;
 }
 
+.dockstory-viewer-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.dockstory-viewer-tool {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-h);
+}
+
+.dockstory-viewer-role {
+  font-size: 11px;
+  line-height: 1.3;
+  color: rgba(71, 85, 105, 0.92);
+}
+
 .dockstory-viewer-label {
   font-size: 11px;
   font-weight: 800;

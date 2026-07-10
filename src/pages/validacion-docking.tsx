@@ -135,14 +135,20 @@ export function ValidacionDocking() {
 
           <div className="dockstory-viewer-grid">
             <article className="dockstory-viewer-card">
-              <span className="dockstory-viewer-label">① Local guiado · referencia</span>
+              <div className="dockstory-viewer-heading">
+                <span className="dockstory-viewer-tool">HADDOCK</span>
+                <span className="dockstory-viewer-role">Pose de referencia</span>
+              </div>
               <div className="dockstory-viewer-frame">
                 <ComplexViewer pdbUrl={active.localPdb} referenceUrl={active.localPdb} />
               </div>
             </article>
 
             <article className="dockstory-viewer-card">
-              <span className="dockstory-viewer-label">② Sobre VEGFA nativo · evaluado</span>
+              <div className="dockstory-viewer-heading">
+                <span className="dockstory-viewer-tool">CABS-dock</span>
+                <span className="dockstory-viewer-role">Sobre VEGFA nativo</span>
+              </div>
               <div className="dockstory-viewer-frame">
                 <ComplexViewer
                   pdbUrl={active.blindPdb}
