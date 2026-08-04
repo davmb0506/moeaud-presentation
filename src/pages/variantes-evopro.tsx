@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import { VEGF_ARMS, vegfArmLabel } from "../data/experimentLabels";
 import opData from "../data/operadoresData.json";
 import tempVariableBoxplotMapping from "../data/tempVariableBoxplotMapping.json";
 import variantData from "../data/variantComparison.json";
@@ -184,21 +185,21 @@ const TEMP_FINAL = {
 const GROUPS: VariantGroup[] = [
   {
     id: "base",
-    label: "EvoPro base",
+    label: VEGF_ARMS.base.label,
     color: BASE_SOURCE.color,
     values: BASE_SOURCE.values,
     summaryLabel: formatSummary(mean(BASE_SOURCE.values), std(BASE_SOURCE.values)),
   },
   {
     id: "both",
-    label: "EvoPro both",
+    label: VEGF_ARMS.both.label,
     color: BOTH_SOURCE.color,
     values: BOTH_SOURCE.values,
     summaryLabel: formatSummary(mean(BOTH_SOURCE.values), std(BOTH_SOURCE.values)),
   },
   {
     id: "temp",
-    label: "Temp. variable",
+    label: VEGF_ARMS.temp.label,
     color: TEMP_SOURCE.color,
     values: TEMP_PLOT_VALUES,
     summaryLabel: formatSummary(TEMP_FINAL.mean, TEMP_FINAL.sd),
@@ -396,10 +397,11 @@ export function VariantesEvoPro() {
       viewport={{ amount: 0.15 }}
     >
       <h2 className="ablacion-title">
-        Comparación de variantes: EvoPro base, both y temperatura variable
+        Comparación de variantes: solo mutación, mutación y cruce, y
+        temperatura variable
       </h2>
       <p className="ablacion-sub">
-        Comparación visual del mejor <strong>overall_score</strong> por
+        Comparación visual del mejor puntaje de diseño alcanzado por
         variante.
       </p>
 
@@ -409,7 +411,7 @@ export function VariantesEvoPro() {
             viewBox={`0 0 ${W} ${H}`}
             className="ablacion-svg variant-svg"
             role="img"
-            aria-label="Boxplots comparativos de EvoPro base, EvoPro both y temperatura variable"
+            aria-label="Diagramas de caja comparando solo mutación, mutación y cruce, y temperatura variable"
             onMouseLeave={() => {
               setHoverId(null);
               setTempHoverKey(null);
@@ -426,7 +428,7 @@ export function VariantesEvoPro() {
             </defs>
 
             <text x={PAD.left + PW / 2} y={20} className="op-sig" textAnchor="middle">
-              Distribución del mejor overall_score por variante representativa
+              Distribución del mejor puntaje por variante representativa
             </text>
 
             {TICKS.map((tick) => (
@@ -470,7 +472,7 @@ export function VariantesEvoPro() {
               textAnchor="middle"
               transform={`rotate(-90 18 ${PAD.top + PH / 2})`}
             >
-              Mejor overall_score (↓ mejor)
+              Mejor puntaje de diseño (↓ mejor)
             </text>
             <text x={PAD.left + 5} y={PAD.top + PH - 7} className="abl-best">
               ↓ mejor
@@ -514,7 +516,7 @@ export function VariantesEvoPro() {
               );
             })}
 
-            {TEMP_VIEWER_POINTS.map((point) => {
+            {TEMP_VIEWER_POINTS.map((point, pointIndex) => {
               const isPinned = point.key === tempPinnedKey;
               const isHover = point.key === tempHoverKey;
               const highlighted = isPinned || isHover;
@@ -557,7 +559,9 @@ export function VariantesEvoPro() {
                     }
                   />
                   <title>
-                    {`${point.run.id} · ${point.run.score.toFixed(3)}${
+                    {`${VEGF_ARMS.temp.short} · réplica ${String(
+                      pointIndex + 1
+                    ).padStart(2, "0")} · ${point.run.score.toFixed(3)}${
                       hasPdb ? "" : " · sin estructura disponible"
                     }`}
                   </title>
@@ -659,12 +663,12 @@ export function VariantesEvoPro() {
                       className="ablacion-info-tag"
                       style={{ background: COND_COLOR[sol.group] }}
                     >
-                      {sol.group === "base" ? "EvoPro base" : "EvoPro both"}
+                      {vegfArmLabel(sol.group)}
                     </span>
                   </div>
                   <div className="op-metrics">
                     <div className="op-metric">
-                      <span className="op-metric-k">overall_score</span>
+                      <span className="op-metric-k">Puntaje general</span>
                       <span className="op-metric-v">{sol.score.toFixed(2)}</span>
                     </div>
                     <div className="op-metric">
@@ -676,7 +680,7 @@ export function VariantesEvoPro() {
                       <span className="op-metric-v">{sol.iptm.toFixed(2)}</span>
                     </div>
                     <div className="op-metric">
-                      <span className="op-metric-k">ContactScore</span>
+                      <span className="op-metric-k">Score de contacto</span>
                       <span className="op-metric-v">{sol.contact.toFixed(1)}</span>
                     </div>
                   </div>
@@ -690,30 +694,28 @@ export function VariantesEvoPro() {
                         className="ablacion-info-tag"
                         style={{ background: TEMP_SOURCE.color }}
                       >
-                        Temp. variable
+                        {VEGF_ARMS.temp.label}
                       </span>
                     </div>
                     <div className="op-metrics">
                       <div className="op-metric">
-                        <span className="op-metric-k">overall_score</span>
+                        <span className="op-metric-k">Puntaje general</span>
                         <span className="op-metric-v">{tempRun.score.toFixed(2)}</span>
                       </div>
                       <div className="op-metric">
-                        <span className="op-metric-k">Gen. budget</span>
-                        <span className="op-metric-v">
-                          {tempRun.generation_budget}
-                        </span>
+                        <span className="op-metric-k">Generaciones</span>
+                        <span className="op-metric-v">60</span>
                       </div>
                       <div className="op-metric">
                         <span className="op-metric-k">ipTM</span>
                         <span className="op-metric-v">
-                          {tempRun.iptm === null ? "null" : tempRun.iptm.toFixed(2)}
+                          {tempRun.iptm === null ? "—" : tempRun.iptm.toFixed(2)}
                         </span>
                       </div>
                       <div className="op-metric">
-                        <span className="op-metric-k">ContactScore</span>
+                        <span className="op-metric-k">Score de contacto</span>
                         <span className="op-metric-v">
-                          {tempRun.contact === null ? "null" : tempRun.contact.toFixed(1)}
+                          {tempRun.contact === null ? "—" : tempRun.contact.toFixed(1)}
                         </span>
                       </div>
                     </div>

@@ -71,3 +71,55 @@ export default defineConfig([
   },
 ])
 ```
+
+## Flujo Goudy (shortlist tesis) — mono + multi
+
+Protocolo canónico de cierre: `select → Rosetta → paper_filter` (Ω soft).
+
+| Panel | Experimento | Shortlist |
+|-------|-------------|-----------|
+| MOEA VEGF-A | `moea_pool1208` | n=11 (listo) |
+| HA-PD1 mono | `hapd1_mono60` | regenerando con réplicas 01–10 |
+
+```bash
+# Tras terminar Goudy HA-PD1:
+python3 scripts/build_shortlist_goudy.py
+```
+
+Salida: `src/data/shortlistGoudy.json` (paneles `moea_pool1208` + `hapd1_mono60`).
+Slides: `ValidacionSintesis`, `ValidacionShortlist`.
+
+## HA-PD1 mono-60 vs AiDs SPR
+
+Slide comparativa (`src/pages/hapd1-mono60-vs-paper.tsx`) entre Top diseños del panel
+`outputs_hapd1_mono_60` (10 réplicas × brazo, 01–10, iteración 60) y los 5 AiDs SPR de Goudy et al. 2023
+re-predichos con AF2 sobre HA-PD1.
+
+Regenerar datos + PDBs públicos:
+
+```bash
+python3 scripts/build_hapd1_mono60_vs_paper.py
+```
+
+Salidas: `src/data/hapd1Mono60VsPaper.json`, `public/pdbs/hapd1/{mono,aids}/`.
+
+Selección: Top-1 por `overall_score` (↓ mejor) por cada uno de los 10 runs de cada
+brazo (1 diseño/run, hasta 10 por brazo). Matching PDB por secuencia exacta de cadena A.
+Se excluyen secuencias degeneradas (A+L > 80%) y con QC estructural débil
+(`pLDDT_A < 75`, `ipTM < 0.10` ≈ scrambled paper, o `PAE iface > 25`); un run sin
+ningún candidato elegible queda sin representar.
+**KD experimental solo para AiDs; no confundir con overall_score.**
+Incluye propiedades ProtParam del binder (GRAVY, carga pH 7, pI, II,
+aromaticidad, MW) para diseños y AiDs.
+
+### Cobertura PDB (resumen)
+
+| brazo | diseños seleccionados (Top-1/run) | con PDB |
+|-------|----------------------:|--------:|
+| both (base) | 9 | 9 |
+| temp | 9 | 9 |
+| mutation | 8 | 8 |
+| **total** | **26** | **26** |
+
+AiDs SPR copiados: 4, 5, 7, 15, 19. Panel: 10 réplicas × brazo (01–10).
+

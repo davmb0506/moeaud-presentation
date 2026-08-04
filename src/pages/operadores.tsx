@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import { VEGF_ARMS, vegfArmLabel } from "../data/experimentLabels";
 import opData from "../data/operadoresData.json";
 
 const fade: Variants = {
@@ -176,7 +177,7 @@ export function Operadores() {
             viewBox={`0 0 ${W} ${H}`}
             className="ablacion-svg"
             role="img"
-            aria-label="Boxplot del mejor overall_score: base vs mutación + crossover"
+            aria-label="Boxplot del mejor overall_score: solo mutación frente a mutación y cruce"
             onMouseLeave={() => setHoverId(null)}
           >
             <text x={PAD.left + PW / 2} y={20} className="op-sig" textAnchor="middle">
@@ -234,21 +235,21 @@ export function Operadores() {
             })}
 
             <text x={X_BASE} y={PAD.top + PH + 22} className="op-xlabel" textAnchor="middle" style={{ fill: COLOR_BASE }}>
-              base (mutación)
+              {VEGF_ARMS.base.short}
             </text>
             <text x={X_BOTH} y={PAD.top + PH + 22} className="op-xlabel" textAnchor="middle" style={{ fill: COLOR_BOTH }}>
-              + crossover
+              {VEGF_ARMS.both.short}
             </text>
           </svg>
 
           <div className="ablacion-legend">
             <span className="ablacion-legend-item">
               <span className="ablacion-swatch" style={{ background: COLOR_BASE }} />
-              EvoPro base (mutación) · {meanOf(BASE).toFixed(1)} ± {stdOf(BASE).toFixed(1)}
+              {VEGF_ARMS.base.label} · {meanOf(BASE).toFixed(1)} ± {stdOf(BASE).toFixed(1)}
             </span>
             <span className="ablacion-legend-item">
               <span className="ablacion-swatch" style={{ background: COLOR_BOTH }} />
-              Mutación + Crossover · {meanOf(BOTH).toFixed(1)} ± {stdOf(BOTH).toFixed(1)}
+              {VEGF_ARMS.both.label} · {meanOf(BOTH).toFixed(1)} ± {stdOf(BOTH).toFixed(1)}
             </span>
           </div>
         </div>
@@ -259,7 +260,7 @@ export function Operadores() {
           <div className="ablacion-info">
             <div className="ablacion-info-head">
               <span className="ablacion-info-tag" style={{ background: COND_COLOR[sol.group] }}>
-                {sol.group === "base" ? "EvoPro base (mutación)" : "Mutación + Crossover"}
+                {vegfArmLabel(sol.group)}
               </span>
             </div>
             <div className="op-metrics">

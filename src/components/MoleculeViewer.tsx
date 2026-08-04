@@ -77,6 +77,7 @@ export function MoleculeViewer() {
   const cancelRef = useRef(false);
 
   const [ready, setReady] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [step, setStep] = useState<Step>(0);
   const [seqInfo, setSeqInfo] = useState<{
@@ -299,10 +300,45 @@ export function MoleculeViewer() {
     viewer.render();
   };
 
+  // ---- Visibilidad: libera el contexto WebGL fuera de pantalla --------------
+  useEffect(() => {
+    const container = viewerRef.current;
+    if (!container) return;
+    const observer = new IntersectionObserver(
+      ([entry]) =>
+        setIsVisible(entry.isIntersecting && entry.intersectionRatio > 0),
+      { threshold: [0, 0.1, 0.25], rootMargin: "0px" }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   // ---- Carga del modelo ------------------------------------------------------
   useEffect(() => {
     const container = viewerRef.current;
     if (!container) return;
+    if (!isVisible) {
+      cancelRef.current = true;
+      if (glViewerRef.current) {
+        try {
+          glViewerRef.current.clear();
+        } catch {
+          /* ignore */
+        }
+        container.innerHTML = "";
+        glViewerRef.current = null;
+      }
+      modelARef.current = null;
+      modelRRef.current = null;
+      candModelsRef.current = [];
+      surfARef.current = null;
+      surfRRef.current = null;
+      setReady(false);
+      setPlaying(false);
+      setStep(0);
+      setSeqInfo(null);
+      return;
+    }
 
     cancelRef.current = false;
     // Fondo transparente: alpha 0. Usamos el color de la tarjeta del tema para
@@ -496,7 +532,7 @@ export function MoleculeViewer() {
       surfARef.current = null;
       surfRRef.current = null;
     };
-  }, []);
+  }, [isVisible]);
 
   const buttonLabel = playing
     ? "Diseñando…"

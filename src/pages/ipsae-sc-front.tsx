@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import { DesignCharacterization } from "../components/DesignCharacterization";
+import { ABLATION_CONDS } from "../data/experimentLabels";
 import frontData from "../data/ipsaeScFront.json";
 
 const fade: Variants = {
@@ -30,16 +32,16 @@ type Point = {
   instability: number | null;
 };
 
-const fmt = (v: number | null, d = 1): string =>
-  v === null ? "—" : v.toFixed(d);
-
 const POINTS = frontData.points as Point[];
 const COUNTS = frontData.counts as Record<string, number>;
 
-const COND_COLOR: Record<string, string> = { con: "#3b6fb0", sin: "#e8943a" };
+const COND_COLOR: Record<string, string> = {
+  con: ABLATION_CONDS.con.color,
+  sin: "#e8943a",
+};
 const COND_LABEL: Record<string, string> = {
-  con: "Con mecanismos",
-  sin: "Sin mecanismos",
+  con: ABLATION_CONDS.con.label,
+  sin: ABLATION_CONDS.sin.label,
 };
 
 // Geometría del scatter.
@@ -94,8 +96,13 @@ const INITIAL_POINT = POINTS.reduce(
 export function IpsaeScFront() {
   const [pinnedId, setPinnedId] = useState<string>(INITIAL_POINT?.id ?? "");
   const [hoverId, setHoverId] = useState<string | null>(null);
+  // Visor: hover temporal o pin. Cono: solo el click (persiste al mover el cursor).
   const activeId = hoverId ?? pinnedId;
   const active = useMemo(() => POINTS.find((p) => p.id === activeId) ?? null, [activeId]);
+  const conePoint = useMemo(
+    () => POINTS.find((p) => p.id === pinnedId) ?? null,
+    [pinnedId]
+  );
   const conPath = useMemo(() => frontPath("con"), []);
   const sinPath = useMemo(() => frontPath("sin"), []);
   const xTicks = useMemo(() => niceTicks(Math.min(...F1S), Math.max(...F1S)), []);
@@ -164,12 +171,38 @@ export function IpsaeScFront() {
             <path d={sinPath} className="abl-front" style={{ stroke: COND_COLOR.sin }} />
             <path d={conPath} className="abl-front" style={{ stroke: COND_COLOR.con }} />
 
+            {/* Cono de dominancia del punto fijado por click (solo líneas; peor = ↑→). */}
+            {conePoint && (
+              <g className="abl-cone-group" aria-hidden>
+                <line
+                  className="abl-cone"
+                  x1={sx(conePoint.f1)}
+                  y1={sy(conePoint.f2)}
+                  x2={PAD.left + PW}
+                  y2={sy(conePoint.f2)}
+                />
+                <line
+                  className="abl-cone"
+                  x1={sx(conePoint.f1)}
+                  y1={sy(conePoint.f2)}
+                  x2={sx(conePoint.f1)}
+                  y2={PAD.top}
+                />
+              </g>
+            )}
+
             {POINTS.map((p) => {
               const isPinned = p.id === pinnedId;
               const isHover = p.id === hoverId;
               const shown = isPinned || isHover;
+              const dominated =
+                conePoint != null &&
+                p.id !== conePoint.id &&
+                p.f1 >= conePoint.f1 &&
+                p.f2 >= conePoint.f2 &&
+                (p.f1 > conePoint.f1 || p.f2 > conePoint.f2);
               return (
-                <g key={p.id}>
+                <g key={p.id} opacity={dominated ? 0.22 : 1}>
                   {isPinned && (
                     <circle cx={sx(p.f1)} cy={sy(p.f2)} r={9} className="abl-ring pinned" style={{ stroke: COND_COLOR[p.cond] }} />
                   )}
@@ -213,44 +246,7 @@ export function IpsaeScFront() {
                   <strong>{active.f2.toFixed(3)}</strong>
                 </span>
               </div>
-              <div className="op-metrics">
-                <div className="op-metric">
-                  <span className="op-metric-k">Radio de giro</span>
-                  <span className="op-metric-v">{fmt(active.rg, 1)} Å</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">Contactos IF</span>
-                  <span className="op-metric-v">{fmt(active.if_contacts, 0)}</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">ΔSASA</span>
-                  <span className="op-metric-v">{fmt(active.bsa, 1)} Å²</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">Carga neta</span>
-                  <span className="op-metric-v">{fmt(active.charge, 1)}</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">pI</span>
-                  <span className="op-metric-v">{fmt(active.pi, 2)}</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">GRAVY</span>
-                  <span className="op-metric-v">{fmt(active.gravy, 3)}</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">Masa</span>
-                  <span className="op-metric-v">{fmt(active.mw_kda, 2)} kDa</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">Aromaticidad</span>
-                  <span className="op-metric-v">{fmt(active.aromaticity, 3)}</span>
-                </div>
-                <div className="op-metric">
-                  <span className="op-metric-k">Inestabilidad</span>
-                  <span className="op-metric-v">{fmt(active.instability, 1)}</span>
-                </div>
-              </div>
+              <DesignCharacterization m={active} />
               <code className="ablacion-info-seq">{active.binder}</code>
               <p className="ablacion-info-note">
                 <span className="ablacion-chip target" /> VEGF-A (objetivo) ·{" "}

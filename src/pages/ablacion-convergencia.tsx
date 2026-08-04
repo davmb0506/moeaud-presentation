@@ -1,10 +1,71 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
+import overheadRaw from "../data/ablationOverhead.json";
 
 const MECH = "#2E6B8E"; // con mecanismos
 const NOMECH = "#F28E2B"; // sin mecanismos
 const GREEN = "#2f8f5f"; // anotaciones / mensaje
+
+type OverheadReplica = {
+  id: string;
+  replica: number;
+  injection_s: number;
+  injection_min: number;
+  injection_per_gen_s: number;
+  injection_per_event_s: number;
+  n_injections: number;
+  gen_median_min: number;
+  pct_of_gen: number;
+  offspring_min: number;
+  selection_min: number;
+  af2_scoring_pct: number;
+  wall_clock_h: number;
+};
+
+type OverheadSummary = {
+  injection_s_median: number;
+  injection_s_min: number;
+  injection_s_max: number;
+  injection_min_median: number;
+  injection_min_min: number;
+  injection_min_max: number;
+  injection_per_gen_s_median: number;
+  n_injections_median: number;
+  n_injections_total: number;
+  injection_per_event_s_median: number;
+  injection_per_event_s_min: number;
+  injection_per_event_s_max: number;
+  gen_median_s: number;
+  gen_median_min: number;
+  pct_of_gen_median: number;
+  offspring_min_median: number;
+  selection_min_median: number;
+  offspring_per_gen_s_median: number;
+  selection_per_gen_s_median: number;
+  af2_scoring_per_gen_s_median: number;
+  af2_scoring_pct_median: number;
+  wall_clock_h_median: number;
+};
+
+type OperatorSelectionCost = {
+  n_offspring_per_gen: number;
+  window_tw: number;
+  draw_us: number;
+  switch_ms: number;
+  total_s_per_run: number;
+  per_gen_ms: number;
+};
+
+type OverheadData = {
+  meta: { formulation: string; n_replicas: number; generations: number };
+  ma: OverheadReplica[];
+  base: OverheadReplica[];
+  summary: { ma: OverheadSummary; base: OverheadSummary };
+  operator_selection: OperatorSelectionCost;
+};
+
+const OVERHEAD = overheadRaw as OverheadData;
 
 const fade: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -27,85 +88,117 @@ type Test = {
   reject: boolean;
 };
 
-type SlideData = {
-  title: string;
-  sub: ReactNode;
-  img: string;
-  alt: string;
-  rows: Test[];
-  msg: string;
-};
+type SlideData =
+  | {
+      kind: "stats";
+      title: string;
+      sub: ReactNode;
+      img: string;
+      alt: string;
+      rows: Test[];
+      msg: string;
+    }
+  | {
+      kind: "overhead";
+      title: string;
+      sub: ReactNode;
+      msg: string;
+    };
 
 const H0_BI =
-  "MOEA-UD con mecanismos obtiene un HV acumulado final igual al de la versión sin mecanismos.";
+  "MOEA-UD con MA obtiene un HV acumulado final igual al de la versión Base.";
 const H1_BI =
-  "MOEA-UD con mecanismos obtiene un HV acumulado final distinto al de la versión sin mecanismos.";
+  "MOEA-UD con MA obtiene un HV acumulado final distinto al de la versión Base.";
 const H0_UNI =
-  "MOEA-UD con mecanismos obtiene un HV acumulado final igual o menor que la versión sin mecanismos.";
+  "MOEA-UD con MA obtiene un HV acumulado final igual o menor que la versión Base.";
 const H1_UNI =
-  "MOEA-UD con mecanismos obtiene un HV acumulado final mayor que la versión sin mecanismos.";
-const ABLATION_FIGURE_VERSION = "iqr-v1";
+  "MOEA-UD con MA obtiene un HV acumulado final mayor que la versión Base.";
+const ABLATION_FIGURE_VERSION = "ma-base-v1";
 
 const SLIDES: SlideData[] = [
   {
+    kind: "stats",
     title: "Ablación de mecanismos — Interface-PAE / pLDDT",
     sub: (
       <>
-        <B>Con mecanismos</B> alcanza un hipervolumen acumulado final medio mayor (
-        <B>1.003</B>) y también una mediana final mayor (<B>1.011</B>) que la
-        versión <O>sin mecanismos</O> (<O>0.915</O>; mediana <O>0.921</O>).
+        <B>MA</B> alcanza un hipervolumen acumulado final medio mayor (
+        <B>1.003</B>) y también una mediana final mayor (<B>1.011</B>) que{" "}
+        <O>Base</O> (<O>0.915</O>; mediana <O>0.921</O>).
       </>
     ),
     img: `/figures/ablation_cumhv_interface_pae_plddt.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — Interface-PAE / pLDDT: con mecanismos frente a sin mecanismos.",
+    alt: "Curva de convergencia del hipervolumen acumulado — Interface-PAE / pLDDT: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.00911", sig: "**", reject: true },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.00455", sig: "**", reject: true },
     ],
-    msg: "En esta formulación, los mecanismos adaptativos mejoran de forma significativa el mejor hipervolumen alcanzado a lo largo de la corrida.",
+    msg: "En esta formulación, los mecanismos adaptativos (MA) mejoran de forma significativa el mejor hipervolumen alcanzado a lo largo de la ejecución.",
   },
   {
+    kind: "stats",
     title: "Ablación de mecanismos — Composite / TM-score",
     sub: (
       <>
-        <O>Sin mecanismos</O> termina ligeramente por encima en hipervolumen
-        acumulado final (<O>1.203</O>) frente a <B>con mecanismos</B> (
+        <O>Base</O> termina ligeramente por encima en hipervolumen
+        acumulado final (<O>1.203</O>) frente a <B>MA</B> (
         <B>1.192</B>); las medianas finales permanecen muy cercanas (
         <B>1.200</B> vs. <O>1.202</O>), sin evidencia de una diferencia
         estadísticamente significativa.
       </>
     ),
     img: `/figures/ablation_cumhv_composite_tmscore.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — Composite / TM-score: con mecanismos frente a sin mecanismos.",
+    alt: "Curva de convergencia del hipervolumen acumulado — Composite / TM-score: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2406", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.8942", sig: "n.s.", reject: false },
     ],
-    msg: "Las trayectorias acumuladas son muy similares y no hay evidencia de que los mecanismos mejoren el mejor HV alcanzado en esta formulación.",
+    msg: "Las trayectorias acumuladas son muy similares y no hay evidencia de que MA mejore el mejor HV alcanzado en esta formulación.",
   },
   {
+    kind: "stats",
     title: "Ablación de mecanismos — ipSAE / SC",
     sub: (
       <>
         No se observa diferencia significativa en el hipervolumen acumulado final
-        (<B>con mecanismos: media 1.190</B>;{" "}
-        <O>sin mecanismos: media 1.199</O>; mediana <B>1.210</B> frente a{" "}
+        (<B>MA: media 1.190</B>;{" "}
+        <O>Base: media 1.199</O>; mediana <B>1.210</B> frente a{" "}
         <O>1.203</O>).
       </>
-    ), 
+    ),
     img: `/figures/ablation_cumhv_ipsae_sc.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — ipSAE / SC: con mecanismos frente a sin mecanismos.",
+    alt: "Curva de convergencia del hipervolumen acumulado — ipSAE / SC: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2755", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.1378", sig: "n.s.", reject: false },
     ],
     msg: "La comparación sigue siendo no concluyente: ambas condiciones alcanzan techos muy parecidos y la variabilidad entre réplicas domina la diferencia media.",
   },
+  {
+    kind: "overhead",
+    title: "Costo computacional adicional de los mecanismos adaptativos",
+    sub: null,
+    msg: `Una generación completa tarda ${OVERHEAD.summary.ma.gen_median_min.toFixed(1)} min de mediana, así que la inyección se lleva el ${OVERHEAD.summary.ma.pct_of_gen_median.toFixed(2)} % del tiempo y la selección de operadores unas ${Math.round(((OVERHEAD.summary.ma.injection_per_gen_s_median * 1000) / OVERHEAD.operator_selection.per_gen_ms) / 10) * 10} veces menos que eso. El costo adicional de los mecanismos es despreciable frente a AF2.`,
+  },
 ];
 const TOTAL = SLIDES.length;
 
 const NEXT = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV = ["ArrowLeft", "ArrowUp", "PageUp"];
+
+/** Tiempo en la unidad que lo deja legible sin ceros de relleno. */
+function fmtTime(seconds: number): string {
+  if (seconds >= 60) return `${(seconds / 60).toFixed(1)} min`;
+  if (seconds >= 1) return `${seconds.toFixed(1)} s`;
+  if (seconds >= 0.01) return `${seconds.toFixed(2)} s`;
+  return `${(seconds * 1000).toFixed(1)} ms`;
+}
+
+function fmtPct(seconds: number, total: number): string {
+  const pct = (100 * seconds) / total;
+  if (pct >= 1) return `${pct.toFixed(1)} %`;
+  if (pct >= 0.01) return `${pct.toFixed(2)} %`;
+  return `${pct.toFixed(4)} %`;
+}
 
 const variants = {
   enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
@@ -114,6 +207,69 @@ const variants = {
 };
 
 function SlideView({ data }: { data: SlideData }) {
+  if (data.kind === "overhead") {
+    const s = OVERHEAD.summary.ma;
+    const genSec = s.gen_median_s;
+    const phases = [
+      { name: "Predicción AF2 y scoring", seconds: s.af2_scoring_per_gen_s_median },
+      { name: "Selección MOEA-UD", seconds: s.selection_per_gen_s_median },
+      { name: "Generación de descendencia", seconds: s.offspring_per_gen_s_median },
+      { name: "Inyección de diversidad", seconds: s.injection_per_gen_s_median, ma: true },
+      {
+        name: "Selección adaptativa de operadores",
+        seconds: OVERHEAD.operator_selection.per_gen_ms / 1000,
+        ma: true,
+      },
+    ];
+    return (
+      <motion.div
+        className="exp exp-oh-slide"
+        variants={fade}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="exp-head">
+          <h2 className="exp-title">{data.title}</h2>
+          {data.sub ? <p className="exp-sub">{data.sub}</p> : null}
+        </div>
+
+        <div className="exp-oh">
+          <table className="exp-table exp-table-phases">
+            <thead>
+              <tr>
+                <th>Fase de una generación</th>
+                <th>Tiempo</th>
+                <th>% de la generación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {phases.map((p) => (
+                <tr key={p.name} className={p.ma ? "exp-tr-ma" : undefined}>
+                  <td className="exp-td-test">
+                    {p.name}
+                    {p.ma ? <span className="exp-ma-tag">MA</span> : null}
+                  </td>
+                  <td className="exp-td-num">{fmtTime(p.seconds)}</td>
+                  <td className="exp-td-num">{fmtPct(p.seconds, genSec)}</td>
+                </tr>
+              ))}
+              <tr className="exp-tr-median">
+                <td className="exp-td-test">Generación completa</td>
+                <td className="exp-td-num">{fmtTime(genSec)}</td>
+                <td className="exp-td-num">100 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p className="exp-msg" style={{ color: GREEN }}>
+          {data.msg}
+        </p>
+        
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div className="exp" variants={fade} initial="hidden" animate="visible">
       <div className="exp-head">
@@ -144,7 +300,10 @@ function SlideView({ data }: { data: SlideData }) {
                 <td>{r.h0}</td>
                 <td>{r.h1}</td>
                 <td className="exp-td-num">{r.p}</td>
-                <td className="exp-td-sig" style={r.reject ? undefined : { color: "var(--text)" }}>
+                <td
+                  className="exp-td-sig"
+                  style={r.reject ? undefined : { color: "var(--text)" }}
+                >
                   {r.sig}
                 </td>
                 <td className={"exp-td-res" + (r.reject ? "" : " ns")}>
@@ -158,7 +317,6 @@ function SlideView({ data }: { data: SlideData }) {
         <p className="exp-msg" style={{ color: GREEN }}>
           {data.msg}
         </p>
-
         <p className="exp-foot">
           *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. = no significativo.
           Hipervolumen acumulado final por réplica; n = 10 réplicas
@@ -241,14 +399,18 @@ export function AblacionConvergencia() {
   return (
     <div className="mec-deck" ref={rootRef}>
       <div className="mec-deck-top">
-        <span className="mec-part b">Ablación · convergencia del HV</span>
+        <span className="mec-part b">Ablación · HV y costo computacional</span>
         <span className="mec-progress">
-          {SLIDES.map((_, i) => (
+          {SLIDES.map((s, i) => (
             <button
               key={i}
               type="button"
               className={"mec-pip pb" + (i === idx ? " on" : "")}
-              aria-label={`Ir a la formulación ${i + 1}`}
+              aria-label={
+                s.kind === "overhead"
+                  ? "Ir al costo computacional de los mecanismos"
+                  : `Ir a la formulación ${i + 1}`
+              }
               onClick={() => {
                 setDir(i > idx ? 1 : -1);
                 setIdx(i);

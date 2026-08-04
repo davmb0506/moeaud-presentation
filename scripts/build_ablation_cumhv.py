@@ -189,8 +189,8 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
     ax.set_ylabel("Hipervolumen acumulado (↑ mejor)", fontsize=12)
     ax.legend(
         handles=[
-            Line2D([0], [0], color=MECH, linewidth=2.5, label="Con mecanismos"),
-            Line2D([0], [0], color=NO_MECH, linewidth=2.5, label="Sin mecanismos"),
+            Line2D([0], [0], color=MECH, linewidth=2.5, label="MA"),
+            Line2D([0], [0], color=NO_MECH, linewidth=2.5, label="Base"),
             Line2D([0], [0], color=TEXT, linewidth=2.5, label="Media"),
             Line2D([0], [0], color=TEXT, linewidth=2.2, linestyle=(0, (5, 4)), label="Mediana"),
             Patch(facecolor=TEXT, edgecolor="none", alpha=0.18, label="RIC (Q1–Q3)"),

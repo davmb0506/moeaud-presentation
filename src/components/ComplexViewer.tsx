@@ -1,12 +1,144 @@
 import { useEffect, useRef, useState } from "react";
 import * as $3Dmol from "3dmol";
-import { chainCA, composeRefTargetWithEvalBinder, kabsch, transformPdb, type ChainRoles } from "../utils/superpose";
+import {
+  chainCA,
+  composeRefTargetWithEvalBinder,
+  kabsch,
+  transformPdb,
+  type ChainRoles,
+} from "../utils/superpose";
 
-const COLOR_TARGET = "#7fb2e6"; // VEGF-A
-const COLOR_BINDER = "#34d399"; // binder diseñado
+const COLOR_TARGET = "#7fb2e6";
+const COLOR_BINDER = "#34d399";
 const COLOR_BINDER_STICK = "#10b981";
 
 type Repr = "cartoon" | "surface";
+
+// Chrome/Electron limitan contextos WebGL. Nunca reclamamos visores que siguen
+// claramente en pantalla (evita matar el panel hermano AiD/diseño del mismo slide).
+const MAX_LIVE_VIEWERS = 8;
+const RECLAIM_MAX_RATIO = 0.12;
+
+type LiveViewerEntry = {
+  id: number;
+  getRatio: () => number;
+  forceDispose: () => void;
+};
+
+let nextViewerId = 1;
+let liveViewers = 0;
+const liveEntries = new Map<number, LiveViewerEntry>();
+const viewerWaiters: Array<() => void> = [];
+
+/** Evita createViewer concurrentes: el 2.º contexto a veces nace “muerto”. */
+let createViewerChain: Promise<void> = Promise.resolve();
+
+function enqueueCreateViewer<T>(task: () => Promise<T>): Promise<T> {
+  const run = createViewerChain.then(task, task);
+  createViewerChain = run.then(
+    () => undefined,
+    () => undefined
+  );
+  return run;
+}
+
+function notifyWaiters() {
+  while (liveViewers < MAX_LIVE_VIEWERS && viewerWaiters.length > 0) {
+    const next = viewerWaiters.shift();
+    next?.();
+  }
+}
+
+function reclaimOffscreenSlots(): number {
+  let freed = 0;
+  for (const entry of [...liveEntries.values()]) {
+    if (entry.getRatio() > RECLAIM_MAX_RATIO) continue;
+    entry.forceDispose();
+    freed += 1;
+  }
+  return freed;
+}
+
+function acquireViewerSlot(getRatio: () => number): {
+  promise: Promise<"acquired" | "cancelled">;
+  cancel: () => void;
+  register: (forceDispose: () => void) => number;
+} {
+  let settled = false;
+  let waiter: (() => void) | null = null;
+  let resolvePromise: ((value: "acquired" | "cancelled") => void) | null =
+    null;
+
+  const tryAcquire = () => {
+    if (settled) return false;
+    if (liveViewers >= MAX_LIVE_VIEWERS) reclaimOffscreenSlots();
+    if (liveViewers >= MAX_LIVE_VIEWERS) return false;
+    liveViewers += 1;
+    settled = true;
+    resolvePromise?.("acquired");
+    return true;
+  };
+
+  const promise = new Promise<"acquired" | "cancelled">((resolve) => {
+    resolvePromise = resolve;
+    if (tryAcquire()) return;
+    waiter = () => {
+      if (settled) return;
+      if (getRatio() <= 0) {
+        viewerWaiters.push(waiter!);
+        return;
+      }
+      if (!tryAcquire()) viewerWaiters.push(waiter!);
+    };
+    viewerWaiters.push(waiter);
+  });
+
+  return {
+    promise,
+    cancel: () => {
+      if (settled) return;
+      settled = true;
+      if (waiter) {
+        const idx = viewerWaiters.indexOf(waiter);
+        if (idx >= 0) viewerWaiters.splice(idx, 1);
+      }
+      resolvePromise?.("cancelled");
+    },
+    register: (forceDispose) => {
+      const entryId = nextViewerId++;
+      liveEntries.set(entryId, { id: entryId, getRatio, forceDispose });
+      return entryId;
+    },
+  };
+}
+
+function unregisterViewer(entryId: number | null) {
+  if (entryId == null) return;
+  liveEntries.delete(entryId);
+}
+
+function releaseViewerSlot() {
+  liveViewers = Math.max(0, liveViewers - 1);
+  notifyWaiters();
+}
+
+function disposeViewer(viewer: any, container: HTMLDivElement | null) {
+  try {
+    viewer?.clear?.();
+  } catch {
+    /* ignore */
+  }
+  if (container) container.innerHTML = "";
+}
+
+function sanitizePdbText(text: string) {
+  const lines = text.split(/\r?\n/).filter((line) => {
+    const t = line.trimStart();
+    return !t.startsWith("MODEL") && !t.startsWith("ENDMDL");
+  });
+  if (!lines.some((line) => line.trim() === "END")) lines.push("END");
+  return `${lines.join("\n")}\n`;
+}
 
 function chainIdsFromPdb(pdbText: string) {
   const seen = new Set<string>();
@@ -28,7 +160,10 @@ function residueCountForChain(pdbText: string, chain: string) {
   return residues.size;
 }
 
-function detectChainRoles(pdbText: string, refTargetLength: number | null): ChainRoles {
+function detectChainRoles(
+  pdbText: string,
+  refTargetLength: number | null
+): ChainRoles {
   const chainIds = chainIdsFromPdb(pdbText);
   if (chainIds.length === 0) {
     return { targetChain: "B", binderChain: "A" };
@@ -63,12 +198,6 @@ function detectChainRoles(pdbText: string, refTargetLength: number | null): Chai
   };
 }
 
-// Aplica la representación actual al modelo cargado. El binder detectado se
-// muestra siempre en cartoon+stick; VEGF-A como cartoon o superficie.
-// Aplica la representación actual. En "surface" se genera la superficie
-// molecular (lisa) de ambas cadenas con su color; en "cartoon", listones.
-// La superficie se calcula con selección por cadena (sin id de modelo) para
-// evitar el bug de getAtomsFromSel con modelos obsoletos.
 async function applyRepr(viewer: any, repr: Repr, roles: ChainRoles) {
   const { targetChain, binderChain } = roles;
   viewer.removeAllSurfaces();
@@ -95,7 +224,10 @@ async function applyRepr(viewer: any, repr: Repr, roles: ChainRoles) {
       console.warn("addSurface falló:", e);
     }
   } else {
-    viewer.setStyle({ chain: targetChain }, { cartoon: { color: COLOR_TARGET } });
+    viewer.setStyle(
+      { chain: targetChain },
+      { cartoon: { color: COLOR_TARGET } }
+    );
     if (binderChain) {
       viewer.setStyle(
         { chain: binderChain },
@@ -109,29 +241,37 @@ async function applyRepr(viewer: any, repr: Repr, roles: ChainRoles) {
   viewer.render();
 }
 
-// Visor de un complejo binder–VEGF-A. Carga el PDB indicado bajo demanda
-// (al cambiar pdbUrl) reutilizando el mismo contexto WebGL. Cada complejo se
-// superpone sobre VEGF-A para que el objetivo quede fijo entre estructuras y
-// solo varíe la pose del binder. La orientación de referencia se fija con
-// referenceUrl (estructura canónica), independiente del orden de hover.
 export function ComplexViewer({
   pdbUrl,
   referenceUrl = null,
   fixTargetFromReference = false,
+  active,
 }: {
   pdbUrl: string | null;
   referenceUrl?: string | null;
   fixTargetFromReference?: boolean;
+  /** Si se define, fuerza el montaje del visor (p. ej. pareja AiD/diseño). */
+  active?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<any>(null);
   const tokenRef = useRef(0);
-  const refCARef = useRef<number[][] | null>(null); // Cα de VEGF-A de referencia
+  const refCARef = useRef<number[][] | null>(null);
   const refPdbTextRef = useRef<string | null>(null);
-  const refRolesRef = useRef<ChainRoles>({ targetChain: "B", binderChain: "A" });
-  const chainRolesRef = useRef<ChainRoles>({ targetChain: "B", binderChain: "A" });
+  const refRolesRef = useRef<ChainRoles>({
+    targetChain: "B",
+    binderChain: "A",
+  });
+  const chainRolesRef = useRef<ChainRoles>({
+    targetChain: "B",
+    binderChain: "A",
+  });
   const cameraSetRef = useRef(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [inView, setInView] = useState(false);
+  // active=true/false fuerza el estado; undefined → IntersectionObserver propio.
+  const isVisible = active !== undefined ? active : inView;
+  const [viewerEpoch, setViewerEpoch] = useState(0);
+  const [slotGen, setSlotGen] = useState(0);
   const [loading, setLoading] = useState(false);
   const [refReady, setRefReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -139,64 +279,191 @@ export function ComplexViewer({
   const reprRef = useRef<Repr>(repr);
   reprRef.current = repr;
 
+  const isVisibleRef = useRef(false);
+  isVisibleRef.current = isVisible;
+  const ratioRef = useRef(0);
+  const entryIdRef = useRef<number | null>(null);
+  const slotHeldRef = useRef(false);
+
+  const tearDownViewer = () => {
+    unregisterViewer(entryIdRef.current);
+    entryIdRef.current = null;
+    if (viewerRef.current) {
+      disposeViewer(viewerRef.current, containerRef.current);
+      viewerRef.current = null;
+    }
+    if (slotHeldRef.current) {
+      releaseViewerSlot();
+      slotHeldRef.current = false;
+    }
+    cameraSetRef.current = false;
+  };
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.05, rootMargin: "240px 0px" }
+      ([entry]) => {
+        const ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
+        // Con active forzado (pareja de visores), reportamos ratio alto para
+        // no ser reclamados como “fuera de pantalla”.
+        ratioRef.current = active ? Math.max(ratio, 0.85) : ratio;
+        setInView(entry.isIntersecting && entry.intersectionRatio > 0);
+      },
+      { threshold: [0, 0.05, 0.15, 0.35, 0.55, 0.75, 1], rootMargin: "0px" }
     );
     observer.observe(container);
     return () => observer.disconnect();
-  }, []);
+  }, [active]);
+
+  useEffect(() => {
+    if (active) {
+      ratioRef.current = Math.max(ratioRef.current, 0.85);
+    }
+  }, [active]);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !isVisible || viewerRef.current) return;
-    const bg =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--viewer-bg")
-        .trim() || "#f4f7fc";
-    const viewer = $3Dmol.createViewer(container, {
-      backgroundColor: bg,
-      backgroundAlpha: 0,
-    });
-    viewer.setBackgroundColor(bg, 0);
-    viewerRef.current = viewer;
+    if (!container) return;
+
+    if (!isVisible) {
+      tearDownViewer();
+      refCARef.current = null;
+      refPdbTextRef.current = null;
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    if (viewerRef.current) return;
+
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    const slot = acquireViewerSlot(() => ratioRef.current);
+    (async () => {
+      const result = await slot.promise;
+      if (result !== "acquired") return;
+      slotHeldRef.current = true;
+      if (cancelled || !isVisibleRef.current) {
+        releaseViewerSlot();
+        slotHeldRef.current = false;
+        return;
+      }
+      const host = containerRef.current;
+      if (!host || viewerRef.current) {
+        releaseViewerSlot();
+        slotHeldRef.current = false;
+        return;
+      }
+
+      // Esperar layout con tamaño real antes de createViewer (0×0 = canvas vacío).
+      for (let i = 0; i < 10; i++) {
+        if (cancelled) break;
+        const { width, height } = host.getBoundingClientRect();
+        if (width >= 32 && height >= 32) break;
+        await new Promise((r) => requestAnimationFrame(() => r(null)));
+      }
+      if (cancelled || !isVisibleRef.current) {
+        releaseViewerSlot();
+        slotHeldRef.current = false;
+        return;
+      }
+
+      entryIdRef.current = slot.register(() => {
+        unregisterViewer(entryIdRef.current);
+        entryIdRef.current = null;
+        if (viewerRef.current) {
+          disposeViewer(viewerRef.current, containerRef.current);
+          viewerRef.current = null;
+        }
+        if (slotHeldRef.current) {
+          releaseViewerSlot();
+          slotHeldRef.current = false;
+        }
+        cameraSetRef.current = false;
+        if (isVisibleRef.current) {
+          queueMicrotask(() => setSlotGen((n) => n + 1));
+        }
+      });
+
+      const bg =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--viewer-bg")
+          .trim() || "#f4f7fc";
+
+      const tryCreate = async () => {
+        reclaimOffscreenSlots();
+        await new Promise<void>((r) => requestAnimationFrame(() => r()));
+        const v = $3Dmol.createViewer(host, {
+          backgroundColor: bg,
+          backgroundAlpha: 0,
+        });
+        const canvas = host.querySelector("canvas") as HTMLCanvasElement | null;
+        if (!canvas) {
+          disposeViewer(v, host);
+          return null;
+        }
+        v.setBackgroundColor(bg, 0);
+        try {
+          v.resize();
+        } catch {
+          /* ignore */
+        }
+        // Un frame de render vacío para validar que el contexto WebGL responde.
+        try {
+          v.render();
+        } catch {
+          disposeViewer(v, host);
+          return null;
+        }
+        await new Promise<void>((r) => requestAnimationFrame(() => r()));
+        return v;
+      };
+
+      const viewer = await enqueueCreateViewer(async () => {
+        let v = await tryCreate();
+        if (!v) {
+          await new Promise((r) => setTimeout(r, 80));
+          if (!cancelled && isVisibleRef.current) v = await tryCreate();
+        }
+        return v;
+      });
+
+      if (!viewer) {
+        tearDownViewer();
+        if (!cancelled) {
+          setLoading(false);
+          setError("No se pudo inicializar el visor 3D (límite WebGL)");
+        }
+        return;
+      }
+
+      viewerRef.current = viewer;
+      if (!cancelled) setViewerEpoch((n) => n + 1);
+    })();
+
     return () => {
-      if (!isVisible) return;
-      viewer.clear();
-      container.innerHTML = "";
-      viewerRef.current = null;
+      cancelled = true;
+      slot.cancel();
+      tearDownViewer();
     };
-  }, [isVisible]);
+  }, [isVisible, slotGen]);
 
-  useEffect(() => {
-    if (isVisible) return;
-    const viewer = viewerRef.current;
-    const container = containerRef.current;
-    if (viewer) viewer.clear();
-    if (container) container.innerHTML = "";
-    viewerRef.current = null;
-    cameraSetRef.current = false;
-    refCARef.current = null;
-    refPdbTextRef.current = null;
-    setLoading(false);
-  }, [isVisible]);
-
-  // Fija el marco de referencia (Cα de VEGF-A) desde una estructura canónica.
   useEffect(() => {
     if (!isVisible) return;
     if (!referenceUrl) {
-      setRefReady(true); // sin referencia: la primera estructura define el marco
+      setRefReady(true);
       return;
     }
     let cancelled = false;
     setRefReady(false);
     fetch(referenceUrl)
       .then((r) => (r.ok ? r.text() : Promise.reject()))
-      .then((text) => {
+      .then((raw) => {
         if (cancelled) return;
+        const text = sanitizePdbText(raw);
         const roles = detectChainRoles(text, null);
         const ca = chainCA(text, roles.targetChain);
         refRolesRef.current = roles;
@@ -230,11 +497,14 @@ export function ComplexViewer({
         if (!r.ok) throw new Error(`No se pudo cargar ${pdbUrl}`);
         return r.text();
       })
-      .then((text) => {
-        if (token !== tokenRef.current) return; // hover más reciente
+      .then((raw) => {
+        if (token !== tokenRef.current) return;
+        const trimmed = raw.trimStart().toLowerCase();
+        if (trimmed.startsWith("<!doctype") || trimmed.startsWith("<html")) {
+          throw new Error(`Se recibió HTML en lugar del PDB (${pdbUrl})`);
+        }
+        const text = sanitizePdbText(raw);
 
-        // Superponer sobre VEGF-A: la primera estructura fija la referencia;
-        // las siguientes se alinean a ella por los Cα de la cadena objetivo.
         let modelText = text;
         let roles = detectChainRoles(text, refCARef.current?.length ?? null);
 
@@ -247,7 +517,7 @@ export function ComplexViewer({
             refPdbTextRef.current,
             text,
             refRolesRef.current,
-            roles,
+            roles
           );
           modelText = composed.pdb;
           roles = composed.roles;
@@ -266,14 +536,10 @@ export function ComplexViewer({
         viewer.removeAllModels();
         viewer.removeAllSurfaces();
         viewer.addModel(modelText, "pdb");
-        // La cámara se fija una sola vez; al estar todo superpuesto sobre el
-        // objetivo, VEGF-A permanece en la misma orientación entre puntos.
-        if (!cameraSetRef.current) {
-          viewer.zoomTo({ chain: roles.targetChain });
-          viewer.zoomTo();
-          viewer.zoom(0.9);
-          cameraSetRef.current = true;
-        }
+        viewer.zoomTo({ chain: roles.targetChain });
+        viewer.zoomTo();
+        viewer.zoom(0.9);
+        cameraSetRef.current = true;
         applyRepr(viewer, reprRef.current, roles);
         viewer.resize();
         setLoading(false);
@@ -281,17 +547,18 @@ export function ComplexViewer({
       .catch((err) => {
         if (token === tokenRef.current) {
           setLoading(false);
-          setError(err instanceof Error ? err.message : "Error al cargar el complejo");
+          setError(
+            err instanceof Error ? err.message : "Error al cargar el complejo"
+          );
         }
       });
-  }, [isVisible, pdbUrl, refReady, fixTargetFromReference]);
+  }, [isVisible, pdbUrl, refReady, fixTargetFromReference, viewerEpoch]);
 
-  // Re-aplica la representación al alternar cartoon/superficie (sin recargar).
   useEffect(() => {
     const viewer = viewerRef.current;
-    if (!viewer) return;
+    if (!viewer || !viewerEpoch) return;
     applyRepr(viewer, repr, chainRolesRef.current);
-  }, [repr]);
+  }, [repr, viewerEpoch]);
 
   return (
     <div className="cv-stage">
@@ -299,7 +566,9 @@ export function ComplexViewer({
       <button
         type="button"
         className="cv-toggle"
-        onClick={() => setRepr((r) => (r === "cartoon" ? "surface" : "cartoon"))}
+        onClick={() =>
+          setRepr((r) => (r === "cartoon" ? "surface" : "cartoon"))
+        }
         title="Cambiar representación"
       >
         {repr === "cartoon" ? "Superficie" : "Cartoon"}

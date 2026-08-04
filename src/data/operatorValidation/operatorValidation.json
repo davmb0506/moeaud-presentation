@@ -1,0 +1,295 @@
+{
+  "meta": {
+    "experiment_id": "exp02_operator_validation",
+    "title": "Validación en cascada — campeones base / both / temp-variable",
+    "generated": "2026-07-16",
+    "data_dir": "src/data/operatorValidation",
+    "evopro_source": "evopro/validation/operator_experiment",
+    "objective_type": "mono-objetivo (overall_score EvoPro)",
+    "target": "Receptor Ig del ejemplo default de EvoPro (~200 aa); NO es VEGF-A",
+    "related_presentation_data": {
+      "operadores_convergence": "src/data/operadoresData.json",
+      "moea_ud_binding": "src/data/bindingValidation.json"
+    },
+    "n_champions": 4,
+    "not_applicable": [
+      "competition_score (VEGFR2)",
+      "epitope_coverage (VEGF-A)",
+      "blind CABSdock (pendiente)",
+      "repredicción AF2 independiente (pendiente)"
+    ]
+  },
+  "cascade_tiers_applied": [
+    "T1 ProtParam (developability)",
+    "T2 Geometría de interfaz (ΔSASA, contactos; pose Boltz)",
+    "T4 PRODIGY (afinidad predicha)",
+    "Energía Rosetta ddG + MM-GBSA (pose Boltz)",
+    "HADDOCK3 local guiado por interfaz del seed Boltz"
+  ],
+  "design_score_comparison": {
+    "cohort_60_gen": {
+      "base_variant": "base_60",
+      "modified_variant": "both_60",
+      "n_base": 30,
+      "n_modified": 29,
+      "mean_base": -188.04,
+      "mean_modified": -192.08,
+      "delta_modified_minus_base": -4.04,
+      "winner_design_score": "both_60",
+      "mann_whitney_p": 0.000185916,
+      "rank_biserial": -0.57
+    },
+    "cohort_500_gen": {
+      "base_variant": "base_500",
+      "modified_variant": "temp_500",
+      "n_base": 29,
+      "n_modified": 30,
+      "mean_base": -187.23,
+      "mean_modified": -194.92,
+      "delta_modified_minus_base": -7.7,
+      "winner_design_score": "temp_500",
+      "mann_whitney_p": 7.44946e-06,
+      "rank_biserial": -0.68
+    }
+  },
+  "champions": [
+    {
+      "variant": "base_60",
+      "label": "Base (60 gen)",
+      "run_id": "run_21",
+      "design_score": -200.125,
+      "tier1_protparam": {
+        "passes": false,
+        "instability_index": 127.72,
+        "gravy": -2.365
+      },
+      "tier2_geometry": {
+        "delta_sasa": 1457.668178524913,
+        "n_contacts": 11,
+        "passes": true
+      },
+      "tier4_prodigy": {
+        "dG_kcal_mol": -9.580430000000002,
+        "ICs": 50.0
+      },
+      "energy_boltz": {
+        "ddg": -27.45,
+        "mmgbsa": -46.69,
+        "sc": 0.537,
+        "iptm": 0.0882
+      },
+      "haddock3": {
+        "score": -124.094,
+        "bsa": 1770.84,
+        "air": 64.776
+      }
+    },
+    {
+      "variant": "both_60",
+      "label": "Both — crossover+mutación (60 gen)",
+      "run_id": "evopro_both_01_20251211_101129",
+      "design_score": -201.682,
+      "tier1_protparam": {
+        "passes": true,
+        "instability_index": 45.89,
+        "gravy": -0.49
+      },
+      "tier2_geometry": {
+        "delta_sasa": 768.3529749333211,
+        "n_contacts": 6,
+        "passes": true
+      },
+      "tier4_prodigy": {
+        "dG_kcal_mol": -7.727604905660378,
+        "ICs": 32.0
+      },
+      "energy_boltz": {
+        "ddg": -17.67,
+        "mmgbsa": -23.67,
+        "sc": 0.514,
+        "iptm": 0.1912
+      },
+      "haddock3": {
+        "score": -88.844,
+        "bsa": 1076.23,
+        "air": 20.482
+      }
+    },
+    {
+      "variant": "base_500",
+      "label": "Base (500 gen)",
+      "run_id": "evopro_raw_run_26",
+      "design_score": -215.85,
+      "tier1_protparam": {
+        "passes": true,
+        "instability_index": 44.03,
+        "gravy": -0.32
+      },
+      "tier2_geometry": {
+        "delta_sasa": 1170.1391259489192,
+        "n_contacts": 13,
+        "passes": true
+      },
+      "tier4_prodigy": {
+        "dG_kcal_mol": -10.829994883720932,
+        "ICs": 50.0
+      },
+      "energy_boltz": {
+        "ddg": -30.62,
+        "mmgbsa": -42.01,
+        "sc": 0.609,
+        "iptm": 0.5535
+      },
+      "haddock3": {
+        "score": -105.917,
+        "bsa": 1558.45,
+        "air": 6.078
+      }
+    },
+    {
+      "variant": "temp_500",
+      "label": "Temp variable ProteinMPNN (500 gen)",
+      "run_id": "outputs_variable_proteinMPNN_final_01",
+      "design_score": -210.236,
+      "tier1_protparam": {
+        "passes": true,
+        "instability_index": 59.59,
+        "gravy": -0.523
+      },
+      "tier2_geometry": {
+        "delta_sasa": 1247.5426282258777,
+        "n_contacts": 11,
+        "passes": true
+      },
+      "tier4_prodigy": {
+        "dG_kcal_mol": -8.888391611374407,
+        "ICs": 57.0
+      },
+      "energy_boltz": {
+        "ddg": -25.59,
+        "mmgbsa": -38.62,
+        "sc": 0.64,
+        "iptm": 0.3496
+      },
+      "haddock3": {
+        "score": -100.079,
+        "bsa": 1390.64,
+        "air": 0.386
+      }
+    }
+  ],
+  "haddock_ranking": [
+    {
+      "variant": "base_60",
+      "label": "Base (60 gen)",
+      "haddock_score": -124.094,
+      "rank": 1
+    },
+    {
+      "variant": "base_500",
+      "label": "Base (500 gen)",
+      "haddock_score": -105.917,
+      "rank": 2
+    },
+    {
+      "variant": "temp_500",
+      "label": "Temp variable ProteinMPNN (500 gen)",
+      "haddock_score": -100.079,
+      "rank": 3
+    },
+    {
+      "variant": "both_60",
+      "label": "Both — crossover+mutación (60 gen)",
+      "haddock_score": -88.844,
+      "rank": 4
+    }
+  ],
+  "head_to_head": {
+    "60_gen": {
+      "base": "base_60",
+      "modified": "both_60",
+      "metrics": {
+        "design_score": {
+          "base_60": -200.125,
+          "both_60": -201.682,
+          "winner": "both_60",
+          "delta": -1.557
+        },
+        "haddock_score": {
+          "base_60": -124.094,
+          "both_60": -88.844,
+          "winner": "base_60",
+          "delta": 35.25
+        },
+        "prodigy_dG": {
+          "base_60": -9.580430000000002,
+          "both_60": -7.727604905660378,
+          "winner": "base_60",
+          "delta": 1.853
+        },
+        "ddg": {
+          "base_60": -27.45,
+          "both_60": -17.67,
+          "winner": "base_60",
+          "delta": 9.78
+        },
+        "iptm": {
+          "base_60": 0.0882,
+          "both_60": 0.1912,
+          "winner": "both_60",
+          "delta": -0.103
+        }
+      }
+    },
+    "500_gen": {
+      "base": "base_500",
+      "modified": "temp_500",
+      "metrics": {
+        "design_score": {
+          "base_500": -215.85,
+          "temp_500": -210.236,
+          "winner": "base_500",
+          "delta": 5.614
+        },
+        "haddock_score": {
+          "base_500": -105.917,
+          "temp_500": -100.079,
+          "winner": "base_500",
+          "delta": 5.838
+        },
+        "prodigy_dG": {
+          "base_500": -10.829994883720932,
+          "temp_500": -8.888391611374407,
+          "winner": "base_500",
+          "delta": 1.942
+        },
+        "ddg": {
+          "base_500": -30.62,
+          "temp_500": -25.59,
+          "winner": "base_500",
+          "delta": 5.03
+        },
+        "iptm": {
+          "base_500": 0.5535,
+          "temp_500": 0.3496,
+          "winner": "base_500",
+          "delta": 0.204
+        }
+      }
+    }
+  },
+  "conclusion": [
+    "Los operadores both y temp mejoran el fitness de diseño (overall_score) frente a base con significancia estadística.",
+    "Ese fitness NO se traduce en mejor unión física: en HADDOCK3 y PRODIGY, los campeones de base superan a both/temp (opuesto al score de diseño).",
+    "El campeón base_60 explota el score (secuencia poli-E/R, falla ProtParam, ipTM=0.09) pero obtiene el mejor HADDOCK score.",
+    "Interpretación: la búsqueda (operadores) funciona; el objetivo escalar de EvoPro no es un proxy fiable de afinidad.",
+    "Complementario al bloque MOEA-UD / VEGF-A en bindingValidation.json."
+  ],
+  "sources": [
+    "evopro/validation/operator_experiment/best_sequences.csv",
+    "evopro/validation/operator_experiment/cascade_champions_summary.csv",
+    "evopro/validation/operator_experiment/haddock_results.csv",
+    "evopro/validation/operator_experiment/energy_results.csv",
+    "evopro/validation/operator_experiment/RESULTS_CASCADE.md"
+  ]
+}

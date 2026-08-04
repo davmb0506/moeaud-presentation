@@ -8,6 +8,8 @@ import { Experimentos } from "./pages/experimentos";
 import { Temperatura } from "./pages/temperatura";
 import { ExperimentosTemp } from "./pages/experimentos-temp";
 import { VariantesEvoPro } from "./pages/variantes-evopro";
+import { Hapd1Variantes } from "./pages/hapd1-variantes";
+import { Hapd1Mono60VsPaper } from "./pages/hapd1-mono60-vs-paper";
 import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 import { Moeaud } from "./pages/moeaud";
 import { AblacionConvergencia } from "./pages/ablacion-convergencia";
@@ -15,9 +17,8 @@ import { Operadores } from "./pages/operadores";
 import { Ablacion } from "./pages/ablacion";
 import { CompositeFront } from "./pages/composite-front";
 import { IpsaeScFront } from "./pages/ipsae-sc-front";
-import { ValidacionSintesis } from "./pages/validacion-sintesis";
-import { ValidacionHerramientasDocking } from "./pages/validacion-herramientas-docking";
-import { ValidacionDocking } from "./pages/validacion-docking";
+import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/validacion-sintesis";
+import { ValidacionShortlist } from "./pages/validacion-shortlist";
 import { Referencias } from "./pages/referencias";
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
@@ -69,6 +70,15 @@ export default function App() {
     setTempRevealed(v);
   };
 
+  // Pasos intra-slide del embudo Goudy (0 = panorama, 1–4 = fases).
+  const [goudyStep, setGoudyStep] = useState(0);
+  const goudyRef = useRef(0);
+  const setGoudy = (n: number) => {
+    const next = Math.max(0, Math.min(GOUDY_MAX_STEP, n));
+    goudyRef.current = next;
+    setGoudyStep(next);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const isNext = NEXT_KEYS.includes(e.key);
@@ -118,6 +128,18 @@ export default function App() {
         return;
       }
 
+      // Slide Goudy: 4 fases de explicación del embudo.
+      if (step === "goudy" && isNext && goudyRef.current < GOUDY_MAX_STEP) {
+        e.preventDefault();
+        setGoudy(goudyRef.current + 1);
+        return;
+      }
+      if (step === "goudy" && isPrev && goudyRef.current > 0) {
+        e.preventDefault();
+        setGoudy(goudyRef.current - 1);
+        return;
+      }
+
       const target = isNext
         ? Math.min(current + 1, slides.length - 1)
         : Math.max(current - 1, 0);
@@ -127,6 +149,7 @@ export default function App() {
         // Al salir de un slide con paso, reinicia el paso para poder repetirlo.
         if (step === "bio") revealBio(false);
         if (step === "temp") revealTemp(false);
+        if (step === "goudy") setGoudy(0);
         slides[target].scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
@@ -354,9 +377,9 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={viewport}
+        viewport={{ amount: 0.15 }}
       >
-        <DisenoAlgoritmo />
+        <Hapd1Variantes />
         <SlideNo n={10} />
       </motion.section>
 
@@ -367,8 +390,30 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <Moeaud />
+        <Hapd1Mono60VsPaper />
         <SlideNo n={11} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <DisenoAlgoritmo />
+        <SlideNo n={12} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <Moeaud />
+        <SlideNo n={13} />
       </motion.section>
 
       {/* <motion.section
@@ -379,7 +424,7 @@ export default function App() {
         viewport={{ amount: 0.3 }}
       >
         <MecanismosDeck />
-        <SlideNo n={12} />
+        <SlideNo n={13} />
       </motion.section> */}
 
       <motion.section
@@ -390,17 +435,6 @@ export default function App() {
         viewport={{ amount: 0.3 }}
       >
         <AblacionConvergencia />
-        <SlideNo n={13} />
-      </motion.section>
-
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.12 }}
-      >
-        <Ablacion />
         <SlideNo n={14} />
       </motion.section>
 
@@ -411,7 +445,7 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <CompositeFront />
+        <Ablacion />
         <SlideNo n={15} />
       </motion.section>
 
@@ -422,7 +456,7 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <IpsaeScFront />
+        <CompositeFront />
         <SlideNo n={16} />
       </motion.section>
 
@@ -431,20 +465,21 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.18 }}
+        viewport={{ amount: 0.12 }}
       >
-        <ValidacionSintesis />
+        <IpsaeScFront />
         <SlideNo n={17} />
       </motion.section>
 
       <motion.section
         className="showcase slide"
+        data-step="goudy"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ amount: 0.18 }}
       >
-        <ValidacionHerramientasDocking />
+        <ValidacionSintesis step={goudyStep} onStepChange={setGoudy} />
         <SlideNo n={18} />
       </motion.section>
 
@@ -453,9 +488,9 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.18 }}
+        viewport={{ amount: 0.12 }}
       >
-        <ValidacionDocking />
+        <ValidacionShortlist />
         <SlideNo n={19} />
       </motion.section>
 

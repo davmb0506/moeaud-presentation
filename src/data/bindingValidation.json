@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "title": "Validación de unión con controles — MOEA-UD / VEGF-A",
+    "generated": "2026-07-16",
+    "target": "VEGF-A (3V2A, cadena A); epítopo = residuos de VEGF-A a <=5 Å de VEGFR-2",
+    "designs": 150,
+    "formulations": [
+      "interface_pae_plddt_mech",
+      "interface_pae_plddt_nomech",
+      "composite_tmscore_mech",
+      "composite_tmscore_nomech",
+      "ipsae_sc_mech",
+      "ipsae_sc_nomech"
+    ],
+    "controls": {
+      "scrambled": "barajado preservando composición de los diseños (n=40 energía / 12 blind)",
+      "random": "composición natural, <=29% identidad a cualquier diseño (n=40 / 12)",
+      "positive": "VEGFR2 nativo (dominio real de 3V2A)"
+    },
+    "note": "Poses de diseño = complejos co-plegados AF2/Boltz (monómero, blanco de diseño). Poses blind = CABSdock docking ciego independiente."
+  },
+  "validation_flow": {
+    "goal": "Inhibir VEGFA-VEGFR2. Criterio funcional PRIMARIO = competencia estérica con VEGFR2 (oclusión), NO cobertura exacta del epítopo.",
+    "tiers": [
+      "T0 método (benchmarks MOEA-UD) — PASA",
+      "T1 developability (ProtParam, plegamiento)",
+      "T2 calidad de interfaz (MM-GBSA + ddG vs controles)",
+      "T3 PRIMARIO: competition score (oclusión de VEGFR2) vs controles",
+      "T4 robustez (dependencia de pose: no se reproduce en blind)",
+      "T5 experimental (ensayo de competencia + SPR/BLI/ITC)"
+    ],
+    "epitope_coverage_role": "SECUNDARIA/descriptiva (se reporta por transparencia; NO es gate, porque el objetivo es inhibición que admite oclusión sin cobertura exacta).",
+    "promising_criterion": "developability OK + energía > scrambled + competition > controles → interface_pae_plddt_mech, ipsae_sc_nomech"
+  },
+  "algorithm_validation": {
+    "claim": "MOEA-UD converge a los frentes de Pareto verdaderos en benchmarks estándar (IGD bajo).",
+    "igd_zdt": {
+      "zdt1": 0.066,
+      "zdt2": 0.019,
+      "zdt3": 0.027,
+      "zdt4": 0.071,
+      "zdt6": 0.003
+    },
+    "hv_note": "El hipervolumen crece a lo largo de las generaciones en corridas reales de proteínas."
+  },
+  "key_finding_objectives": "Los paquetes usados (interface_pae_plddt, composite_tmscore, ipsae_sc) optimizan métricas de interfaz GLOBALES (confianza AF2 / geometría), NO el epítopo. El epítopo solo entró como bonus escalar (no objetivo de Pareto). Existen paquetes epítopo-específicos (composite_epitope, epitope_tmscore) que no se usaron.",
+  "monomer_dimer_confound": {
+    "positive_control_monomer_epitope_cov": 0.0,
+    "positive_control_dimer_epitope_cov": 0.93,
+    "explanation": "El sitio de VEGFR2 se forma en el HOMODÍMERO de VEGF-A. El diseño se hizo contra un monómero, donde el epítopo no se presenta completo."
+  },
+  "energy_design_pose": {
+    "method_note": "MM-GBSA (OpenMM/GBn2) y Rosetta InterfaceAnalyzer ddG sobre poses de diseño (monómero). p = Mann-Whitney (diseños < control = mejores).",
+    "controls": {
+      "mmgbsa": {
+        "scrambled_media": -67.6,
+        "random_media": -21.4
+      },
+      "ddg": {
+        "scrambled_media": -49.8,
+        "random_media": -46.1
+      }
+    },
+    "by_formulation": {
+      "interface_pae_plddt_mech": {
+        "mmgbsa_media": -82.1,
+        "mmgbsa_p_scr": 0.018,
+        "ddg_media": -55.3,
+        "ddg_p_scr": 0.139
+      },
+      "ipsae_sc_nomech": {
+        "mmgbsa_media": -84.8,
+        "mmgbsa_p_scr": 0.011,
+        "ddg_media": -58.3,
+        "ddg_p_scr": 0.061
+      },
+      "ipsae_sc_mech": {
+        "mmgbsa_media": -68.3,
+        "mmgbsa_p_scr": 0.556,
+        "ddg_media": -49.0,
+        "ddg_p_scr": 0.572
+      },
+      "interface_pae_plddt_nomech": {
+        "mmgbsa_media": -64.2,
+        "mmgbsa_p_scr": 0.492,
+        "ddg_media": -45.2,
+        "ddg_p_scr": 0.76
+      },
+      "composite_tmscore_mech": {
+        "mmgbsa_media": -59.3,
+        "mmgbsa_p_scr": 0.698,
+        "ddg_media": -41.4,
+        "ddg_p_scr": 0.919
+      },
+      "composite_tmscore_nomech": {
+        "mmgbsa_media": -51.1,
+        "mmgbsa_p_scr": 0.943,
+        "ddg_media": -37.4,
+        "ddg_p_scr": 0.975
+      }
+    },
+    "conclusion": "En la pose de diseño, ipsae_sc_nomech (MM-GBSA p=0.011, ddG p=0.061) e interface_pae_plddt_mech (MM-GBSA p=0.018) superan al control estricto (scrambled). Las demás no."
+  },
+  "energy_blind_pose": {
+    "method_note": "MM-GBSA sobre poses de docking ciego (CABSdock). n_control=12+12.",
+    "controls": {
+      "scrambled_media": -80.9,
+      "random_media": -71.9
+    },
+    "by_formulation_median": {
+      "interface_pae_plddt_mech": {
+        "median": -67.7,
+        "p_scr": 0.996
+      },
+      "ipsae_sc_nomech": {
+        "median": -66.2,
+        "p_scr": 0.989
+      },
+      "ipsae_sc_mech": {
+        "median": -73.5,
+        "p_scr": 0.692
+      },
+      "composite_tmscore_mech": {
+        "median": -75.0,
+        "p_scr": 0.861
+      },
+      "composite_tmscore_nomech": {
+        "median": -76.1,
+        "p_scr": 0.747
+      },
+      "interface_pae_plddt_nomech": {
+        "median": -64.2,
+        "p_scr": 0.979
+      }
+    },
+    "conclusion": "En poses de docking INDEPENDIENTE (blind), NINGUNA formulación supera a los controles. La ventaja energética es dependiente de la pose de diseño."
+  },
+  "epitope_coverage_blind": {
+    "method_note": "Cobertura del epítopo (14 residuos) por el clúster dominante (cluster_0) del docking ciego.",
+    "controls": {
+      "scrambled_media": 0.048,
+      "random_media": 0.036
+    },
+    "by_formulation_media": {
+      "ipsae_sc_mech": 0.04,
+      "interface_pae_plddt_mech": 0.034,
+      "ipsae_sc_nomech": 0.023,
+      "composite_tmscore_mech": 0.023,
+      "composite_tmscore_nomech": 0.014,
+      "interface_pae_plddt_nomech": 0.011
+    },
+    "conclusion": "En docking ciego, ninguna formulación cubre el epítopo más que los controles (todas ~0; controles levemente mayores)."
+  },
+  "competition_score": {
+    "method_note": "compute_competition_score: choque estérico entre binder y VEGFR2 alineado (mayor = más bloqueo). p = Mann-Whitney (diseños > control).",
+    "controls": {
+      "scrambled_media": 0.125,
+      "random_media": 0.1
+    },
+    "by_formulation": {
+      "interface_pae_plddt_mech": {
+        "media": 0.34,
+        "p_scr": 0.0,
+        "p_rnd": 0.0
+      },
+      "ipsae_sc_nomech": {
+        "media": 0.238,
+        "p_scr": 0.002,
+        "p_rnd": 0.0
+      },
+      "ipsae_sc_mech": {
+        "media": 0.103,
+        "p_scr": 0.647,
+        "p_rnd": 0.367
+      },
+      "interface_pae_plddt_nomech": {
+        "media": 0.085,
+        "p_scr": 0.848,
+        "p_rnd": 0.576
+      },
+      "composite_tmscore_mech": {
+        "media": 0.053,
+        "p_scr": 0.982,
+        "p_rnd": 0.906
+      },
+      "composite_tmscore_nomech": {
+        "media": 0.049,
+        "p_scr": 0.976,
+        "p_rnd": 0.897
+      }
+    },
+    "conclusion": "interface_pae_plddt_mech (p<0.001) e ipsae_sc_nomech (p=0.002) muestran competencia estérica con VEGFR2 significativamente mayor que controles → posible inhibición por oclusión (mismas 2 formulaciones que ganan en energía)."
+  },
+  "overall_conclusion": [
+    "MOEA-UD funciona como optimizador multiobjetivo (benchmarks ZDT, IGD 0.003-0.07; HV crece).",
+    "Los objetivos usados fueron de interfaz GLOBAL, no del epítopo; el epítopo no fue objetivo de Pareto.",
+    "Dos formulaciones (interface_pae_plddt_mech, ipsae_sc_nomech) producen binders con mejor energía de interfaz y mayor competencia estérica con VEGFR2 que controles (design pose).",
+    "La ventaja es dependiente de la pose predicha: NO se reproduce en docking independiente (blind), ni hay cobertura específica del epítopo por encima del azar.",
+    "Interpretación: interfaces predichas favorables + posible inhibición por oclusión, pero no reconocimiento específico del epítopo. Validación experimental (SPR/BLI/ITC + ensayo de competencia) necesaria.",
+    "Vía correcta a binders funcionales: rediseñar con objetivo epítopo-específico (composite_epitope) contra el dímero."
+  ],
+  "sources": [
+    "evopro/validation/cascade/energy_all150_mmgbsa.log",
+    "evopro/validation/cascade/energy_all150_ddg.log",
+    "evopro/validation/cascade/mmgbsa_blind_grouped.log",
+    "evopro/validation/cascade/epi_blind_grouped.log",
+    "evopro/validation/cascade/competition_score.log",
+    "evopro/validation/cascade/boltz_dimer_test (control positivo dímero)"
+  ]
+}
