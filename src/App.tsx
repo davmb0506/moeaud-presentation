@@ -4,27 +4,36 @@ import "./App.css";
 import { MoleculeViewer } from "./components/MoleculeViewer";
 import { Agenda } from "./pages/agenda";
 import { EvoproIntro } from "./pages/evopro-intro";
-import { Experimentos } from "./pages/experimentos";
-import { Temperatura } from "./pages/temperatura";
-import { ExperimentosTemp } from "./pages/experimentos-temp";
-import { VariantesEvoPro } from "./pages/variantes-evopro";
+import { Multiobjetivo, MO_MAX_STEP } from "./pages/multiobjetivo";
 import { Hapd1Variantes } from "./pages/hapd1-variantes";
 import { Hapd1Mono60VsPaper } from "./pages/hapd1-mono60-vs-paper";
-import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
-import { Moeaud } from "./pages/moeaud";
+import { Moeaud, UD_MAX_STEP } from "./pages/moeaud";
 import { AblacionConvergencia } from "./pages/ablacion-convergencia";
-import { Operadores } from "./pages/operadores";
 import { Ablacion } from "./pages/ablacion";
+import { FormulacionesMecanismos, FORMECH_MAX_STEP } from "./pages/formulaciones-mecanismos";
+/* Inactivos en avances (redundantes con HA-PD1):
+import { Experimentos } from "./pages/experimentos";
+import { Hapd1Stats } from "./pages/hapd1-stats";
+import { Operadores } from "./pages/operadores";
+*/
 import { CompositeFront } from "./pages/composite-front";
 import { IpsaeScFront } from "./pages/ipsae-sc-front";
 import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/validacion-sintesis";
 import { ValidacionShortlist } from "./pages/validacion-shortlist";
+import { WrapUp } from "./pages/wrap-up";
 import { Referencias } from "./pages/referencias";
+
+/* Imports del deck completo (inactivos en avances):
+import { Temperatura } from "./pages/temperatura";
+import { ExperimentosTemp } from "./pages/experimentos-temp";
+import { VariantesEvoPro } from "./pages/variantes-evopro";
+import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
+*/
 
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 20;
+const TOTAL_SLIDES = 17;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -62,21 +71,40 @@ export default function App() {
     setBioRevealed(v);
   };
 
-  // Paso intra-slide: el bloque de temperatura variable se revela con avanzar.
-  const [tempRevealed, setTempRevealed] = useState(false);
-  const tempRef = useRef(false);
-  const revealTemp = (v: boolean) => {
-    tempRef.current = v;
-    setTempRevealed(v);
-  };
-
-  // Pasos intra-slide del embudo Goudy (0 = panorama, 1–4 = fases).
+  // Pasos intra-slide del embudo (0 = panorama, 1–N = fases).
   const [goudyStep, setGoudyStep] = useState(0);
   const goudyRef = useRef(0);
   const setGoudy = (n: number) => {
     const next = Math.max(0, Math.min(GOUDY_MAX_STEP, n));
     goudyRef.current = next;
     setGoudyStep(next);
+  };
+
+  // Pasos intra-slide mono→multi (convergencia → nube+frente).
+  const [moStep, setMoStep] = useState(0);
+  const moRef = useRef(0);
+  const setMo = (n: number) => {
+    const next = Math.max(0, Math.min(MO_MAX_STEP, n));
+    moRef.current = next;
+    setMoStep(next);
+  };
+
+  // Pasos intra-slide MOEA-UD (frente → fijos → adaptativos).
+  const [udStep, setUdStep] = useState(0);
+  const udRef = useRef(0);
+  const setUd = (n: number) => {
+    const next = Math.max(0, Math.min(UD_MAX_STEP, n));
+    udRef.current = next;
+    setUdStep(next);
+  };
+
+  // Pasos intra-slide formulaciones (pares de objetivos + viewer).
+  const [formechStep, setFormechStep] = useState(0);
+  const formechRef = useRef(0);
+  const setFormech = (n: number) => {
+    const next = Math.max(0, Math.min(FORMECH_MAX_STEP, n));
+    formechRef.current = next;
+    setFormechStep(next);
   };
 
   useEffect(() => {
@@ -90,8 +118,11 @@ export default function App() {
       );
       if (!slides.length) return;
 
-      // Diapositiva actual = la más cercana al scroll actual
-      const y = window.scrollY;
+      const y =
+        window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
       let current = 0;
       let best = Infinity;
       slides.forEach((s, i) => {
@@ -104,7 +135,6 @@ export default function App() {
 
       const step = slides[current]?.dataset.step;
 
-      // Slide con paso intermedio (objetivo → importancia biológica).
       if (step === "bio" && isNext && !bioRef.current) {
         e.preventDefault();
         revealBio(true);
@@ -116,19 +146,6 @@ export default function App() {
         return;
       }
 
-      // Slide de temperatura: revela el bloque de temperatura variable.
-      if (step === "temp" && isNext && !tempRef.current) {
-        e.preventDefault();
-        revealTemp(true);
-        return;
-      }
-      if (step === "temp" && isPrev && tempRef.current) {
-        e.preventDefault();
-        revealTemp(false);
-        return;
-      }
-
-      // Slide Goudy: 4 fases de explicación del embudo.
       if (step === "goudy" && isNext && goudyRef.current < GOUDY_MAX_STEP) {
         e.preventDefault();
         setGoudy(goudyRef.current + 1);
@@ -140,16 +157,54 @@ export default function App() {
         return;
       }
 
+      if (step === "mo" && isNext && moRef.current < MO_MAX_STEP) {
+        e.preventDefault();
+        setMo(moRef.current + 1);
+        return;
+      }
+      if (step === "mo" && isPrev && moRef.current > 0) {
+        e.preventDefault();
+        setMo(moRef.current - 1);
+        return;
+      }
+
+      if (step === "ud" && isNext && udRef.current < UD_MAX_STEP) {
+        e.preventDefault();
+        setUd(udRef.current + 1);
+        return;
+      }
+      if (step === "ud" && isPrev && udRef.current > 0) {
+        e.preventDefault();
+        setUd(udRef.current - 1);
+        return;
+      }
+
+      if (
+        step === "formech" &&
+        isNext &&
+        formechRef.current < FORMECH_MAX_STEP
+      ) {
+        e.preventDefault();
+        setFormech(formechRef.current + 1);
+        return;
+      }
+      if (step === "formech" && isPrev && formechRef.current > 0) {
+        e.preventDefault();
+        setFormech(formechRef.current - 1);
+        return;
+      }
+
       const target = isNext
         ? Math.min(current + 1, slides.length - 1)
         : Math.max(current - 1, 0);
 
       if (target !== current) {
         e.preventDefault();
-        // Al salir de un slide con paso, reinicia el paso para poder repetirlo.
         if (step === "bio") revealBio(false);
-        if (step === "temp") revealTemp(false);
         if (step === "goudy") setGoudy(0);
+        if (step === "mo") setMo(0);
+        if (step === "ud") setUd(0);
+        if (step === "formech") setFormech(0);
         slides[target].scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
@@ -160,6 +215,10 @@ export default function App() {
 
   return (
     <main className="app">
+      {/* ============================================================ */}
+      {/* === DECK AVANCES (activo) — énfasis en RESULTADOS === */}
+      {/* ============================================================ */}
+
       <motion.section
         className="cover slide"
         variants={slideContainer}
@@ -197,6 +256,7 @@ export default function App() {
         </motion.div>
         <SlideNo n={1} />
       </motion.section>
+
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -204,9 +264,10 @@ export default function App() {
         whileInView="visible"
         viewport={viewport}
       >
-        <Agenda></Agenda>
+        <Agenda />
         <SlideNo n={2} />
       </motion.section>
+
       <motion.section
         className="showcase slide"
         data-step="bio"
@@ -248,26 +309,17 @@ export default function App() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <h2 className="objective-title">Importancia biológica</h2>
-                  <ul className="objective-bio-list">
-                    <li>
-                      <strong>Angiogénesis.</strong> VEGF-A media la formación
-                      de vasos sanguíneos en procesos fisiológicos y
-                      patológicos.<sup className="cite">1</sup>
-                    </li>
-                    <li>
-                      <strong>Patología.</strong> Su desregulación interviene en
-                      la progresión tumoral (vascularización, metástasis) y en
-                      enfermedades oculares neovasculares.
-                      <sup className="cite">2</sup>
-                    </li>
-                    <li>
-                      <strong>Diana terapéutica.</strong> La inhibición del eje
-                      VEGF-A/VEGFR-2 tiene uso clínico (p. ej., bevacizumab).
-                      <sup className="cite">3</sup> El diseño <em>de novo</em> de
-                      péptidos <em>binder</em> es una alternativa a los
-                      anticuerpos monoclonales.<sup className="cite">4</sup>
-                    </li>
-                  </ul>
+                  <p className="objective-text">
+                    VEGF-A promueve la formación de vasos sanguíneos.
+                    <sup className="cite">1</sup> En patologías que dependen
+                    de angiogénesis anómala —cáncer y enfermedades oculares
+                    neovasculares—, su sobreexpresión favorece la progresión.
+                    <sup className="cite">2</sup> Fármacos como bevacizumab —
+                    anticuerpos de ~150&nbsp;kDa — se unen a VEGF-A y evitan
+                    que active VEGFR-2.<sup className="cite">3</sup> Aquí se
+                    buscan péptidos de 21 residuos con el mismo fin.
+                    <sup className="cite">4</sup>
+                  </p>
 
                   <ol className="objective-refs">
                     <li>
@@ -296,15 +348,19 @@ export default function App() {
 
           <motion.div variants={slideItem} className="showcase-card">
             <MoleculeViewer />
-            <motion.p variants={slideItem} style={{fontWeight:"lighter",fontSize:"0.5rem",marginTop:"10px"}}>
-              Estructuras: PDB 3V2A (VEGF-A · VEGFR-2), 1UBQ, 1CRN, 2GB1 · Render con
-              3Dmol.js
+            <motion.p
+              variants={slideItem}
+              style={{ fontWeight: "lighter", fontSize: "0.5rem", marginTop: "10px" }}
+            >
+              Estructuras: PDB 3V2A (VEGF-A · VEGFR-2), 1UBQ, 1CRN, 2GB1 · Render
+              con 3Dmol.js
             </motion.p>
           </motion.div>
         </div>
         <SlideNo n={3} />
       </motion.section>
 
+      {/* --- Contexto método + resultados mono (HA-PD1) --- */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -323,7 +379,7 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.15 }}
       >
-        <Experimentos />
+        <Hapd1Variantes />
         <SlideNo n={5} />
       </motion.section>
 
@@ -334,41 +390,45 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <Operadores />
+        <Hapd1Mono60VsPaper />
         <SlideNo n={6} />
       </motion.section>
 
+      {/* --- De mono a multi → MOEA-UD --- */}
       <motion.section
         className="showcase slide"
-        data-step="temp"
+        data-step="mo"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={viewport}
+        viewport={{ amount: 0.15 }}
       >
-        <Temperatura revealed={tempRevealed} />
+        <Multiobjetivo step={moStep} />
         <SlideNo n={7} />
       </motion.section>
 
       <motion.section
         className="showcase slide"
+        data-step="ud"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.15 }}
+        viewport={{ amount: 0.12 }}
       >
-        <ExperimentosTemp />
+        <Moeaud step={udStep} />
         <SlideNo n={8} />
       </motion.section>
 
+      {/* --- Resultados VEGF-A --- */}
       <motion.section
         className="showcase slide"
+        data-step="formech"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ amount: 0.15 }}
       >
-        <VariantesEvoPro />
+        <FormulacionesMecanismos step={formechStep} onStepChange={setFormech} />
         <SlideNo n={9} />
       </motion.section>
 
@@ -377,9 +437,9 @@ export default function App() {
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.15 }}
+        viewport={{ amount: 0.3 }}
       >
-        <Hapd1Variantes />
+        <AblacionConvergencia />
         <SlideNo n={10} />
       </motion.section>
 
@@ -390,63 +450,8 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <Hapd1Mono60VsPaper />
-        <SlideNo n={11} />
-      </motion.section>
-
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewport}
-      >
-        <DisenoAlgoritmo />
-        <SlideNo n={12} />
-      </motion.section>
-
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.12 }}
-      >
-        <Moeaud />
-        <SlideNo n={13} />
-      </motion.section>
-
-      {/* <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.3 }}
-      >
-        <MecanismosDeck />
-        <SlideNo n={13} />
-      </motion.section> */}
-
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.3 }}
-      >
-        <AblacionConvergencia />
-        <SlideNo n={14} />
-      </motion.section>
-
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.12 }}
-      >
         <Ablacion />
-        <SlideNo n={15} />
+        <SlideNo n={11} />
       </motion.section>
 
       <motion.section
@@ -457,7 +462,7 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <CompositeFront />
-        <SlideNo n={16} />
+        <SlideNo n={12} />
       </motion.section>
 
       <motion.section
@@ -468,7 +473,7 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <IpsaeScFront />
-        <SlideNo n={17} />
+        <SlideNo n={13} />
       </motion.section>
 
       <motion.section
@@ -480,7 +485,7 @@ export default function App() {
         viewport={{ amount: 0.18 }}
       >
         <ValidacionSintesis step={goudyStep} onStepChange={setGoudy} />
-        <SlideNo n={18} />
+        <SlideNo n={14} />
       </motion.section>
 
       <motion.section
@@ -491,7 +496,19 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <ValidacionShortlist />
-        <SlideNo n={19} />
+        <SlideNo n={15} />
+      </motion.section>
+
+      {/* --- Cierre --- */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <WrapUp />
+        <SlideNo n={16} />
       </motion.section>
 
       <motion.section
@@ -502,10 +519,31 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={20} />
+        <SlideNo n={17} />
       </motion.section>
 
-      
+      {/* ============================================================ */}
+      {/* === DECK COMPLETO (comentado para avances) === */}
+      {/* No montar estas secciones: se conservan para restaurar el deck. */}
+      {/*
+      Operadores, Experimentos, Hapd1Stats (sacados del deck de avances).
+      <motion.section className="showcase slide" data-step="temp" ...>
+        <Temperatura revealed={tempRevealed} />
+      </motion.section>
+      <motion.section className="showcase slide" ...>
+        <ExperimentosTemp />
+      </motion.section>
+      <motion.section className="showcase slide" ...>
+        <VariantesEvoPro />
+      </motion.section>
+      <motion.section className="showcase slide" ...>
+        <DisenoAlgoritmo />
+      </motion.section>
+      <motion.section className="showcase slide" ...>
+        <MecanismosDeck />
+      </motion.section>
+      */}
+      {/* === FIN DECK COMPLETO === */}
     </main>
   );
 }

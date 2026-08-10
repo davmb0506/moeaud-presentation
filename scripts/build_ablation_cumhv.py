@@ -184,9 +184,9 @@ def plot_pair(spec: PairSpec) -> tuple[Path, dict[str, float], dict[str, int]]:
     ax.plot(grid, no_mech_mean, color=NO_MECH, linewidth=2.5)
     ax.plot(grid, no_mech_median, color=NO_MECH, linewidth=2.2, linestyle=(0, (5, 4)))
 
-    ax.set_title(f"Convergencia del hipervolumen acumulado — {spec.formulation}", fontsize=14, pad=14)
+    ax.set_title(f"Convergencia del hipervolumen — {spec.formulation}", fontsize=14, pad=14)
     ax.set_xlabel("Generación", fontsize=12)
-    ax.set_ylabel("Hipervolumen acumulado (↑ mejor)", fontsize=12)
+    ax.set_ylabel("Hipervolumen (↑ mejor)", fontsize=12)
     ax.legend(
         handles=[
             Line2D([0], [0], color=MECH, linewidth=2.5, label="MA"),

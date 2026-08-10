@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
+import { ABLATION_CONDS } from "../data/experimentLabels";
 import overheadRaw from "../data/ablationOverhead.json";
 
-const MECH = "#2E6B8E"; // con mecanismos
-const NOMECH = "#F28E2B"; // sin mecanismos
+const MECH = ABLATION_CONDS.con.color;
+const NOMECH = ABLATION_CONDS.sin.color;
 const GREEN = "#2f8f5f"; // anotaciones / mensaje
 
 type OverheadReplica = {
@@ -102,18 +103,18 @@ type SlideData =
       kind: "overhead";
       title: string;
       sub: ReactNode;
-      msg: string;
+      msg: string | null;
     };
 
 const H0_BI =
-  "MOEA-UD con MA obtiene un HV acumulado final igual al de la versión Base.";
+  "MOEA-UD con MA obtiene un HV final igual al de la versión Base.";
 const H1_BI =
-  "MOEA-UD con MA obtiene un HV acumulado final distinto al de la versión Base.";
+  "MOEA-UD con MA obtiene un HV final distinto al de la versión Base.";
 const H0_UNI =
-  "MOEA-UD con MA obtiene un HV acumulado final igual o menor que la versión Base.";
+  "MOEA-UD con MA obtiene un HV final igual o menor que la versión Base.";
 const H1_UNI =
-  "MOEA-UD con MA obtiene un HV acumulado final mayor que la versión Base.";
-const ABLATION_FIGURE_VERSION = "ma-base-v1";
+  "MOEA-UD con MA obtiene un HV final mayor que la versión Base.";
+const ABLATION_FIGURE_VERSION = "ma-base-v3";
 
 const SLIDES: SlideData[] = [
   {
@@ -121,13 +122,13 @@ const SLIDES: SlideData[] = [
     title: "Ablación de mecanismos — Interface-PAE / pLDDT",
     sub: (
       <>
-        <B>MA</B> alcanza un hipervolumen acumulado final medio mayor (
+        <B>MA</B> alcanza un hipervolumen final medio mayor (
         <B>1.003</B>) y también una mediana final mayor (<B>1.011</B>) que{" "}
         <O>Base</O> (<O>0.915</O>; mediana <O>0.921</O>).
       </>
     ),
     img: `/figures/ablation_cumhv_interface_pae_plddt.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — Interface-PAE / pLDDT: MA frente a Base.",
+    alt: "Curva de convergencia del hipervolumen — Interface-PAE / pLDDT: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.00911", sig: "**", reject: true },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.00455", sig: "**", reject: true },
@@ -140,14 +141,14 @@ const SLIDES: SlideData[] = [
     sub: (
       <>
         <O>Base</O> termina ligeramente por encima en hipervolumen
-        acumulado final (<O>1.203</O>) frente a <B>MA</B> (
+        final (<O>1.203</O>) frente a <B>MA</B> (
         <B>1.192</B>); las medianas finales permanecen muy cercanas (
         <B>1.200</B> vs. <O>1.202</O>), sin evidencia de una diferencia
         estadísticamente significativa.
       </>
     ),
     img: `/figures/ablation_cumhv_composite_tmscore.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — Composite / TM-score: MA frente a Base.",
+    alt: "Curva de convergencia del hipervolumen — Composite / TM-score: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2406", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.8942", sig: "n.s.", reject: false },
@@ -159,14 +160,14 @@ const SLIDES: SlideData[] = [
     title: "Ablación de mecanismos — ipSAE / SC",
     sub: (
       <>
-        No se observa diferencia significativa en el hipervolumen acumulado final
+        No se observa diferencia significativa en el hipervolumen final
         (<B>MA: media 1.190</B>;{" "}
         <O>Base: media 1.199</O>; mediana <B>1.210</B> frente a{" "}
         <O>1.203</O>).
       </>
     ),
     img: `/figures/ablation_cumhv_ipsae_sc.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen acumulado — ipSAE / SC: MA frente a Base.",
+    alt: "Curva de convergencia del hipervolumen — ipSAE / SC: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2755", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.1378", sig: "n.s.", reject: false },
@@ -177,7 +178,7 @@ const SLIDES: SlideData[] = [
     kind: "overhead",
     title: "Costo computacional adicional de los mecanismos adaptativos",
     sub: null,
-    msg: `Una generación completa tarda ${OVERHEAD.summary.ma.gen_median_min.toFixed(1)} min de mediana, así que la inyección se lleva el ${OVERHEAD.summary.ma.pct_of_gen_median.toFixed(2)} % del tiempo y la selección de operadores unas ${Math.round(((OVERHEAD.summary.ma.injection_per_gen_s_median * 1000) / OVERHEAD.operator_selection.per_gen_ms) / 10) * 10} veces menos que eso. El costo adicional de los mecanismos es despreciable frente a AF2.`,
+    msg: null,
   },
 ];
 const TOTAL = SLIDES.length;
@@ -262,9 +263,11 @@ function SlideView({ data }: { data: SlideData }) {
           </table>
         </div>
 
-        <p className="exp-msg" style={{ color: GREEN }}>
-          {data.msg}
-        </p>
+        {data.msg ? (
+          <p className="exp-msg" style={{ color: GREEN }}>
+            {data.msg}
+          </p>
+        ) : null}
         
       </motion.div>
     );
@@ -319,7 +322,7 @@ function SlideView({ data }: { data: SlideData }) {
         </p>
         <p className="exp-foot">
           *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. = no significativo.
-          Hipervolumen acumulado final por réplica; n = 10 réplicas
+          Hipervolumen final por réplica; n = 10 réplicas
           independientes por condición. Línea sólida: media; línea discontinua:
           mediana; banda sombreada: rango intercuartil (Q1–Q3) entre réplicas.
         </p>

@@ -13,10 +13,10 @@
   "arms": [
     {
       "id": "mutation",
-      "label": "Solo mutaci\u00f3n",
-      "shortLabel": "Mutaci\u00f3n",
+      "label": "Solo mutación",
+      "shortLabel": "Mutación",
       "color": "#3b6fb0",
-      "note": "carpeta mutation_* = solo mutaci\u00f3n",
+      "note": "carpeta mutation_* = solo mutación",
       "run_root": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60",
       "n": 10,
       "mean": -179.99172297536043,
@@ -51,7 +51,7 @@
           "contact": 8.33386949811663,
           "pae_iface": 26.852520992037785,
           "confdiff": 0.4828090958115094,
-          "pdb": "/pdbs/hapd1-variantes/mutation_01.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_01.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_01/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_01/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=50 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -60,7 +60,10 @@
           "gravy": 1.06,
           "mw_kda": 5.13,
           "aromaticity": 0.035,
-          "instability": 18.9
+          "instability": 18.9,
+          "rg": 10.79,
+          "if_contacts": 35,
+          "bsa": 806.6
         },
         {
           "id": "mutation_02",
@@ -77,7 +80,7 @@
           "contact": 0.0,
           "pae_iface": 30.540990770416734,
           "confdiff": 0.9403215905941136,
-          "pdb": "/pdbs/hapd1-variantes/mutation_02.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_02.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_02/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_02/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=50 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -86,7 +89,10 @@
           "gravy": 2.691,
           "mw_kda": 5.53,
           "aromaticity": 0.0,
-          "instability": 28.6
+          "instability": 28.6,
+          "rg": 25.11,
+          "if_contacts": 0,
+          "bsa": 0.0
         },
         {
           "id": "mutation_03",
@@ -103,7 +109,7 @@
           "contact": 19.509351021902912,
           "pae_iface": 22.929224485003385,
           "confdiff": 0.37326216534090934,
-          "pdb": "/pdbs/hapd1-variantes/mutation_03.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_03.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_03/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_03/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=8 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -112,7 +118,10 @@
           "gravy": -0.602,
           "mw_kda": 6.67,
           "aromaticity": 0.018,
-          "instability": 62.8
+          "instability": 62.8,
+          "rg": 11.13,
+          "if_contacts": 61,
+          "bsa": 1607.7
         },
         {
           "id": "mutation_04",
@@ -129,7 +138,7 @@
           "contact": 13.245327377319336,
           "pae_iface": 24.847328215560676,
           "confdiff": 0.26697924620795543,
-          "pdb": "/pdbs/hapd1-variantes/mutation_04.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_04.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_04/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_04/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=54 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -138,7 +147,10 @@
           "gravy": -0.479,
           "mw_kda": 6.73,
           "aromaticity": 0.018,
-          "instability": 74.7
+          "instability": 74.7,
+          "rg": 10.85,
+          "if_contacts": 46,
+          "bsa": 1191.6
         },
         {
           "id": "mutation_05",
@@ -155,7 +167,7 @@
           "contact": 4.7747661590576165,
           "pae_iface": 24.62308183237284,
           "confdiff": 0.28456958533146953,
-          "pdb": "/pdbs/hapd1-variantes/mutation_05.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_05.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_05/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_05/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=43 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -164,7 +176,10 @@
           "gravy": 0.442,
           "mw_kda": 5.58,
           "aromaticity": 0.035,
-          "instability": 26.5
+          "instability": 26.5,
+          "rg": 10.58,
+          "if_contacts": 15,
+          "bsa": 544.1
         },
         {
           "id": "mutation_06",
@@ -181,7 +196,7 @@
           "contact": 16.54000691005162,
           "pae_iface": 22.490206301291398,
           "confdiff": 0.29639699603690944,
-          "pdb": "/pdbs/hapd1-variantes/mutation_06.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_06.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_06/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_06/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=48 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -190,7 +205,10 @@
           "gravy": 0.095,
           "mw_kda": 6.02,
           "aromaticity": 0.07,
-          "instability": 17.7
+          "instability": 17.7,
+          "rg": 10.9,
+          "if_contacts": 50,
+          "bsa": 1278.2
         },
         {
           "id": "mutation_07",
@@ -207,7 +225,7 @@
           "contact": 0.0,
           "pae_iface": 31.192454689427425,
           "confdiff": 0.5289729814368913,
-          "pdb": "/pdbs/hapd1-variantes/mutation_07.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_07.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_07/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_07/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=60 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -216,7 +234,10 @@
           "gravy": 3.582,
           "mw_kda": 6.38,
           "aromaticity": 0.0,
-          "instability": 16.6
+          "instability": 16.6,
+          "rg": 25.58,
+          "if_contacts": 0,
+          "bsa": 0.0
         },
         {
           "id": "mutation_08",
@@ -233,7 +254,7 @@
           "contact": 5.316892242431641,
           "pae_iface": 26.375066536744928,
           "confdiff": 0.38430411720364116,
-          "pdb": "/pdbs/hapd1-variantes/mutation_08.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_08.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_08/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_08/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=20 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -242,7 +263,10 @@
           "gravy": 0.737,
           "mw_kda": 4.97,
           "aromaticity": 0.018,
-          "instability": 18.6
+          "instability": 18.6,
+          "rg": 10.64,
+          "if_contacts": 24,
+          "bsa": 685.0
         },
         {
           "id": "mutation_09",
@@ -259,7 +283,7 @@
           "contact": 16.74687069484166,
           "pae_iface": 25.329692867852128,
           "confdiff": 0.3219898884594721,
-          "pdb": "/pdbs/hapd1-variantes/mutation_09.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_09.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_09/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_09/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=50 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -268,7 +292,10 @@
           "gravy": -0.737,
           "mw_kda": 6.25,
           "aromaticity": 0.018,
-          "instability": 64.3
+          "instability": 64.3,
+          "rg": 10.73,
+          "if_contacts": 63,
+          "bsa": 1287.3
         },
         {
           "id": "mutation_10",
@@ -285,7 +312,7 @@
           "contact": 0.0,
           "pae_iface": 30.608739923204134,
           "confdiff": 0.7010528454628626,
-          "pdb": "/pdbs/hapd1-variantes/mutation_10.pdb",
+          "pdb": "/pdbs/hapd1/variantes/mutation_10.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_10/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/mutation_10/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=36 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -294,16 +321,19 @@
           "gravy": 2.996,
           "mw_kda": 6.54,
           "aromaticity": 0.07,
-          "instability": 21.9
+          "instability": 21.9,
+          "rg": 25.16,
+          "if_contacts": 0,
+          "bsa": 0.0
         }
       ]
     },
     {
       "id": "base",
-      "label": "Mutaci\u00f3n y cruce",
+      "label": "Mutación y cruce",
       "shortLabel": "Mut. + cruce",
       "color": "#d1622b",
-      "note": "carpeta base_* = mutaci\u00f3n + cruce",
+      "note": "carpeta base_* = mutación + cruce",
       "run_root": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60",
       "n": 10,
       "mean": -186.87002095621844,
@@ -338,7 +368,7 @@
           "contact": 19.122248758588515,
           "pae_iface": 22.22338197415124,
           "confdiff": 0.48000371115657564,
-          "pdb": "/pdbs/hapd1-variantes/base_01.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_01.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_01/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_01/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=49 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -347,7 +377,10 @@
           "gravy": 0.711,
           "mw_kda": 5.54,
           "aromaticity": 0.018,
-          "instability": 15.7
+          "instability": 15.7,
+          "rg": 11.11,
+          "if_contacts": 43,
+          "bsa": 1512.3
         },
         {
           "id": "base_02",
@@ -364,7 +397,7 @@
           "contact": 0.0,
           "pae_iface": 31.14973841131076,
           "confdiff": 0.820167188756106,
-          "pdb": "/pdbs/hapd1-variantes/base_02.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_02.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_02/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_02/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=60 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -373,7 +406,10 @@
           "gravy": 3.656,
           "mw_kda": 6.33,
           "aromaticity": 0.0,
-          "instability": 9.8
+          "instability": 9.8,
+          "rg": 25.37,
+          "if_contacts": 0,
+          "bsa": 0.0
         },
         {
           "id": "base_03",
@@ -390,7 +426,7 @@
           "contact": 0.0,
           "pae_iface": 29.15842441230964,
           "confdiff": 1.5233460837202017,
-          "pdb": "/pdbs/hapd1-variantes/base_03.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_03.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_03/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_03/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=47 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -399,7 +435,10 @@
           "gravy": 2.463,
           "mw_kda": 5.07,
           "aromaticity": 0.0,
-          "instability": 20.9
+          "instability": 20.9,
+          "rg": 24.61,
+          "if_contacts": 0,
+          "bsa": 0.0
         },
         {
           "id": "base_04",
@@ -416,7 +455,7 @@
           "contact": 20.602167020525254,
           "pae_iface": 23.57314074385681,
           "confdiff": 1.011683026314068,
-          "pdb": "/pdbs/hapd1-variantes/base_04.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_04.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_04/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_04/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=54 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -425,7 +464,10 @@
           "gravy": -0.032,
           "mw_kda": 5.68,
           "aromaticity": 0.018,
-          "instability": 19.9
+          "instability": 19.9,
+          "rg": 18.12,
+          "if_contacts": 81,
+          "bsa": 1724.3
         },
         {
           "id": "base_05",
@@ -442,7 +484,7 @@
           "contact": 19.631010546003065,
           "pae_iface": 23.44807363023945,
           "confdiff": 0.22986961083797872,
-          "pdb": "/pdbs/hapd1-variantes/base_05.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_05.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_05/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_05/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=56 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -451,7 +493,10 @@
           "gravy": -0.914,
           "mw_kda": 6.33,
           "aromaticity": 0.018,
-          "instability": 25.9
+          "instability": 25.9,
+          "rg": 10.91,
+          "if_contacts": 74,
+          "bsa": 1668.2
         },
         {
           "id": "base_06",
@@ -468,7 +513,7 @@
           "contact": 15.961126817975726,
           "pae_iface": 24.87864819441892,
           "confdiff": 0.31447802710185147,
-          "pdb": "/pdbs/hapd1-variantes/base_06.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_06.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_06/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_06/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=38 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -477,7 +522,10 @@
           "gravy": -0.819,
           "mw_kda": 6.63,
           "aromaticity": 0.053,
-          "instability": 37.0
+          "instability": 37.0,
+          "rg": 11.0,
+          "if_contacts": 55,
+          "bsa": 1459.9
         },
         {
           "id": "base_07",
@@ -494,7 +542,7 @@
           "contact": 17.540623637608125,
           "pae_iface": 24.60468323364663,
           "confdiff": 0.4070198579345489,
-          "pdb": "/pdbs/hapd1-variantes/base_07.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_07.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_07/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_07/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=43 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -503,7 +551,10 @@
           "gravy": -1.119,
           "mw_kda": 6.72,
           "aromaticity": 0.018,
-          "instability": 82.6
+          "instability": 82.6,
+          "rg": 11.04,
+          "if_contacts": 65,
+          "bsa": 1573.4
         },
         {
           "id": "base_08",
@@ -520,7 +571,7 @@
           "contact": 11.066777583530973,
           "pae_iface": 25.151746885695324,
           "confdiff": 0.8895726643392674,
-          "pdb": "/pdbs/hapd1-variantes/base_08.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_08.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_08/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_08/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=43 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -529,7 +580,10 @@
           "gravy": -1.393,
           "mw_kda": 6.55,
           "aromaticity": 0.0,
-          "instability": 65.2
+          "instability": 65.2,
+          "rg": 24.75,
+          "if_contacts": 42,
+          "bsa": 907.8
         },
         {
           "id": "base_09",
@@ -546,7 +600,7 @@
           "contact": 11.59758464268276,
           "pae_iface": 27.92184914042425,
           "confdiff": 0.20907674241598304,
-          "pdb": "/pdbs/hapd1-variantes/base_09.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_09.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_09/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_09/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=57 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -555,7 +609,10 @@
           "gravy": 0.454,
           "mw_kda": 5.45,
           "aromaticity": 0.018,
-          "instability": 10.3
+          "instability": 10.3,
+          "rg": 10.28,
+          "if_contacts": 71,
+          "bsa": 1096.1
         },
         {
           "id": "base_10",
@@ -572,7 +629,7 @@
           "contact": 10.647578266688756,
           "pae_iface": 24.181399731901074,
           "confdiff": 0.188350351423016,
-          "pdb": "/pdbs/hapd1-variantes/base_10.pdb",
+          "pdb": "/pdbs/hapd1/variantes/base_10.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_10/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60/base_10/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=52 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -581,7 +638,10 @@
           "gravy": -0.554,
           "mw_kda": 6.36,
           "aromaticity": 0.018,
-          "instability": 30.0
+          "instability": 30.0,
+          "rg": 10.92,
+          "if_contacts": 40,
+          "bsa": 1237.0
         }
       ]
     },
@@ -590,10 +650,10 @@
       "label": "Temperatura variable",
       "shortLabel": "T variable",
       "color": "#1d8a7a",
-      "note": "temp_v3: mutaci\u00f3n + cruce + T variable",
+      "note": "temp_v3: mutación + cruce + T variable, T0=0.1, rango [0.05,0.3], metric=score",
       "run_root": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3",
       "n": 10,
-      "mean": -185.75630640555207,
+      "mean": -185.75630640555204,
       "std": 5.880267980687249,
       "min": -191.13047149626,
       "max": -169.94102383620992,
@@ -625,7 +685,7 @@
           "contact": 7.341553878784181,
           "pae_iface": 25.34196004905515,
           "confdiff": 0.3665686450235109,
-          "pdb": "/pdbs/hapd1-variantes/temp_01.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_01.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_01/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_01/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=55 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -634,7 +694,10 @@
           "gravy": 0.074,
           "mw_kda": 6.07,
           "aromaticity": 0.0,
-          "instability": 46.0
+          "instability": 46.0,
+          "rg": 10.51,
+          "if_contacts": 32,
+          "bsa": 926.9
         },
         {
           "id": "temp_02",
@@ -651,7 +714,7 @@
           "contact": 10.449783488682339,
           "pae_iface": 24.77604941781882,
           "confdiff": 0.35131245186595356,
-          "pdb": "/pdbs/hapd1-variantes/temp_02.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_02.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_02/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_02/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=57 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -660,7 +723,10 @@
           "gravy": -0.175,
           "mw_kda": 6.14,
           "aromaticity": 0.035,
-          "instability": 9.0
+          "instability": 9.0,
+          "rg": 10.69,
+          "if_contacts": 33,
+          "bsa": 870.4
         },
         {
           "id": "temp_03",
@@ -677,7 +743,7 @@
           "contact": 10.450994982038225,
           "pae_iface": 23.938909389198344,
           "confdiff": 0.24894113331928303,
-          "pdb": "/pdbs/hapd1-variantes/temp_03.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_03.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_03/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_03/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=57 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -686,7 +752,10 @@
           "gravy": -0.239,
           "mw_kda": 6.22,
           "aromaticity": 0.035,
-          "instability": 22.7
+          "instability": 22.7,
+          "rg": 10.75,
+          "if_contacts": 34,
+          "bsa": 1300.4
         },
         {
           "id": "temp_04",
@@ -703,7 +772,7 @@
           "contact": 15.29729587009975,
           "pae_iface": 21.134396649630183,
           "confdiff": 0.24211638528598575,
-          "pdb": "/pdbs/hapd1-variantes/temp_04.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_04.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_04/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_04/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=27 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -712,7 +781,10 @@
           "gravy": -0.505,
           "mw_kda": 6.54,
           "aromaticity": 0.018,
-          "instability": 65.0
+          "instability": 65.0,
+          "rg": 10.85,
+          "if_contacts": 28,
+          "bsa": 1502.5
         },
         {
           "id": "temp_05",
@@ -729,7 +801,7 @@
           "contact": 15.327964074271069,
           "pae_iface": 24.295025335798638,
           "confdiff": 0.26699214769322605,
-          "pdb": "/pdbs/hapd1-variantes/temp_05.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_05.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_05/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_05/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=44 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -738,7 +810,10 @@
           "gravy": 0.358,
           "mw_kda": 5.69,
           "aromaticity": 0.018,
-          "instability": 13.0
+          "instability": 13.0,
+          "rg": 10.79,
+          "if_contacts": 52,
+          "bsa": 1173.8
         },
         {
           "id": "temp_06",
@@ -755,7 +830,7 @@
           "contact": 16.94056134905134,
           "pae_iface": 24.993455486980913,
           "confdiff": 0.33982455128336303,
-          "pdb": "/pdbs/hapd1-variantes/temp_06.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_06.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_06/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_06/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=58 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -764,7 +839,10 @@
           "gravy": -0.519,
           "mw_kda": 6.4,
           "aromaticity": 0.018,
-          "instability": 35.2
+          "instability": 35.2,
+          "rg": 11.0,
+          "if_contacts": 73,
+          "bsa": 1682.1
         },
         {
           "id": "temp_07",
@@ -781,7 +859,7 @@
           "contact": 20.8817779813494,
           "pae_iface": 22.99864498443806,
           "confdiff": 0.4253919951484138,
-          "pdb": "/pdbs/hapd1-variantes/temp_07.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_07.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_07/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_07/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=39 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -790,7 +868,10 @@
           "gravy": -0.553,
           "mw_kda": 6.41,
           "aromaticity": 0.018,
-          "instability": 51.2
+          "instability": 51.2,
+          "rg": 11.05,
+          "if_contacts": 57,
+          "bsa": 1909.8
         },
         {
           "id": "temp_08",
@@ -807,7 +888,7 @@
           "contact": 21.179155458722793,
           "pae_iface": 22.03856751378546,
           "confdiff": 0.4159547453005507,
-          "pdb": "/pdbs/hapd1-variantes/temp_08.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_08.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_08/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_08/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=37 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -816,7 +897,10 @@
           "gravy": 0.328,
           "mw_kda": 5.83,
           "aromaticity": 0.035,
-          "instability": 42.1
+          "instability": 42.1,
+          "rg": 10.73,
+          "if_contacts": 56,
+          "bsa": 1733.2
         },
         {
           "id": "temp_09",
@@ -833,7 +917,7 @@
           "contact": 13.104605048043387,
           "pae_iface": 23.69457499861067,
           "confdiff": 0.24816068017050122,
-          "pdb": "/pdbs/hapd1-variantes/temp_09.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_09.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_09/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_09/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=46 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -842,7 +926,10 @@
           "gravy": -0.626,
           "mw_kda": 6.29,
           "aromaticity": 0.053,
-          "instability": 16.9
+          "instability": 16.9,
+          "rg": 10.62,
+          "if_contacts": 43,
+          "bsa": 1280.2
         },
         {
           "id": "temp_10",
@@ -859,7 +946,7 @@
           "contact": 18.916087940761024,
           "pae_iface": 24.023561354778728,
           "confdiff": 0.26414159487666244,
-          "pdb": "/pdbs/hapd1-variantes/temp_10.pdb",
+          "pdb": "/pdbs/hapd1/variantes/temp_10.pdb",
           "score_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_10/outputs/scores.csv",
           "pdb_source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60_temp_v3/temp_10/outputs/seq_0_pred_0_chainAB.pdb",
           "notes": "best_iteration=54 | last_iteration_used=60 | point_value = cumulative minimum across iterations 1..last",
@@ -868,7 +955,10 @@
           "gravy": 0.216,
           "mw_kda": 6.2,
           "aromaticity": 0.018,
-          "instability": 55.0
+          "instability": 55.0,
+          "rg": 10.75,
+          "if_contacts": 65,
+          "bsa": 1506.5
         }
       ]
     }

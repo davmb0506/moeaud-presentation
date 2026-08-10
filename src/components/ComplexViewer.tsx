@@ -11,9 +11,332 @@ import {
 const COLOR_TARGET = "#7fb2e6";
 const COLOR_BINDER = "#34d399";
 const COLOR_BINDER_STICK = "#10b981";
+const COLOR_IF = "#e8590c";
 
 type Repr = "cartoon" | "surface";
 
+/** Modos didácticos para explicar pares de objetivos (slide formulaciones). */
+export type MetricMode = "pae_plddt" | "composite_tm" | "ipsae_sc";
+
+type AtomSnap = { atom: any; x: number; y: number; z: number };
+
+function delay(ms: number, cancelled: () => boolean) {
+  return new Promise<void>((resolve) => {
+    const t0 = performance.now();
+    const tick = () => {
+      if (cancelled() || performance.now() - t0 >= ms) resolve();
+      else requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+function snapshotAtoms(viewer: any, sel: object): AtomSnap[] {
+  const atoms = viewer.selectedAtoms(sel) as any[];
+  return atoms.map((atom) => ({
+    atom,
+    x: atom.x as number,
+    y: atom.y as number,
+    z: atom.z as number,
+  }));
+}
+
+function restoreAtoms(snap: AtomSnap[]) {
+  for (const s of snap) {
+    s.atom.x = s.x;
+    s.atom.y = s.y;
+    s.atom.z = s.z;
+  }
+}
+
+function offsetAtoms(snap: AtomSnap[], dx: number, dy: number, dz: number) {
+  for (const s of snap) {
+    s.atom.x = s.x + dx;
+    s.atom.y = s.y + dy;
+    s.atom.z = s.z + dz;
+  }
+}
+
+function chainCentroid(viewer: any, chain: string): [number, number, number] {
+  const atoms = viewer.selectedAtoms({ chain, atom: "CA" }) as any[];
+  if (!atoms.length) {
+    const all = viewer.selectedAtoms({ chain }) as any[];
+    if (!all.length) return [0, 0, 0];
+    let x = 0,
+      y = 0,
+      z = 0;
+    for (const a of all) {
+      x += a.x;
+      y += a.y;
+      z += a.z;
+    }
+    const n = all.length;
+    return [x / n, y / n, z / n];
+  }
+  let x = 0,
+    y = 0,
+    z = 0;
+  for (const a of atoms) {
+    x += a.x;
+    y += a.y;
+    z += a.z;
+  }
+  const n = atoms.length;
+  return [x / n, y / n, z / n];
+}
+
+function normalize3(v: [number, number, number]): [number, number, number] {
+  const L = Math.hypot(v[0], v[1], v[2]) || 1;
+  return [v[0] / L, v[1] / L, v[2] / L];
+}
+
+async function clearSurfaces(viewer: any) {
+  try {
+    viewer.removeAllSurfaces();
+  } catch {
+    /* ignore */
+  }
+}
+
+function styleBaseCartoon(
+  viewer: any,
+  roles: ChainRoles,
+  binderSpectrum = false
+) {
+  const { targetChain, binderChain } = roles;
+  viewer.setStyle({}, {});
+  viewer.setStyle(
+    { chain: targetChain },
+    { cartoon: { color: COLOR_TARGET } }
+  );
+  if (binderChain) {
+    viewer.setStyle(
+      { chain: binderChain },
+      {
+        cartoon: {
+          color: binderSpectrum ? "spectrum" : COLOR_BINDER,
+        },
+      }
+    );
+  }
+}
+
+function styleInterfaceSticks(
+  viewer: any,
+  roles: ChainRoles,
+  color = COLOR_IF
+) {
+  const { targetChain, binderChain } = roles;
+  if (!binderChain) return;
+  viewer.addStyle(
+    {
+      chain: binderChain,
+      byres: true,
+      within: { distance: 5.0, sel: { chain: targetChain } },
+    },
+    { stick: { radius: 0.2, color } }
+  );
+  viewer.addStyle(
+    {
+      chain: targetChain,
+      byres: true,
+      within: { distance: 5.0, sel: { chain: binderChain } },
+    },
+    { stick: { radius: 0.14, color } }
+  );
+}
+
+async function addPairSurfaces(viewer: any, roles: ChainRoles, opacity = 0.9) {
+  const { targetChain, binderChain } = roles;
+  await clearSurfaces(viewer);
+  try {
+    await viewer.addSurface(
+      $3Dmol.SurfaceType.MS,
+      { color: COLOR_TARGET, opacity },
+      { chain: targetChain },
+      { chain: targetChain }
+    );
+    if (binderChain) {
+      await viewer.addSurface(
+        $3Dmol.SurfaceType.MS,
+        { color: COLOR_BINDER, opacity },
+        { chain: binderChain },
+        { chain: binderChain }
+      );
+    }
+  } catch (e) {
+    console.warn("addSurface falló:", e);
+  }
+}
+
+async function animateApproach(
+  viewer: any,
+  snap: AtomSnap[],
+  dir: [number, number, number],
+  dist: number,
+  frames: number,
+  cancelled: () => boolean,
+  inward: boolean
+) {
+  for (let i = 0; i <= frames; i++) {
+    if (cancelled()) return;
+    const t = i / frames;
+    const u = inward ? 1 - t : t;
+    const d = dist * u;
+    offsetAtoms(snap, dir[0] * d, dir[1] * d, dir[2] * d);
+    viewer.render();
+    await delay(28, cancelled);
+  }
+  if (inward) restoreAtoms(snap);
+  viewer.render();
+}
+
+/**
+ * Secuencia didáctica: cada eje hace algo visualmente distinto.
+ * onBeat recibe el nombre del eje activo (p. ej. "pLDDT").
+ */
+async function runMetricAnimation(
+  viewer: any,
+  mode: MetricMode,
+  roles: ChainRoles,
+  cancelled: () => boolean,
+  onBeat: (beat: string | null) => void
+) {
+  const { targetChain, binderChain } = roles;
+  if (!binderChain) return;
+
+  const binderSnap = snapshotAtoms(viewer, { chain: binderChain });
+  const cT = chainCentroid(viewer, targetChain);
+  const cB = chainCentroid(viewer, binderChain);
+  const dir = normalize3([cB[0] - cT[0], cB[1] - cT[1], cB[2] - cT[2]]);
+
+  const hold = (ms: number) => delay(ms, cancelled);
+
+  while (!cancelled()) {
+    await clearSurfaces(viewer);
+    restoreAtoms(binderSnap);
+    viewer.setStyle({}, {});
+
+    if (mode === "pae_plddt") {
+      // Interface-PAE = pose relativa (el péptido se mueve respecto a VEGF-A).
+      onBeat("Interface-PAE");
+      styleBaseCartoon(viewer, roles, false);
+      viewer.zoomTo();
+      viewer.zoom(0.9);
+      viewer.render();
+      await hold(500);
+      if (cancelled()) break;
+      await animateApproach(viewer, binderSnap, dir, 10, 18, cancelled, false);
+      if (cancelled()) break;
+      await hold(600);
+      if (cancelled()) break;
+      await animateApproach(viewer, binderSnap, dir, 10, 18, cancelled, true);
+      restoreAtoms(binderSnap);
+      styleInterfaceSticks(viewer, roles, COLOR_IF);
+      viewer.render();
+      await hold(1200);
+      if (cancelled()) break;
+
+      // pLDDT = confianza del pliegue (colores), sin mover la pose.
+      onBeat("pLDDT");
+      restoreAtoms(binderSnap);
+      viewer.setStyle({}, {});
+      viewer.setStyle(
+        { chain: targetChain },
+        { cartoon: { color: "spectrum" } }
+      );
+      viewer.setStyle(
+        { chain: binderChain },
+        { cartoon: { color: "spectrum" } }
+      );
+      viewer.zoomTo();
+      viewer.zoom(0.9);
+      viewer.render();
+      await hold(2200);
+    } else if (mode === "composite_tm") {
+      // Compuesto = solo la zona de contacto.
+      onBeat("Compuesto");
+      viewer.setStyle(
+        { chain: targetChain },
+        { cartoon: { color: "#e8eef6" } }
+      );
+      viewer.setStyle(
+        { chain: binderChain },
+        { cartoon: { color: "#e8eef6" } }
+      );
+      styleInterfaceSticks(viewer, roles, COLOR_IF);
+      viewer.addStyle(
+        {
+          chain: binderChain,
+          byres: true,
+          within: { distance: 5.0, sel: { chain: targetChain } },
+        },
+        { sphere: { radius: 0.6, color: COLOR_IF } }
+      );
+      viewer.zoomTo({
+        chain: binderChain,
+        byres: true,
+        within: { distance: 8, sel: { chain: targetChain } },
+      });
+      viewer.zoom(0.8);
+      viewer.render();
+      await hold(2000);
+      if (cancelled()) break;
+
+      // TM-score = solo el pliegue del péptido (VEGF-A desaparece).
+      onBeat("TM-score");
+      viewer.setStyle({}, {});
+      viewer.setStyle({ chain: targetChain }, {});
+      viewer.setStyle(
+        { chain: binderChain },
+        { cartoon: { color: COLOR_BINDER } }
+      );
+      viewer.zoomTo({ chain: binderChain });
+      viewer.zoom(0.7);
+      viewer.render();
+      await hold(2000);
+    } else {
+      // ipSAE = confianza de red en la interfaz (colores + contactos), sin mover.
+      onBeat("ipSAE");
+      styleBaseCartoon(viewer, roles, true);
+      styleInterfaceSticks(viewer, roles, COLOR_BINDER_STICK);
+      viewer.zoomTo({
+        chain: binderChain,
+        byres: true,
+        within: { distance: 8, sel: { chain: targetChain } },
+      });
+      viewer.zoom(0.85);
+      viewer.render();
+      await hold(2000);
+      if (cancelled()) break;
+
+      // SC = encaje de superficies (aleja y vuelve a acoplar).
+      onBeat("SC");
+      restoreAtoms(binderSnap);
+      viewer.setStyle({}, {});
+      styleBaseCartoon(viewer, roles, false);
+      viewer.zoomTo();
+      viewer.zoom(0.9);
+      viewer.render();
+      await hold(300);
+      if (cancelled()) break;
+      await animateApproach(viewer, binderSnap, dir, 16, 22, cancelled, false);
+      if (cancelled()) break;
+      await hold(400);
+      if (cancelled()) break;
+      await animateApproach(viewer, binderSnap, dir, 16, 22, cancelled, true);
+      restoreAtoms(binderSnap);
+      viewer.setStyle({}, {});
+      await addPairSurfaces(viewer, roles, 0.92);
+      viewer.render();
+      await hold(1600);
+    }
+
+    if (!cancelled()) await hold(350);
+  }
+
+  onBeat(null);
+}
 // Chrome/Electron limitan contextos WebGL. Nunca reclamamos visores que siguen
 // claramente en pantalla (evita matar el panel hermano AiD/diseño del mismo slide).
 const MAX_LIVE_VIEWERS = 8;
@@ -246,12 +569,18 @@ export function ComplexViewer({
   referenceUrl = null,
   fixTargetFromReference = false,
   active,
+  metricMode = null,
+  onMetricBeat,
 }: {
   pdbUrl: string | null;
   referenceUrl?: string | null;
   fixTargetFromReference?: boolean;
   /** Si se define, fuerza el montaje del visor (p. ej. pareja AiD/diseño). */
   active?: boolean;
+  /** Si se define, anima estilos didácticos y oculta el toggle cartoon/superficie. */
+  metricMode?: MetricMode | null;
+  /** Nombre del eje que la animación está ilustrando (p. ej. "pLDDT"). */
+  onMetricBeat?: (beat: string | null) => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<any>(null);
@@ -278,6 +607,10 @@ export function ComplexViewer({
   const [repr, setRepr] = useState<Repr>("cartoon");
   const reprRef = useRef<Repr>(repr);
   reprRef.current = repr;
+  const metricModeRef = useRef(metricMode);
+  metricModeRef.current = metricMode;
+  const onBeatRef = useRef(onMetricBeat);
+  onBeatRef.current = onMetricBeat;
 
   const isVisibleRef = useRef(false);
   isVisibleRef.current = isVisible;
@@ -444,8 +777,28 @@ export function ComplexViewer({
       if (!cancelled) setViewerEpoch((n) => n + 1);
     })();
 
+    const onResize = () => {
+      const viewer = viewerRef.current;
+      if (!viewer || !container.isConnected) return;
+      try {
+        viewer.resize();
+        if (cameraSetRef.current) {
+          viewer.zoomTo();
+          viewer.zoom(0.9);
+          viewer.render();
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    const ro = new ResizeObserver(() => {
+      requestAnimationFrame(onResize);
+    });
+    ro.observe(container);
+
     return () => {
       cancelled = true;
+      ro.disconnect();
       slot.cancel();
       tearDownViewer();
     };
@@ -540,7 +893,12 @@ export function ComplexViewer({
         viewer.zoomTo();
         viewer.zoom(0.9);
         cameraSetRef.current = true;
-        applyRepr(viewer, reprRef.current, roles);
+        if (!metricModeRef.current) {
+          applyRepr(viewer, reprRef.current, roles);
+        } else {
+          styleBaseCartoon(viewer, roles, false);
+          viewer.render();
+        }
         viewer.resize();
         setLoading(false);
       })
@@ -557,22 +915,54 @@ export function ComplexViewer({
   useEffect(() => {
     const viewer = viewerRef.current;
     if (!viewer || !viewerEpoch) return;
+    if (metricMode) return; // la animación se encarga
     applyRepr(viewer, repr, chainRolesRef.current);
-  }, [repr, viewerEpoch]);
+  }, [repr, metricMode, viewerEpoch]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || !viewerEpoch || !metricMode) {
+      onBeatRef.current?.(null);
+      return;
+    }
+
+    let cancelled = false;
+    const isCancelled = () => cancelled || !viewerRef.current;
+
+    (async () => {
+      // Esperar un frame para que el modelo esté estable.
+      await delay(80, isCancelled);
+      if (isCancelled()) return;
+      await runMetricAnimation(
+        viewer,
+        metricMode,
+        chainRolesRef.current,
+        isCancelled,
+        (beat) => onBeatRef.current?.(beat)
+      );
+    })();
+
+    return () => {
+      cancelled = true;
+      onBeatRef.current?.(null);
+    };
+  }, [metricMode, viewerEpoch, pdbUrl]);
 
   return (
     <div className="cv-stage">
       <div className="cv-viewer" ref={containerRef} />
-      <button
-        type="button"
-        className="cv-toggle"
-        onClick={() =>
-          setRepr((r) => (r === "cartoon" ? "surface" : "cartoon"))
-        }
-        title="Cambiar representación"
-      >
-        {repr === "cartoon" ? "Superficie" : "Cartoon"}
-      </button>
+      {!metricMode && (
+        <button
+          type="button"
+          className="cv-toggle"
+          onClick={() =>
+            setRepr((r) => (r === "cartoon" ? "surface" : "cartoon"))
+          }
+          title="Cambiar representación"
+        >
+          {repr === "cartoon" ? "Superficie" : "Cartoon"}
+        </button>
+      )}
       {loading && <span className="cv-loading">cargando…</span>}
       {error && <span className="cv-loading">{error}</span>}
     </div>

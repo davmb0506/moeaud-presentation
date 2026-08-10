@@ -472,10 +472,7 @@ export function VariantesEvoPro() {
               textAnchor="middle"
               transform={`rotate(-90 18 ${PAD.top + PH / 2})`}
             >
-              Mejor puntaje de diseño (↓ mejor)
-            </text>
-            <text x={PAD.left + 5} y={PAD.top + PH - 7} className="abl-best">
-              ↓ mejor
+              Mejor puntaje de diseño
             </text>
 
             {BOXES.map((group, index) => (
@@ -483,8 +480,10 @@ export function VariantesEvoPro() {
             ))}
 
             {VIEWER_POINTS.map((point) => {
-              const isPinned = point.key === pinnedId;
-              const isHover = point.key === hoverId;
+              const isPinned =
+                viewerMode === "ops" && point.key === pinnedId;
+              const isHover =
+                viewerMode === "ops" && point.key === hoverId;
               const highlighted = isPinned || isHover;
               return (
                 <g key={point.key}>
@@ -505,10 +504,13 @@ export function VariantesEvoPro() {
                     style={{ fill: COND_COLOR[point.group] }}
                     onMouseEnter={() => {
                       setViewerMode("ops");
+                      setTempHoverKey(null);
                       setHoverId(point.key);
                     }}
+                    onMouseLeave={() => setHoverId(null)}
                     onClick={() => {
                       setViewerMode("ops");
+                      setTempHoverKey(null);
                       setPinnedId(point.key);
                     }}
                   />
@@ -517,8 +519,10 @@ export function VariantesEvoPro() {
             })}
 
             {TEMP_VIEWER_POINTS.map((point, pointIndex) => {
-              const isPinned = point.key === tempPinnedKey;
-              const isHover = point.key === tempHoverKey;
+              const isPinned =
+                viewerMode === "temp" && point.key === tempPinnedKey;
+              const isHover =
+                viewerMode === "temp" && point.key === tempHoverKey;
               const highlighted = isPinned || isHover;
               const hasPdb = Boolean(point.run.viewerPdbUrl);
               return (
@@ -545,14 +549,19 @@ export function VariantesEvoPro() {
                       hasPdb
                         ? () => {
                             setViewerMode("temp");
+                            setHoverId(null);
                             setTempHoverKey(point.key);
                           }
                         : undefined
+                    }
+                    onMouseLeave={
+                      hasPdb ? () => setTempHoverKey(null) : undefined
                     }
                     onClick={
                       hasPdb
                         ? () => {
                             setViewerMode("temp");
+                            setHoverId(null);
                             setTempPinnedKey(point.key);
                           }
                         : undefined
@@ -725,7 +734,7 @@ export function VariantesEvoPro() {
               )}
               <p className="ablacion-info-note">
                 <span className="ablacion-chip target" /> objetivo (VEGF-A) ·{" "}
-                <span className="ablacion-chip binder" /> binder diseñado
+                <span className="ablacion-chip binder" /> péptido diseñado
               </p>
             </div>
         </section>

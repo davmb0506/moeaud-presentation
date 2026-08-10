@@ -11,16 +11,16 @@
       "min_plddt_a": 75.0,
       "min_iptm": 0.1,
       "max_pae_iface": 25.0,
-      "note": "pLDDT filters poor binder folding; ipTM/PAE filter weak target contact (ipTM floor \u2248 scrambled controls in paper)."
+      "note": "pLDDT filters poor binder folding; ipTM/PAE filter weak target contact (ipTM floor ≈ scrambled controls in paper)."
     },
     "n_replicas_per_arm": 10,
-    "replica_range": "01\u201310",
+    "replica_range": "01–10",
     "caveats": [
       "overall_score is a computational EvoPro objective, not KD.",
       "High pLDDT alone does not imply better binding.",
       "KD (nM) exists only for paper AiDs (SPR); designs have no experimental KD.",
       "Comparison is AF2 under the same HA-PD1 target/protocol.",
-      "Confirmatory ranking for the thesis is Flujo Goudy (Rosetta dG/dSASA \u2192 OmegaFold); this slide is AF2 vs AiDs only."
+      "Confirmatory ranking for the thesis is Flujo Goudy (Rosetta dG/dSASA → OmegaFold); this slide is AF2 vs AiDs only."
     ],
     "arm_af2_ranking_note": {
       "base": "best median best-ipTM across runs (~0.194); max 0.313 (base_08)",
@@ -28,7 +28,8 @@
       "mutation": "intermediate (median ~0.183; max 0.343 mutation_10)"
     },
     "source_runs": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60",
-    "paper_manifest": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/validation/standard/manifests/paper_hapd1_control_manifest.csv"
+    "paper_manifest": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/validation/standard/manifests/paper_hapd1_control_manifest.csv",
+    "struct_metrics": "rg / if_contacts / bsa from scripts/pdb_metrics.py on chainAB PDBs (binder=A, target=B; contact cutoff 4.5 Å; Shrake–Rupley ΔSASA)."
   },
   "paper_aids": [
     {
@@ -47,7 +48,12 @@
       "gravy": -0.035,
       "mw_kda": 6.59,
       "aromaticity": 0.018,
-      "instability": 65.0
+      "instability": 65.0,
+      "contact": 16.9158018384661,
+      "confdiff": 0.33176050629437337,
+      "rg": 11.06,
+      "if_contacts": 45,
+      "bsa": 1482.4
     },
     {
       "aid_id": 5,
@@ -65,7 +71,12 @@
       "gravy": -0.063,
       "mw_kda": 6.62,
       "aromaticity": 0.035,
-      "instability": 58.4
+      "instability": 58.4,
+      "contact": 12.148022161211285,
+      "confdiff": 0.275157526322121,
+      "rg": 11.14,
+      "if_contacts": 15,
+      "bsa": 871.7
     },
     {
       "aid_id": 7,
@@ -83,7 +94,12 @@
       "gravy": -0.118,
       "mw_kda": 7.36,
       "aromaticity": 0.031,
-      "instability": 35.3
+      "instability": 35.3,
+      "contact": 8.100691059657505,
+      "confdiff": 0.23555252995762652,
+      "rg": 11.0,
+      "if_contacts": 38,
+      "bsa": 1294.1
     },
     {
       "aid_id": 15,
@@ -101,7 +117,12 @@
       "gravy": 0.129,
       "mw_kda": 6.61,
       "aromaticity": 0.095,
-      "instability": 22.4
+      "instability": 22.4,
+      "contact": 6.687986128670828,
+      "confdiff": 0.28516487416976033,
+      "rg": 10.79,
+      "if_contacts": 12,
+      "bsa": 669.7
     },
     {
       "aid_id": 19,
@@ -119,7 +140,12 @@
       "gravy": 0.308,
       "mw_kda": 7.05,
       "aromaticity": 0.031,
-      "instability": 39.3
+      "instability": 39.3,
+      "contact": 7.946562058585031,
+      "confdiff": 0.2117957888286441,
+      "rg": 10.85,
+      "if_contacts": 22,
+      "bsa": 1099.5
     }
   ],
   "paper_medians": {
@@ -217,7 +243,10 @@
       "gravy": 0.711,
       "mw_kda": 5.54,
       "aromaticity": 0.018,
-      "instability": 15.7
+      "instability": 15.7,
+      "rg": 11.11,
+      "if_contacts": 43,
+      "bsa": 1512.3
     },
     {
       "id": "both_02",
@@ -258,7 +287,10 @@
       "gravy": -0.112,
       "mw_kda": 6.07,
       "aromaticity": 0.0,
-      "instability": 36.7
+      "instability": 36.7,
+      "rg": 23.57,
+      "if_contacts": 59,
+      "bsa": 1591.9
     },
     {
       "id": "both_03",
@@ -299,7 +331,10 @@
       "gravy": 0.768,
       "mw_kda": 5.31,
       "aromaticity": 0.018,
-      "instability": 27.5
+      "instability": 27.5,
+      "rg": 10.16,
+      "if_contacts": 28,
+      "bsa": 1024.5
     },
     {
       "id": "both_04",
@@ -340,7 +375,10 @@
       "gravy": -0.032,
       "mw_kda": 5.68,
       "aromaticity": 0.018,
-      "instability": 19.9
+      "instability": 19.9,
+      "rg": 18.12,
+      "if_contacts": 81,
+      "bsa": 1724.3
     },
     {
       "id": "both_05",
@@ -381,7 +419,10 @@
       "gravy": -0.914,
       "mw_kda": 6.33,
       "aromaticity": 0.018,
-      "instability": 25.9
+      "instability": 25.9,
+      "rg": 10.91,
+      "if_contacts": 74,
+      "bsa": 1668.2
     },
     {
       "id": "both_06",
@@ -422,7 +463,10 @@
       "gravy": -0.051,
       "mw_kda": 6.08,
       "aromaticity": 0.035,
-      "instability": 23.9
+      "instability": 23.9,
+      "rg": 10.66,
+      "if_contacts": 23,
+      "bsa": 974.6
     },
     {
       "id": "both_07",
@@ -463,7 +507,10 @@
       "gravy": -0.937,
       "mw_kda": 6.63,
       "aromaticity": 0.018,
-      "instability": 84.0
+      "instability": 84.0,
+      "rg": 10.94,
+      "if_contacts": 53,
+      "bsa": 1328.5
     },
     {
       "id": "both_08",
@@ -504,7 +551,10 @@
       "gravy": -1.811,
       "mw_kda": 7.08,
       "aromaticity": 0.018,
-      "instability": 51.4
+      "instability": 51.4,
+      "rg": 24.63,
+      "if_contacts": 19,
+      "bsa": 694.4
     },
     {
       "id": "both_09",
@@ -545,7 +595,10 @@
       "gravy": -0.818,
       "mw_kda": 6.41,
       "aromaticity": 0.018,
-      "instability": 38.1
+      "instability": 38.1,
+      "rg": 11.23,
+      "if_contacts": 46,
+      "bsa": 1180.3
     },
     {
       "id": "temp_01",
@@ -586,7 +639,10 @@
       "gravy": -1.263,
       "mw_kda": 6.93,
       "aromaticity": 0.053,
-      "instability": 65.0
+      "instability": 65.0,
+      "rg": 11.16,
+      "if_contacts": 62,
+      "bsa": 1621.1
     },
     {
       "id": "temp_02",
@@ -627,7 +683,10 @@
       "gravy": -0.696,
       "mw_kda": 6.65,
       "aromaticity": 0.053,
-      "instability": 45.3
+      "instability": 45.3,
+      "rg": 11.04,
+      "if_contacts": 38,
+      "bsa": 1273.2
     },
     {
       "id": "temp_03",
@@ -668,7 +727,10 @@
       "gravy": -1.033,
       "mw_kda": 6.73,
       "aromaticity": 0.035,
-      "instability": 56.5
+      "instability": 56.5,
+      "rg": 11.05,
+      "if_contacts": 49,
+      "bsa": 1258.8
     },
     {
       "id": "temp_04",
@@ -709,7 +771,10 @@
       "gravy": -1.068,
       "mw_kda": 7.02,
       "aromaticity": 0.053,
-      "instability": 80.1
+      "instability": 80.1,
+      "rg": 11.27,
+      "if_contacts": 53,
+      "bsa": 1401.2
     },
     {
       "id": "temp_05",
@@ -750,7 +815,10 @@
       "gravy": -0.863,
       "mw_kda": 6.9,
       "aromaticity": 0.035,
-      "instability": 79.3
+      "instability": 79.3,
+      "rg": 11.12,
+      "if_contacts": 53,
+      "bsa": 1346.8
     },
     {
       "id": "temp_06",
@@ -791,7 +859,10 @@
       "gravy": -0.472,
       "mw_kda": 6.47,
       "aromaticity": 0.035,
-      "instability": 40.3
+      "instability": 40.3,
+      "rg": 11.2,
+      "if_contacts": 35,
+      "bsa": 1656.2
     },
     {
       "id": "temp_07",
@@ -832,7 +903,10 @@
       "gravy": -0.946,
       "mw_kda": 6.61,
       "aromaticity": 0.035,
-      "instability": 36.0
+      "instability": 36.0,
+      "rg": 10.85,
+      "if_contacts": 44,
+      "bsa": 1053.0
     },
     {
       "id": "temp_08",
@@ -873,7 +947,10 @@
       "gravy": -1.002,
       "mw_kda": 6.83,
       "aromaticity": 0.018,
-      "instability": 63.9
+      "instability": 63.9,
+      "rg": 11.24,
+      "if_contacts": 58,
+      "bsa": 1558.2
     },
     {
       "id": "temp_09",
@@ -914,7 +991,10 @@
       "gravy": -0.456,
       "mw_kda": 6.17,
       "aromaticity": 0.035,
-      "instability": 42.9
+      "instability": 42.9,
+      "rg": 11.04,
+      "if_contacts": 50,
+      "bsa": 1165.2
     },
     {
       "id": "mutation_01",
@@ -955,7 +1035,10 @@
       "gravy": 0.177,
       "mw_kda": 5.66,
       "aromaticity": 0.018,
-      "instability": 33.0
+      "instability": 33.0,
+      "rg": 10.28,
+      "if_contacts": 8,
+      "bsa": 553.0
     },
     {
       "id": "mutation_02",
@@ -996,7 +1079,10 @@
       "gravy": -0.602,
       "mw_kda": 6.67,
       "aromaticity": 0.018,
-      "instability": 62.8
+      "instability": 62.8,
+      "rg": 11.13,
+      "if_contacts": 61,
+      "bsa": 1607.7
     },
     {
       "id": "mutation_03",
@@ -1037,7 +1123,10 @@
       "gravy": 0.719,
       "mw_kda": 5.32,
       "aromaticity": 0.07,
-      "instability": 12.9
+      "instability": 12.9,
+      "rg": 26.46,
+      "if_contacts": 16,
+      "bsa": 954.3
     },
     {
       "id": "mutation_04",
@@ -1078,7 +1167,10 @@
       "gravy": 0.442,
       "mw_kda": 5.58,
       "aromaticity": 0.035,
-      "instability": 26.5
+      "instability": 26.5,
+      "rg": 10.58,
+      "if_contacts": 15,
+      "bsa": 544.1
     },
     {
       "id": "mutation_05",
@@ -1119,7 +1211,10 @@
       "gravy": 0.095,
       "mw_kda": 6.02,
       "aromaticity": 0.07,
-      "instability": 17.7
+      "instability": 17.7,
+      "rg": 10.9,
+      "if_contacts": 50,
+      "bsa": 1278.2
     },
     {
       "id": "mutation_06",
@@ -1160,7 +1255,10 @@
       "gravy": 1.716,
       "mw_kda": 6.49,
       "aromaticity": 0.07,
-      "instability": 55.0
+      "instability": 55.0,
+      "rg": 25.54,
+      "if_contacts": 9,
+      "bsa": 473.8
     },
     {
       "id": "mutation_07",
@@ -1201,7 +1299,10 @@
       "gravy": 0.453,
       "mw_kda": 5.28,
       "aromaticity": 0.035,
-      "instability": 11.0
+      "instability": 11.0,
+      "rg": 10.69,
+      "if_contacts": 6,
+      "bsa": 608.6
     },
     {
       "id": "mutation_08",
@@ -1242,7 +1343,10 @@
       "gravy": 0.96,
       "mw_kda": 6.61,
       "aromaticity": 0.158,
-      "instability": 44.2
+      "instability": 44.2,
+      "rg": 24.48,
+      "if_contacts": 12,
+      "bsa": 686.1
     }
   ]
 }

@@ -46,7 +46,7 @@ CASCADE_POOL = (
 
 PANELS = {
     "moea_pool1208": {
-        "label": "MOEA VEGF-A (pool ND)",
+        "label": "MOEA VEGF-A (no dominados)",
         "target": "VEGF-A",
         "experiment_mode": "multiobjective",
         "protocol": "vegfa_adapted",
@@ -244,7 +244,7 @@ def build_funnel(exp: str) -> list[dict] | None:
     if exp == "moea_pool1208":
         return [
             {
-                "label": "Pool inicial",
+                "label": "Conjunto inicial",
                 "value": n_cand or 1208,
                 "note": "Diseños no dominados de los 6 grupos; aún sin filtro",
             },
@@ -254,7 +254,7 @@ def build_funnel(exp: str) -> list[dict] | None:
                 "note": "Completan la relajación Rosetta; sin corte por energía",
             },
             {
-                "label": "Top 100",
+                "label": "100 mejores",
                 "value": n_top or 100,
                 "note": "Conserva los 100 de mejor energía de interfaz",
             },
@@ -273,7 +273,7 @@ def build_funnel(exp: str) -> list[dict] | None:
     soft_qc = hapd1_soft_qc_rows(exp)
     return [
         {
-            "label": "Pool inicial",
+            "label": "Conjunto inicial",
             "value": n_cand,
             "note": "Última generación de los 3 brazos; aún sin filtro",
         },
@@ -283,7 +283,7 @@ def build_funnel(exp: str) -> list[dict] | None:
             "note": "Completan la relajación Rosetta; sin corte por energía",
         },
         {
-            "label": "Top 100",
+            "label": "100 mejores",
             "value": n_top or 100,
             "note": "Conserva los 100 de mejor energía de interfaz",
         },

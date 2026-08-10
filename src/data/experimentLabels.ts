@@ -82,12 +82,14 @@ export const ABLATION_CONDS = {
   con: {
     label: "Con mecanismos",
     short: "Con MA",
-    color: "#2b6ef2",
+    /** Azul — alinea con curvas MA de las figuras de convergencia. */
+    color: "#2E6B8E",
   },
   sin: {
     label: "Sin mecanismos",
     short: "Sin MA",
-    color: "#d6455a",
+    /** Naranja — alinea con curvas Base de las figuras de convergencia. */
+    color: "#F28E2B",
   },
 } as const;
 

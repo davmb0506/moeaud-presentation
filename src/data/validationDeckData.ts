@@ -40,7 +40,7 @@ export const validationDeck = {
         evidence: "1049 -> 100 -> 96",
         summary:
           "Se conserva el top 100 del paper y se filtran degenerados (A+L, Ala, A+Q).",
-        question: "¿Qué diseños priorizar para el gate estructural ortogonal?",
+        question: "¿Qué diseños priorizar para el gate estructural?",
         limit: "El top 100 sigue siendo ranking Rosetta, no evidencia de unión wet-lab.",
       },
       {
@@ -50,7 +50,7 @@ export const validationDeck = {
         evidence: "96 -> 11 thesis (3 hard)",
         summary:
           "RMSD binder Ω vs AF2: pass <3 Å, marginal <5 Å; ≤3 por grupo. Selección final = soft.",
-        question: "¿Qué diseños mantienen acuerdo estructural ortogonal?",
+        question: "¿Qué diseños mantienen acuerdo estructural?",
         limit: "Umbral paper-hard es agresivo en este setup; soft está calibrado.",
       },
       {
@@ -59,7 +59,7 @@ export const validationDeck = {
         title: "Rama docking (aparte del Goudy)",
         evidence: "HADDOCK / CABS-dock exploratorio",
         summary:
-          "Docking local y blind son una rama ortogonal distinta del filtro Goudy; no definen la selección final.",
+          "Docking local y blind son una rama distinta del filtro Goudy; no definen la selección final.",
         question: "¿Qué tanto resiste una pose fuera del screening Goudy?",
         limit: "Screening Goudy, HADDOCK y blind docking no son intercambiables.",
       },
@@ -67,7 +67,7 @@ export const validationDeck = {
     takeaways: [
       "El filtro oficial del paper es Flujo Goudy (Rosetta → top100 → QC → Ω → diversidad).",
       "Valida el pipeline de screening in silico, no binders experimentales.",
-      "Docking/HADDOCK es rama ortogonal; no reemplaza el ranking dG/dSASA×100.",
+      "Docking/HADDOCK es rama aparte; no reemplaza el ranking dG/dSASA×100.",
     ],
     sources: [
       "evopro/validation/unified/runs/moea_pool1208/paper_filter/summary.md",
@@ -340,7 +340,7 @@ export const validationDeck = {
     open: [
       "Solo algunos casos se acercan de forma parcial al acomodo local en el blind docking nativo.",
       "No hay recuperación consistente del mismo sitio a lo largo de todo el panel.",
-      "Aún no hay evidencia ortogonal fuerte para afirmar descubrimiento espontáneo del sitio ni competencia con VEGFR2.",
+      "Aún no hay evidencia fuerte para afirmar descubrimiento espontáneo del sitio ni competencia con VEGFR2.",
       "La conclusión defendible sigue siendo soporte para refinamiento local, no validación final de mecanismo.",
     ],
     sources: [

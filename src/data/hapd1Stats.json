@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "n_per_arm": 10,
+    "generation_budget": 60,
+    "score": "cumulative minimum overall_score per run",
+    "sense": "min",
+    "figure": "/graf_hapd1_stats_3arms.png",
+    "contrasts": [
+      "Tres variantes (Kruskal–Wallis)",
+      "Mutación + cruza vs Solo mutación",
+      "Temp. variable vs Mutación + cruza"
+    ],
+    "note": "overall_score del GA. Mann–Whitney U bilateral y unilateral en dos contrastes, más Kruskal–Wallis global.",
+    "kruskal_wallis": {
+      "H": 5.274838709677411,
+      "p": 0.07154566549928391,
+      "significant_0_05": false
+    }
+  },
+  "groups": {
+    "mutation": {
+      "label": "Solo mutación",
+      "color": "#2b6ef2",
+      "n": 10,
+      "mean": -179.9917229753604,
+      "std": 7.019033103420839,
+      "median": -178.13334638484565
+    },
+    "base": {
+      "label": "Mutación + cruza",
+      "color": "#e8833a",
+      "n": 10,
+      "mean": -186.8700209562184,
+      "std": 4.619396674090114,
+      "median": -187.76248744607466
+    },
+    "temp": {
+      "label": "Temp. variable",
+      "color": "#1d8a7a",
+      "n": 10,
+      "mean": -185.75630640555204,
+      "std": 5.880267980687249,
+      "median": -187.27860223630148
+    }
+  },
+  "headline": {
+    "text_parts": [
+      {
+        "text": "mutación + cruza",
+        "color": "#e8833a"
+      },
+      {
+        "text": " supera a ",
+        "color": null
+      },
+      {
+        "text": "solo mutación",
+        "color": "#2b6ef2"
+      },
+      {
+        "text": "; ",
+        "color": null
+      },
+      {
+        "text": "temp. variable",
+        "color": "#1d8a7a"
+      },
+      {
+        "text": " no se separa de ",
+        "color": null
+      },
+      {
+        "text": "mutación + cruza",
+        "color": "#e8833a"
+      },
+      {
+        "text": " (n = 10 / brazo).",
+        "color": null
+      }
+    ]
+  },
+  "tests": [
+    {
+      "contrast": "Tres variantes",
+      "test": "Kruskal–Wallis",
+      "h0": "Las tres variantes tienen la misma distribución de aptitud.",
+      "h1": "Al menos una variante difiere en la distribución de aptitud.",
+      "p": 0.07154566549928391,
+      "p_fmt": "0.0715457",
+      "sig": "n.s.",
+      "reject": false
+    },
+    {
+      "contrast": "Mut+cruza vs Solo mutación",
+      "test": "Mann-Whitney U (bilateral)",
+      "h0": "Mutación + cruza obtiene valores de aptitud iguales que solo mutación.",
+      "h1": "Mutación + cruza obtiene valores de aptitud distintos a solo mutación.",
+      "p": 0.031209012771740218,
+      "p_fmt": "0.031209",
+      "sig": "*",
+      "reject": true
+    },
+    {
+      "contrast": "Mut+cruza vs Solo mutación",
+      "test": "Mann-Whitney U (unilateral)",
+      "h0": "Mutación + cruza obtiene valores de aptitud iguales o peores que solo mutación.",
+      "h1": "Mutación + cruza obtiene valores de aptitud mejores que solo mutación.",
+      "p": 0.015604506385870109,
+      "p_fmt": "0.0156045",
+      "sig": "*",
+      "reject": true
+    },
+    {
+      "contrast": "Temp. variable vs Mut+cruza",
+      "test": "Mann-Whitney U (bilateral)",
+      "h0": "Temp. variable obtiene valores de aptitud iguales que mutación + cruza.",
+      "h1": "Temp. variable obtiene valores de aptitud distintos a mutación + cruza.",
+      "p": 0.9698499769931556,
+      "p_fmt": "0.96985",
+      "sig": "n.s.",
+      "reject": false
+    },
+    {
+      "contrast": "Temp. variable vs Mut+cruza",
+      "test": "Mann-Whitney U (unilateral)",
+      "h0": "Temp. variable obtiene valores de aptitud iguales o peores que mutación + cruza.",
+      "h1": "Temp. variable obtiene valores de aptitud mejores que mutación + cruza.",
+      "p": 0.5451390554272223,
+      "p_fmt": "0.545139",
+      "sig": "n.s.",
+      "reject": false
+    }
+  ],
+  "sig_key": "* p < 0.05 · ** p < 0.01 · *** p < 0.001 · n.s. = no significativo"
+}

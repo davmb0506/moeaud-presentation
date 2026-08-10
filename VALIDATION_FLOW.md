@@ -1,6 +1,6 @@
 # Flujo de validación in silico (MOEA-UD VEGF-A)
 
-## Flujo Goudy (filtro ortogonal oficial — Goudy et al. 2023)
+## Flujo Goudy (filtro computacional — Goudy et al. 2023)
 
 Réplica del cribado del paper EvoPro sobre el pool ND agregado (`moea_pool1208`).
 
@@ -19,7 +19,7 @@ Fuente: `EvoPro_Mod/evopro/validation/unified/runs/moea_pool1208/paper_filter/su
 
 PRODIGY / MM-GBSA son **post-hoc opcionales** sobre el shortlist; no definen el ranking Goudy.
 
-Docking (HADDOCK / CABS-dock) es una **rama ortogonal** distinta; no sustituye el embudo anterior.
+Docking (HADDOCK / CABS-dock) es una **rama aparte**; no sustituye el embudo anterior.
 
 ---
 

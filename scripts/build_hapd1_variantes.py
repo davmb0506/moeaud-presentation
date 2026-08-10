@@ -14,17 +14,18 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 import statistics
 from pathlib import Path
 
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
+from pdb_metrics import compute_metrics
+
 EVOPRO = Path("/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro")
 RUN_ROOT = EVOPRO / "run" / "outputs_hapd1_mono_60"
 TEMP_V3_ROOT = EVOPRO / "run" / "outputs_hapd1_mono_60_temp_v3"
 PRES = Path("/home/david/Documents/Dev/Tesis/moeaud-presentation")
-PUB = PRES / "public" / "pdbs" / "hapd1-variantes"
+PUB = PRES / "public" / "pdbs" / "hapd1" / "variantes"
 DATA_OUT = PRES / "src" / "data" / "hapd1Variantes.json"
 
 STANDARD_AA = set("ACDEFGHIKLMNPQRSTVWY")
@@ -241,7 +242,13 @@ def extract_run(arm: dict, replica: int) -> dict:
         dest_name = f"{run_id}.pdb"
         dest = PUB / dest_name
         dest.write_text(sanitize_pdb(src_pdb.read_text()))
-        dest_rel = f"/pdbs/hapd1-variantes/{dest_name}"
+        dest_rel = f"/pdbs/hapd1/variantes/{dest_name}"
+
+    struct = (
+        compute_metrics(dest, best["binder"], binder_chain="A", target_chain="B")
+        if dest_rel is not None
+        else {"rg": None, "if_contacts": None, "bsa": None}
+    )
 
     return {
         "id": run_id,
@@ -259,6 +266,9 @@ def extract_run(arm: dict, replica: int) -> dict:
         "pae_iface": float(best["pae_iface"]) if best["pae_iface"] is not None else None,
         "confdiff": float(best["confdiff"]) if best["confdiff"] is not None else None,
         "pdb": dest_rel,
+        "rg": struct.get("rg"),
+        "if_contacts": struct.get("if_contacts"),
+        "bsa": struct.get("bsa"),
         "score_source": str(scores_path),
         "pdb_source": str(src_pdb) if src_pdb else None,
         "notes": (
@@ -270,9 +280,9 @@ def extract_run(arm: dict, replica: int) -> dict:
 
 
 def main() -> None:
-    if PUB.is_dir():
-        shutil.rmtree(PUB)
     PUB.mkdir(parents=True, exist_ok=True)
+    for old_pdb in PUB.glob("*.pdb"):
+        old_pdb.unlink()
 
     arms_out: list[dict] = []
     all_runs: list[dict] = []

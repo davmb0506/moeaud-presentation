@@ -11,11 +11,12 @@ from __future__ import annotations
 import csv
 import json
 import re
-import shutil
 import statistics
 from pathlib import Path
 
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
+
+from pdb_metrics import compute_metrics
 
 EVOPRO = Path("/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro")
 RUN_ROOT = EVOPRO / "run" / "outputs_hapd1_mono_60"
@@ -282,6 +283,10 @@ def load_paper_aids() -> list[dict]:
                 overall_by_aid[aid] = {
                     "overall_score": _safe_float(row["overall_score"]),
                     "plddt_chain_a": _safe_float(row.get("pLDDT_chainA")),
+                    "contact": _safe_float(row.get("ContactScore")),
+                    "confdiff": _safe_float(row.get("ConfDiffScore")),
+                    "bonus": _safe_float(row.get("BonusScore")),
+                    "penalty": _safe_float(row.get("PenaltyScore")),
                 }
 
     aids: list[dict] = []
@@ -315,6 +320,12 @@ def load_paper_aids() -> list[dict]:
             }
             if aid in overall_by_aid:
                 entry.update(overall_by_aid[aid])
+            struct = compute_metrics(
+                dest, seq_by_aid[aid], binder_chain="A", target_chain="B"
+            )
+            entry["rg"] = struct["rg"]
+            entry["if_contacts"] = struct["if_contacts"]
+            entry["bsa"] = struct["bsa"]
             aids.append(entry)
     aids.sort(key=lambda a: a["aid_id"])
     return aids
@@ -341,14 +352,15 @@ def median(vals: list[float | None]) -> float | None:
 def main() -> None:
     PUB.mkdir(parents=True, exist_ok=True)
     designs_dir = PUB / "mono"
-    if designs_dir.is_dir():
-        # Clear stale PDBs from previous selection rules (e.g. old Top-2 set).
-        shutil.rmtree(designs_dir)
-    # Ruta antigua que Vite no servía de forma fiable.
+    # No rmtree: borrar el dir mientras Vite corre hace que sirva index.html
+    # en /pdbs/hapd1/mono/*.pdb hasta reiniciar el server.
+    designs_dir.mkdir(parents=True, exist_ok=True)
+    for old in designs_dir.glob("*.pdb"):
+        old.unlink()
     legacy = PUB / "designs"
     if legacy.is_dir():
-        shutil.rmtree(legacy)
-    designs_dir.mkdir(parents=True, exist_ok=True)
+        for old in legacy.glob("*.pdb"):
+            old.unlink()
     (PUB / "aids").mkdir(parents=True, exist_ok=True)
 
     aids = load_paper_aids()
@@ -490,6 +502,18 @@ def main() -> None:
                 "best_iptm_aid_id": best_iptm_aid["aid_id"],
                 **peptide_props(item["binder_seq"]),
             }
+            if pdb_resolved:
+                dest_path = PUB / "mono" / f"{sol_id}.pdb"
+                struct = compute_metrics(
+                    dest_path, item["binder_seq"], binder_chain="A", target_chain="B"
+                )
+                entry["rg"] = struct["rg"]
+                entry["if_contacts"] = struct["if_contacts"]
+                entry["bsa"] = struct["bsa"]
+            else:
+                entry["rg"] = None
+                entry["if_contacts"] = None
+                entry["bsa"] = None
             designs.append(entry)
             arm_buckets[arm].append(entry)
             table_rows.append(

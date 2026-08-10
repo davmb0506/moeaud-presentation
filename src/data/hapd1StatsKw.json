@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "source": "hapd1Variantes.json",
+    "score": "cumulative minimum overall_score across iterations 1..60 per run",
+    "generation_budget": 60,
+    "replicas_per_arm": 10,
+    "sense": "min",
+    "note": "Menor puntaje = mejor. Pruebas no paramétricas (n=10/brazo).",
+    "run_root": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/run/outputs_hapd1_mono_60"
+  },
+  "arms": [
+    {
+      "id": "mutation",
+      "label": "Solo mutación",
+      "shortLabel": "Mutación",
+      "color": "#3b6fb0",
+      "n": 10,
+      "mean": -179.99172297536043,
+      "std": 7.019033103420839,
+      "median": -178.02240612554272,
+      "min": -192.31247471516946,
+      "max": -172.30435237014626
+    },
+    {
+      "id": "base",
+      "label": "Mutación y cruce",
+      "shortLabel": "Mut. + cruce",
+      "color": "#d1622b",
+      "n": 10,
+      "mean": -186.87002095621844,
+      "std": 4.619396674090114,
+      "median": -187.41641525741878,
+      "min": -193.58291639836327,
+      "max": -178.47035531198523
+    },
+    {
+      "id": "temp",
+      "label": "Temperatura variable",
+      "shortLabel": "T variable",
+      "color": "#1d8a7a",
+      "n": 10,
+      "mean": -185.75630640555204,
+      "std": 5.880267980687249,
+      "median": -186.73359663209175,
+      "min": -191.13047149626,
+      "max": -169.94102383620992
+    }
+  ],
+  "kruskal_wallis": {
+    "H": 5.274838709677411,
+    "p": 0.07154566549928391,
+    "significant_0_05": false,
+    "df": 2
+  },
+  "pairwise_mann_whitney": [
+    {
+      "a": "mutation",
+      "b": "base",
+      "label": "Mutación vs Mut+cruz",
+      "n_a": 10,
+      "n_b": 10,
+      "mean_a": -179.99172297536043,
+      "mean_b": -186.87002095621844,
+      "median_a": -178.02240612554272,
+      "median_b": -187.41641525741878,
+      "U": 79.0,
+      "p": 0.031209012771740218,
+      "rank_biserial": -0.5800000000000001,
+      "p_holm": 0.09362703831522065,
+      "significant_0_05": false,
+      "better": "base"
+    },
+    {
+      "a": "mutation",
+      "b": "temp",
+      "label": "Mutación vs Temp. variable",
+      "n_a": 10,
+      "n_b": 10,
+      "mean_a": -179.99172297536043,
+      "mean_b": -185.75630640555204,
+      "median_a": -178.02240612554272,
+      "median_b": -186.73359663209175,
+      "U": 73.0,
+      "p": 0.08897301170181328,
+      "rank_biserial": -0.45999999999999996,
+      "p_holm": 0.17794602340362656,
+      "significant_0_05": false,
+      "better": "temp"
+    },
+    {
+      "a": "base",
+      "b": "temp",
+      "label": "Mut+cruz vs Temp. variable",
+      "n_a": 10,
+      "n_b": 10,
+      "mean_a": -186.87002095621844,
+      "mean_b": -185.75630640555204,
+      "median_a": -187.41641525741878,
+      "median_b": -186.73359663209175,
+      "U": 49.0,
+      "p": 0.9698499769931556,
+      "rank_biserial": 0.020000000000000018,
+      "p_holm": 0.9698499769931556,
+      "significant_0_05": false,
+      "better": "base"
+    }
+  ],
+  "reading": "Kruskal–Wallis no rechaza igualdad de distribuciones entre brazos (α = 0.05): las tres variantes no se separan de forma concluyente en el mejor puntaje por réplica."
+}

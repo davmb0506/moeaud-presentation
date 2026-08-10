@@ -39,13 +39,11 @@ export function FrontCanvas({
   width = 380,
   height = 300,
   children,
-  showBest = true,
   ariaLabel = "Frente de Pareto",
 }: {
   width?: number;
   height?: number;
   children: (s: ScaleFns) => ReactNode;
-  showBest?: boolean;
   ariaLabel?: string;
 }) {
   const PADL = 30;
@@ -67,11 +65,6 @@ export function FrontCanvas({
       <text className="mec-axt" x={PADL - 22} y={PADT + 4}>
         f₂
       </text>
-      {showBest && (
-        <text className="mec-best" x={PADL + 6} y={PADT + PH - 6}>
-          ↙ menor = mejor
-        </text>
-      )}
       {children({ sx, sy })}
     </svg>
   );

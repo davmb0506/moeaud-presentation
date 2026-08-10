@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import {
+  fmtChar,
+  fmtSignedChar,
+  gravyTrait,
+  stabilityTrait,
+  ValueWithTrait,
+} from "../components/DesignCharacterization";
 import {
   ABLATION_CONDS,
   HAPD1_ARMS,
@@ -45,6 +52,12 @@ type Candidate = {
   ipsae?: number | null;
   design_sc?: number | null;
   af2_source?: string | null;
+  haddock_score?: number | null;
+  haddock_vs_native?: number | null;
+  haddock_beats_native?: boolean | null;
+  haddock_pdb?: string | null;
+  haddock_if_contacts?: number | null;
+  haddock_dsasa?: number | null;
 };
 
 type Panel = {
@@ -52,6 +65,12 @@ type Panel = {
   candidates: Candidate[];
   note?: string | null;
   target?: string;
+  haddock?: {
+    native_control_score?: number;
+    native_if_contacts?: number | null;
+    native_dsasa?: number | null;
+    struct_metrics_note?: string;
+  } | null;
 };
 
 type PaperAid = {
@@ -68,6 +87,9 @@ type PaperAid = {
   aromaticity: number | null;
   instability: number | null;
   mw_kda: number | null;
+  rg?: number | null;
+  if_contacts?: number | null;
+  bsa?: number | null;
 };
 
 export type ShortlistPanelId = "moea_pool1208" | "hapd1_mono60";
@@ -84,14 +106,14 @@ const PANEL_COPY: Record<
   moea_pool1208: {
     title: "Selección final",
     subtitle: (n) =>
-      `Los ${n} candidatos que pasaron el filtro sobre el pool no dominado (con y sin mecanismos).`,
+      `Los ${n} candidatos del filtro sobre el conjunto no dominado. El score de docking se muestra junto a la referencia del complejo nativo VEGF–VEGFR-2 (−80.1).`,
     targetChip: "VEGF-A",
     tab: "VEGF-A",
   },
   hapd1_mono60: {
     title: "Selección final",
     subtitle: (n) =>
-      `Los ${n} del filtro HA-PD1. Confianza AF2 (pLDDT, ipTM, PAE) en ambos lados; el KD por SPR solo existe para los AiDs (Goudy et al. 2023).`,
+      `Los ${n} diseños HA-PD1 que pasan los filtros de validación. Se comparan con AiDs del artículo (Goudy et al. 2023).`,
     targetChip: "HA-PD1",
     tab: "HA-PD1",
   },
@@ -99,11 +121,15 @@ const PANEL_COPY: Record<
 
 const PANEL_IDS: ShortlistPanelId[] = ["moea_pool1208", "hapd1_mono60"];
 const AIDS = (hapd1VsPaper as { paper_aids: PaperAid[] }).paper_aids;
-
-type TraitTone = "ok" | "warn" | "neutral";
+const NATIVE_HADDOCK_SCORE = -80.099;
+const NATIVE_COMPLEX_PDB =
+  "/pdbs/shortlist-haddock/vegfa_vegfr2_native_haddock.pdb";
+const PANEL_DATA = shortlistData as {
+  panels?: Record<string, Panel>;
+};
 
 function panelOf(id: ShortlistPanelId): Panel | undefined {
-  return (shortlistData as { panels?: Record<string, Panel> }).panels?.[id];
+  return PANEL_DATA.panels?.[id];
 }
 
 function isNomech(grupo: string): boolean {
@@ -125,10 +151,18 @@ function fmt(n: number | null | undefined, digits = 2) {
   return Number(n).toFixed(digits);
 }
 
-function fmtSigned(v: number | null | undefined, digits = 1) {
-  if (v == null || Number.isNaN(v)) return "—";
-  const s = v.toFixed(digits);
-  return v > 0 ? `+${s}` : s;
+type CmpTone = "win" | "lose" | "neutral";
+
+function cmpTone(
+  design: number | null | undefined,
+  aid: number | null | undefined,
+  higherIsBetter: boolean
+): CmpTone {
+  if (design == null || aid == null || Number.isNaN(design) || Number.isNaN(aid))
+    return "neutral";
+  if (Math.abs(design - aid) < 1e-9) return "neutral";
+  const better = higherIsBetter ? design > aid : design < aid;
+  return better ? "win" : "lose";
 }
 
 function designLabel(c: Candidate): string {
@@ -138,38 +172,6 @@ function designLabel(c: Candidate): string {
 function epiPct(c: Candidate): string {
   if (c.epitope_coverage == null || Number.isNaN(c.epitope_coverage)) return "—";
   return `${Math.round(100 * c.epitope_coverage)}%`;
-}
-
-function gravyTrait(gravy: number | null | undefined): {
-  label: string;
-  tone: TraitTone;
-} {
-  if (gravy == null || Number.isNaN(gravy))
-    return { label: "—", tone: "neutral" };
-  if (gravy >= 0.5) return { label: "hidrofóbico", tone: "warn" };
-  if (gravy >= 0) return { label: "levemente hidrofóbico", tone: "neutral" };
-  return { label: "hidrofílico", tone: "ok" };
-}
-
-function stabilityTrait(ii: number | null | undefined): {
-  label: string;
-  tone: TraitTone;
-} {
-  if (ii == null || Number.isNaN(ii)) return { label: "—", tone: "neutral" };
-  if (ii < 40) return { label: "estable", tone: "ok" };
-  if (ii < 65) return { label: "moderado", tone: "neutral" };
-  return { label: "inestable", tone: "warn" };
-}
-
-function chargeTrait(charge: number | null | undefined): {
-  label: string;
-  tone: TraitTone;
-} {
-  if (charge == null || Number.isNaN(charge))
-    return { label: "—", tone: "neutral" };
-  if (Math.abs(charge) < 1) return { label: "casi neutro", tone: "neutral" };
-  if (charge > 0) return { label: "carga +", tone: "ok" };
-  return { label: "carga −", tone: "neutral" };
 }
 
 function aidById(id: number) {
@@ -227,58 +229,6 @@ function nearestAidId(seq: string): number {
   return bestId;
 }
 
-type PeptideLike = {
-  gravy?: number | null;
-  charge?: number | null;
-  pI?: number | null;
-  pi?: number | null;
-  aromaticity?: number | null;
-  instability?: number | null;
-  mw_kda?: number | null;
-};
-
-function PeptideMetrics({ p }: { p: PeptideLike }) {
-  const gravy = gravyTrait(p.gravy);
-  const charge = chargeTrait(p.charge);
-  const stability = stabilityTrait(p.instability);
-  const pi = p.pI ?? p.pi;
-  return (
-    <div className="hapd1-peptide">
-      <div className="hapd1-metrics hapd1-peptide-metrics">
-        <div className="hapd1-metric">
-          <span>GRAVY</span>
-          <strong>{fmt(p.gravy, 3)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${gravy.tone}`}>{gravy.label}</em>
-        </div>
-        <div className="hapd1-metric">
-          <span>Carga pH 7</span>
-          <strong>{fmtSigned(p.charge, 1)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${charge.tone}`}>{charge.label}</em>
-        </div>
-        <div className="hapd1-metric">
-          <span>pI</span>
-          <strong>{fmt(pi, 2)}</strong>
-        </div>
-        <div className="hapd1-metric">
-          <span>II</span>
-          <strong>{fmt(p.instability, 1)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${stability.tone}`}>
-            {stability.label}
-          </em>
-        </div>
-        <div className="hapd1-metric">
-          <span>Aromaticidad</span>
-          <strong>{fmt(p.aromaticity, 3)}</strong>
-        </div>
-        <div className="hapd1-metric">
-          <span>MW</span>
-          <strong>{fmt(p.mw_kda, 2)} kDa</strong>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function ValidacionShortlist() {
   const [panelId, setPanelId] = useState<ShortlistPanelId>("moea_pool1208");
   const panel = panelOf(panelId);
@@ -307,6 +257,8 @@ export function ValidacionShortlist() {
   }, [candidates, designId]);
 
   const compareAids = panelId === "hapd1_mono60";
+  const compareNative = panelId === "moea_pool1208";
+  const isCompare = compareAids || compareNative;
 
   const nearestAid = useMemo(
     () => (active ? nearestAidId(active.binder_seq) : AIDS[0]?.aid_id ?? 4),
@@ -327,7 +279,7 @@ export function ValidacionShortlist() {
   );
 
   useEffect(() => {
-    if (!compareAids) {
+    if (!isCompare) {
       setViewersActive(false);
       setDesignViewerActive(false);
       return;
@@ -341,7 +293,7 @@ export function ValidacionShortlist() {
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [compareAids, active?.id]);
+  }, [isCompare, active?.id]);
 
   useEffect(() => {
     if (!viewersActive) {
@@ -390,10 +342,87 @@ export function ValidacionShortlist() {
 
   const accent = accentFor(active, panelId);
   const showEpitope = panelId === "moea_pool1208";
+  const nativeIf = panel.haddock?.native_if_contacts ?? null;
+  const nativeDsasa = panel.haddock?.native_dsasa ?? null;
+
+  const gravy = gravyTrait(active.gravy);
+  const stab = stabilityTrait(active.instability);
+  const aidGravy = gravyTrait(refAid.gravy);
+  const aidStab = stabilityTrait(refAid.instability);
+
+  type MetricRow = { label: string; value: ReactNode };
+  const designMetrics: MetricRow[] = showEpitope
+    ? [
+        ...(active.plddt_a != null || active.pae_iface != null
+          ? [
+              { label: "pLDDT", value: fmt(active.plddt_a, 1) },
+              { label: "PAE iface", value: `${fmt(active.pae_iface, 1)} Å` },
+            ]
+          : [
+              { label: "ipSAE", value: fmt(active.ipsae, 3) },
+              { label: "SC", value: fmt(active.design_sc, 3) },
+            ]),
+        { label: "dG/dSASA×100", value: fmt(active.score_rosetta, 2) },
+        ...(active.haddock_score != null
+          ? [
+              {
+                label: "Docking",
+                value: fmt(active.haddock_score, 1),
+              },
+            ]
+          : []),
+        { label: "Ω RMSD", value: `${fmt(active.rmsd_A, 2)} Å` },
+        { label: "Epítopo VEGFR-2", value: epiPct(active) },
+      ]
+    : [
+        { label: "pLDDT péptido", value: fmt(active.plddt_a, 1) },
+        { label: "ipTM", value: fmt(active.iptm, 3) },
+        { label: "PAE iface", value: `${fmt(active.pae_iface, 1)} Å` },
+        { label: "Ω RMSD", value: `${fmt(active.rmsd_A, 2)} Å` },
+      ];
+
+  const charRows: MetricRow[] = [
+    {
+      label: "Contactos IF",
+      value: fmtChar(active.n_interface_res, 0),
+    },
+    {
+      label: "ΔSASA",
+      value: `${fmtChar(active.dsasa, 0)} Å²`,
+    },
+    {
+      label: "GRAVY",
+      value: (
+        <ValueWithTrait value={fmtChar(active.gravy, 3)} trait={gravy} />
+      ),
+    },
+    {
+      label: "Carga pH 7",
+      value: fmtSignedChar(active.charge, 1),
+    },
+    {
+      label: "pI",
+      value: fmtChar(active.pI, 2),
+    },
+    {
+      label: "II",
+      value: (
+        <ValueWithTrait value={fmtChar(active.instability, 1)} trait={stab} />
+      ),
+    },
+    {
+      label: "Aromaticidad",
+      value: fmtChar(active.aromaticity, 3),
+    },
+    {
+      label: "MW",
+      value: `${fmtChar(active.mw_kda, 2)} kDa`,
+    },
+  ];
 
   return (
     <motion.div
-      className="hapd1"
+      className={`hapd1 hapd1-shortlist${isCompare ? " is-compare" : ""}`}
       variants={fade}
       initial="hidden"
       whileInView="visible"
@@ -402,10 +431,7 @@ export function ValidacionShortlist() {
       <h2 className="validacion-title">{copy.title}</h2>
       <p className="validacion-sub">{copy.subtitle(candidates.length)}</p>
 
-      <div
-        className="dockstory-case-controls"
-        style={{ marginBottom: 14, gap: 8 }}
-      >
+      <div className="dockstory-case-controls hapd1-shortlist-tabs">
         {PANEL_IDS.map((id) => (
           <button
             key={id}
@@ -424,12 +450,11 @@ export function ValidacionShortlist() {
 
       <div className="hapd1-grid">
         <aside className="hapd1-sidebar">
-          <section className="validacion-card hapd1-card hapd1-filters-card">
+          <section className="validacion-card hapd1-card hapd1-compare">
             <div
-              className="hapd1-filters"
-              style={{
-                gridTemplateColumns: compareAids ? "1fr 1fr" : "1fr",
-              }}
+              className={`hapd1-filters${
+                compareAids ? " hapd1-filters-2" : ""
+              }`}
             >
               <label className="hapd1-label">
                 Diseño
@@ -447,7 +472,7 @@ export function ValidacionShortlist() {
               </label>
               {compareAids ? (
                 <label className="hapd1-label">
-                  Referencia AiD
+                  AiD
                   <select
                     className="hapd1-select"
                     value={String(aidId)}
@@ -468,115 +493,338 @@ export function ValidacionShortlist() {
                 </label>
               ) : null}
             </div>
-          </section>
 
-          <section className="validacion-card hapd1-card hapd1-compare">
             {compareAids ? (
-              <div className="hapd1-compare-cols">
-                <div>
-                  <div className="hapd1-col-head">
-                    <span className="hapd1-tag" style={{ color: accent }}>
-                      {designLabel(active)}
-                    </span>
-                  </div>
-                  <div className="hapd1-metrics">
-                    <div className="hapd1-metric">
-                      <span>pLDDT binder</span>
-                      <strong>{fmt(active.plddt_a, 1)}</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>ipTM</span>
-                      <strong>{fmt(active.iptm, 3)}</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>PAE iface</span>
-                      <strong>{fmt(active.pae_iface, 1)} Å</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>Ω RMSD</span>
-                      <strong>{fmt(active.rmsd_A, 2)} Å</strong>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="hapd1-col-head">
-                    <span className="hapd1-tag aid">AiD {refAid.aid_id}</span>
-                    <span className="hapd1-crit">SPR · Goudy 2023</span>
-                  </div>
-                  <div className="hapd1-metrics">
-                    <div className="hapd1-metric">
-                      <span>pLDDT binder</span>
-                      <strong>{fmt(refAid.plddt, 1)}</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>ipTM</span>
-                      <strong>{fmt(refAid.iptm, 3)}</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>PAE iface</span>
-                      <strong>{fmt(refAid.pae, 1)} Å</strong>
-                    </div>
-                    <div className="hapd1-metric">
-                      <span>KD</span>
-                      <strong>{fmt(refAid.kd_nM, 1)} nM</strong>
-                    </div>
-                  </div>
-                </div>
+              <div className="hapd1-delta-head">
+                <span className="hapd1-kd">
+                  KD AiD <strong>{fmt(refAid.kd_nM, 1)} nM</strong>
+                </span>
               </div>
-            ) : (
+            ) : compareNative ? (
+              <div className="hapd1-delta-head">
+                <span className="hapd1-kd">
+                  Referencia nativa{" "}
+                  <strong>{fmt(NATIVE_HADDOCK_SCORE, 1)}</strong>
+                </span>
+              </div>
+            ) : null}
+
+            {compareAids || compareNative ? (
               <>
-                <div className="hapd1-col-head">
-                  <span className="hapd1-tag" style={{ color: accent }}>
-                    {designLabel(active)}
-                  </span>
-                </div>
-                <div className="hapd1-metrics">
-                  {active.plddt_a != null || active.pae_iface != null ? (
-                    <>
-                      <div className="hapd1-metric">
-                        <span>pLDDT</span>
-                        <strong>{fmt(active.plddt_a, 1)}</strong>
-                      </div>
-                      <div className="hapd1-metric">
-                        <span>PAE iface</span>
-                        <strong>{fmt(active.pae_iface, 1)} Å</strong>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="hapd1-metric">
-                        <span>ipSAE</span>
-                        <strong>{fmt(active.ipsae, 3)}</strong>
-                      </div>
-                      <div className="hapd1-metric">
-                        <span>SC diseño</span>
-                        <strong>{fmt(active.design_sc, 3)}</strong>
-                      </div>
-                    </>
-                  )}
-                  <div className="hapd1-metric">
-                    <span>dG/dSASA×100</span>
-                    <strong>{fmt(active.score_rosetta, 2)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>Ω RMSD</span>
-                    <strong>{fmt(active.rmsd_A, 2)} Å</strong>
-                  </div>
-                  {showEpitope ? (
-                    <div className="hapd1-metric">
-                      <span>Epítopo VEGFR-2</span>
-                      <strong>{epiPct(active)}</strong>
-                    </div>
-                  ) : null}
-                </div>
+                {compareAids ? (
+                  <p className="hapd1-diff-key" aria-hidden>
+                    <span className="hapd1-diff-swatch best" /> mejor valor
+                  </p>
+                ) : (
+                  <p className="hapd1-diff-key">
+                    Docking del nativo es referencia de protocolo (VEGFR ≫
+                    péptido). Contactos IF y ΔSASA usan el mismo método en ambas
+                    poses de docking.
+                  </p>
+                )}
+                <table className="hapd1-delta-table hapd1-diff-table">
+                  <thead>
+                    <tr>
+                      <th>Indicador</th>
+                      <th>Diseño</th>
+                      <th>{compareAids ? "AiD" : "Ref. nativa"}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(compareAids
+                      ? ([
+                          {
+                            section: "Validación",
+                            label: "pLDDT péptido",
+                            design: fmt(active.plddt_a, 1),
+                            other: fmt(refAid.plddt, 1),
+                            tone: cmpTone(active.plddt_a, refAid.plddt, true),
+                          },
+                          {
+                            label: "ipTM",
+                            design: fmt(active.iptm, 3),
+                            other: fmt(refAid.iptm, 3),
+                            tone: cmpTone(active.iptm, refAid.iptm, true),
+                          },
+                          {
+                            label: "PAE iface",
+                            design: `${fmt(active.pae_iface, 1)} Å`,
+                            other: `${fmt(refAid.pae, 1)} Å`,
+                            tone: cmpTone(active.pae_iface, refAid.pae, false),
+                          },
+                          {
+                            label: "Ω RMSD",
+                            design: `${fmt(active.rmsd_A, 2)} Å`,
+                            other: "—",
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "KD",
+                            design: "—",
+                            other: `${fmt(refAid.kd_nM, 1)} nM`,
+                            tone: "neutral" as const,
+                          },
+                          {
+                            section: "Estructura / péptido",
+                            label: "Contactos IF",
+                            design: fmtChar(active.n_interface_res, 0),
+                            other: fmtChar(refAid.if_contacts ?? null, 0),
+                            tone: cmpTone(
+                              active.n_interface_res,
+                              refAid.if_contacts,
+                              true
+                            ),
+                          },
+                          {
+                            label: "ΔSASA",
+                            design: `${fmtChar(active.dsasa, 0)} Å²`,
+                            other: `${fmtChar(refAid.bsa ?? null, 0)} Å²`,
+                            tone: cmpTone(active.dsasa, refAid.bsa, true),
+                          },
+                          {
+                            label: "GRAVY",
+                            design: (
+                              <ValueWithTrait
+                                value={fmtChar(active.gravy, 3)}
+                                trait={gravy}
+                              />
+                            ),
+                            other: (
+                              <ValueWithTrait
+                                value={fmtChar(refAid.gravy, 3)}
+                                trait={aidGravy}
+                              />
+                            ),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "Carga pH 7",
+                            design: fmtSignedChar(active.charge, 1),
+                            other: fmtSignedChar(refAid.charge, 1),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "pI",
+                            design: fmtChar(active.pI, 2),
+                            other: fmtChar(refAid.pi, 2),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "II",
+                            design: (
+                              <ValueWithTrait
+                                value={fmtChar(active.instability, 1)}
+                                trait={stab}
+                              />
+                            ),
+                            other: (
+                              <ValueWithTrait
+                                value={fmtChar(refAid.instability, 1)}
+                                trait={aidStab}
+                              />
+                            ),
+                            tone: cmpTone(
+                              active.instability,
+                              refAid.instability,
+                              false
+                            ),
+                          },
+                          {
+                            label: "Aromaticidad",
+                            design: fmtChar(active.aromaticity, 3),
+                            other: fmtChar(refAid.aromaticity, 3),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "MW",
+                            design: `${fmtChar(active.mw_kda, 2)} kDa`,
+                            other: `${fmtChar(refAid.mw_kda, 2)} kDa`,
+                            tone: "neutral" as const,
+                          },
+                        ] satisfies Array<{
+                          section?: string;
+                          label: string;
+                          design: ReactNode;
+                          other: ReactNode;
+                          tone: CmpTone;
+                        }>)
+                      : ([
+                          {
+                            section: "Docking / interfaz",
+                            label: "Docking",
+                            design: fmt(active.haddock_score, 1),
+                            other: fmt(NATIVE_HADDOCK_SCORE, 1),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "Contactos IF",
+                            design: fmtChar(active.haddock_if_contacts, 0),
+                            other: fmtChar(nativeIf, 0),
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "ΔSASA",
+                            design:
+                              active.haddock_dsasa != null
+                                ? `${fmtChar(active.haddock_dsasa, 0)} Å²`
+                                : "—",
+                            other:
+                              nativeDsasa != null
+                                ? `${fmtChar(nativeDsasa, 0)} Å²`
+                                : "—",
+                            tone: "neutral" as const,
+                          },
+                          {
+                            label: "Epítopo VEGFR-2",
+                            design: epiPct(active),
+                            other: "sitio nativo",
+                            tone: "neutral" as const,
+                          },
+                        ] satisfies Array<{
+                          section?: string;
+                          label: string;
+                          design: ReactNode;
+                          other: ReactNode;
+                          tone: CmpTone;
+                        }>
+                    )).map((r) => (
+                      <Fragment key={r.label}>
+                        {r.section ? (
+                          <tr className="hapd1-diff-section">
+                            <td colSpan={3}>{r.section}</td>
+                          </tr>
+                        ) : null}
+                        <tr className={`hapd1-diff-row tone-${r.tone}`}>
+                          <td>
+                            <span className="hapd1-delta-label">{r.label}</span>
+                          </td>
+                          <td
+                            className={
+                              r.tone === "win" ? "hapd1-val-best" : undefined
+                            }
+                          >
+                            {r.design}
+                          </td>
+                          <td
+                            className={
+                              r.tone === "lose" ? "hapd1-val-best" : undefined
+                            }
+                          >
+                            {r.other}
+                          </td>
+                        </tr>
+                      </Fragment>
+                    ))}
+                  </tbody>
+                </table>
+                {compareNative ? (
+                  <table className="hapd1-delta-table hapd1-diff-table">
+                    <thead>
+                      <tr>
+                        <th>Indicador</th>
+                        <th>Diseño</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="hapd1-diff-section">
+                        <td colSpan={2}>Solo diseño (no aplica al nativo)</td>
+                      </tr>
+                      {(
+                        [
+                          {
+                            label: "dG/dSASA×100",
+                            value: fmt(active.score_rosetta, 2),
+                          },
+                          {
+                            label: "Ω RMSD",
+                            value: `${fmt(active.rmsd_A, 2)} Å`,
+                          },
+                          {
+                            label: "GRAVY",
+                            value: (
+                              <ValueWithTrait
+                                value={fmtChar(active.gravy, 3)}
+                                trait={gravy}
+                              />
+                            ),
+                          },
+                          {
+                            label: "Carga pH 7",
+                            value: fmtSignedChar(active.charge, 1),
+                          },
+                          {
+                            label: "pI",
+                            value: fmtChar(active.pI, 2),
+                          },
+                          {
+                            label: "II",
+                            value: (
+                              <ValueWithTrait
+                                value={fmtChar(active.instability, 1)}
+                                trait={stab}
+                              />
+                            ),
+                          },
+                          {
+                            label: "Aromaticidad",
+                            value: fmtChar(active.aromaticity, 3),
+                          },
+                          {
+                            label: "MW",
+                            value: `${fmtChar(active.mw_kda, 2)} kDa`,
+                          },
+                        ] as const
+                      ).map((r) => (
+                        <tr key={r.label}>
+                          <td>
+                            <span className="hapd1-delta-label">{r.label}</span>
+                          </td>
+                          <td>{r.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : null}
               </>
+            ) : (
+              <table className="hapd1-delta-table hapd1-diff-table">
+                <thead>
+                  <tr>
+                    <th>Indicador</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="hapd1-diff-section">
+                    <td colSpan={2}>Cribado</td>
+                  </tr>
+                  {designMetrics.map((r) => (
+                    <tr key={r.label}>
+                      <td>
+                        <span className="hapd1-delta-label">{r.label}</span>
+                      </td>
+                      <td>{r.value}</td>
+                    </tr>
+                  ))}
+                  <tr className="hapd1-diff-section">
+                    <td colSpan={2}>Estructura / péptido</td>
+                  </tr>
+                  {charRows.map((r) => (
+                    <tr key={r.label}>
+                      <td>
+                        <span className="hapd1-delta-label">{r.label}</span>
+                      </td>
+                      <td>{r.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
 
             <div className="hapd1-seqs">
               <div className="hapd1-seq-block">
                 <span className="hapd1-seq-label">
-                  {designLabel(active)} ·{" "}
-                  {active.length ?? active.binder_seq.length} aa
+                  Secuencia · {active.length ?? active.binder_seq.length} aa
                 </span>
                 <code className="hapd1-seq">{active.binder_seq}</code>
               </div>
@@ -588,124 +836,83 @@ export function ValidacionShortlist() {
                     </span>
                     <code className="hapd1-seq">{refAid.binder_seq}</code>
                   </div>
-                  <div className="hapd1-seq-block hapd1-seq-align">
-                    <span className="hapd1-seq-label">Alineamiento</span>
-                    <div
-                      className="hapd1-align"
-                      aria-label="Alineamiento de secuencias"
-                    >
-                      {seqAlign.long.split("").map((ch, i) => {
-                        const inWindow =
-                          i >= seqAlign.offset &&
-                          i < seqAlign.offset + seqAlign.short.length;
-                        const match =
-                          inWindow && seqAlign.matches[i - seqAlign.offset];
-                        return (
-                          <span
-                            key={`${ch}-${i}`}
-                            className={
-                              match
-                                ? "hapd1-aa match"
-                                : inWindow
-                                  ? "hapd1-aa miss"
-                                  : "hapd1-aa outside"
-                            }
-                          >
-                            {ch}
-                          </span>
-                        );
-                      })}
-                    </div>
-                    <div className="hapd1-align hapd1-align-short">
-                      {Array.from({ length: seqAlign.offset }, (_, i) => (
-                        <span key={`pad-${i}`} className="hapd1-aa pad">
-                          ·
-                        </span>
-                      ))}
-                      {seqAlign.short.split("").map((ch, i) => (
-                        <span
-                          key={`s-${ch}-${i}`}
-                          className={
-                            seqAlign.matches[i]
-                              ? "hapd1-aa match"
-                              : "hapd1-aa miss"
-                          }
-                        >
-                          {ch}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="hapd1-ident">
-                      Identidad: {(seqAlign.identity * 100).toFixed(1)}%
-                    </p>
-                  </div>
+                  <p className="hapd1-ident">
+                    Identidad: {(seqAlign.identity * 100).toFixed(1)}%
+                  </p>
                 </>
               ) : null}
             </div>
           </section>
-
-          {!compareAids ? (
-            <section className="validacion-card hapd1-card hapd1-peptide-panel">
-              <PeptideMetrics p={active} />
-            </section>
-          ) : null}
         </aside>
 
         <section className="hapd1-main">
-          {compareAids ? (
+          {isCompare ? (
             <>
               <div className="hapd1-viewers" ref={viewersRef}>
                 <div className="validacion-card hapd1-card hapd1-viewer-card">
                   <div className="hapd1-viewer-head">
-                    <span className="hapd1-tag aid">AiD {refAid.aid_id}</span>
+                    <span className="hapd1-tag aid">
+                      {compareAids ? `AiD ${refAid.aid_id}` : "VEGFR-2 nativo"}
+                    </span>
                   </div>
                   <ComplexViewer
-                    key={`aid-${refAid.aid_id}`}
-                    pdbUrl={refAid.pdb}
-                    referenceUrl={refAid.pdb}
+                    key={
+                      compareAids
+                        ? `aid-${refAid.aid_id}`
+                        : "native-vegfr2"
+                    }
+                    pdbUrl={compareAids ? refAid.pdb : NATIVE_COMPLEX_PDB}
+                    referenceUrl={
+                      compareAids ? refAid.pdb : NATIVE_COMPLEX_PDB
+                    }
                     active={viewersActive ? true : undefined}
                   />
-                  <p className="hapd1-legend">
-                    <span className="ablacion-chip target" /> HA-PD1 ·{" "}
-                    <span className="ablacion-chip binder" /> AiD paper
-                  </p>
                 </div>
                 <div className="validacion-card hapd1-card hapd1-viewer-card">
                   <div className="hapd1-viewer-head">
                     <span className="hapd1-tag" style={{ color: accent }}>
-                      {designLabel(active)}
+                      Diseño
                     </span>
                   </div>
-                  {active.pdb ? (
+                  {(compareNative
+                    ? active.haddock_pdb ?? active.pdb
+                    : active.pdb) ? (
                     <ComplexViewer
-                      key={`des-${active.id}`}
-                      pdbUrl={active.pdb}
-                      referenceUrl={active.pdb}
+                      key={`des-${active.id}-${compareNative ? "hd" : "af"}`}
+                      pdbUrl={
+                        (compareNative
+                          ? active.haddock_pdb ?? active.pdb
+                          : active.pdb) as string
+                      }
+                      referenceUrl={
+                        (compareNative
+                          ? active.haddock_pdb ?? active.pdb
+                          : active.pdb) as string
+                      }
                       active={designViewerActive ? true : undefined}
                     />
                   ) : (
                     <p className="dockstory-note">PDB no disponible</p>
                   )}
-                  <p className="hapd1-legend">
-                    <span className="ablacion-chip target" /> HA-PD1 ·{" "}
-                    <span className="ablacion-chip binder" /> binder filtrado
-                  </p>
                 </div>
               </div>
-              <section className="validacion-card hapd1-card hapd1-peptide-panel">
-                <div className="hapd1-peptide-cols">
-                  <PeptideMetrics p={refAid} />
-                  <PeptideMetrics p={active} />
-                </div>
-              </section>
+              <p className="hapd1-legend hapd1-legend-shared">
+                {compareAids ? (
+                  <>
+                    <span className="ablacion-chip target" /> HA-PD1 ·{" "}
+                    <span className="ablacion-chip binder" /> péptido (AiD |
+                    diseño)
+                  </>
+                ) : (
+                  <>
+                    <span className="ablacion-chip target" /> VEGF-A ·{" "}
+                    <span className="ablacion-chip binder" /> VEGFR-2 | péptido
+                  </>
+                )}
+              </p>
             </>
           ) : (
             <div className="validacion-card hapd1-card hapd1-viewer-card moea-viewer-card">
-              <div className="hapd1-viewer-head">
-                <span className="hapd1-tag" style={{ color: accent }}>
-                  {designLabel(active)}
-                </span>
-              </div>
               {active.pdb ? (
                 <ComplexViewer
                   key={`${panelId}-${active.pdb}`}
@@ -716,7 +923,7 @@ export function ValidacionShortlist() {
               )}
               <p className="hapd1-legend">
                 <span className="ablacion-chip target" /> {copy.targetChip} ·{" "}
-                <span className="ablacion-chip binder" /> binder diseñado
+                <span className="ablacion-chip binder" /> péptido diseñado
               </p>
             </div>
           )}

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
 import { DesignCharacterization } from "../components/DesignCharacterization";
+import { DominanceCones } from "../components/DominanceCones";
 import { ABLATION_CONDS } from "../data/experimentLabels";
 import frontData from "../data/ipsaeScFront.json";
 
@@ -74,14 +75,6 @@ function niceTicks(min: number, max: number, count = 5): number[] {
   return out;
 }
 
-function frontPath(cond: string): string {
-  const pts = POINTS.filter((p) => p.cond === cond).sort((a, b) => a.f1 - b.f1);
-  if (pts.length < 2) return "";
-  return pts
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${sx(p.f1).toFixed(1)} ${sy(p.f2).toFixed(1)}`)
-    .join(" ");
-}
-
 // Referencia de orientación (VEGF-A fijo): mejor ipSAE con mecanismos.
 const REF_POINT = POINTS.filter((p) => p.cond === "con").reduce(
   (b, p) => (p.f1 < b.f1 ? p : b),
@@ -103,14 +96,22 @@ export function IpsaeScFront() {
     () => POINTS.find((p) => p.id === pinnedId) ?? null,
     [pinnedId]
   );
-  const conPath = useMemo(() => frontPath("con"), []);
-  const sinPath = useMemo(() => frontPath("sin"), []);
+  const conePts = useMemo(
+    () =>
+      POINTS.map((p) => ({
+        id: p.id,
+        x: p.f1,
+        y: p.f2,
+        color: COND_COLOR[p.cond],
+      })),
+    []
+  );
   const xTicks = useMemo(() => niceTicks(Math.min(...F1S), Math.max(...F1S)), []);
   const yTicks = useMemo(() => niceTicks(Math.min(...F2S), Math.max(...F2S)), []);
 
   return (
     <motion.div
-      className="ablacion"
+      className="ablacion ablacion-front"
       variants={fade}
       initial="hidden"
       whileInView="visible"
@@ -120,8 +121,8 @@ export function IpsaeScFront() {
         Ablación de mecanismos — ipSAE / Shape Complementarity
       </h2>
       <p className="ablacion-sub">
-        Frente no dominado <strong>agregado</strong> (10 réplicas por condición).
-        
+        Aproximación del frente <strong>agregada</strong> (10 réplicas por
+        condición).
       </p>
 
       <div className="ablacion-grid">
@@ -130,7 +131,7 @@ export function IpsaeScFront() {
             viewBox={`0 0 ${W} ${H}`}
             className="ablacion-svg"
             role="img"
-            aria-label="Frente de Pareto 1 - ipSAE contra 1 - SC"
+            aria-label="Aproximación del frente 1 - ipSAE contra 1 - SC"
             onMouseLeave={() => setHoverId(null)}
           >
             {xTicks.map((t) => (
@@ -164,32 +165,15 @@ export function IpsaeScFront() {
             >
               f₂: 1 − SC
             </text>
-            <text x={PAD.left + 5} y={PAD.top + PH - 7} className="abl-best">
-              ↙ menor = mejor
-            </text>
 
-            <path d={sinPath} className="abl-front" style={{ stroke: COND_COLOR.sin }} />
-            <path d={conPath} className="abl-front" style={{ stroke: COND_COLOR.con }} />
-
-            {/* Cono de dominancia del punto fijado por click (solo líneas; peor = ↑→). */}
-            {conePoint && (
-              <g className="abl-cone-group" aria-hidden>
-                <line
-                  className="abl-cone"
-                  x1={sx(conePoint.f1)}
-                  y1={sy(conePoint.f2)}
-                  x2={PAD.left + PW}
-                  y2={sy(conePoint.f2)}
-                />
-                <line
-                  className="abl-cone"
-                  x1={sx(conePoint.f1)}
-                  y1={sy(conePoint.f2)}
-                  x2={sx(conePoint.f1)}
-                  y2={PAD.top}
-                />
-              </g>
-            )}
+            <DominanceCones
+              points={conePts}
+              sx={sx}
+              sy={sy}
+              xMaxPx={PAD.left + PW}
+              yMinPx={PAD.top}
+              highlightId={pinnedId}
+            />
 
             {POINTS.map((p) => {
               const isPinned = p.id === pinnedId;

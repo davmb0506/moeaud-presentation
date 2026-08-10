@@ -1,6 +1,8 @@
 import { type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
 
+export const UD_MAX_STEP = 2;
+
 const wrap: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -58,8 +60,6 @@ const REFERENCES: ReactNode[] = [
 
 // ---------------------------------------------------------------------------
 // Geometría del gráfico (espacio de objetivos, minimización).
-// Ideal en la esquina inferior-izquierda; frente convexo decreciente con un
-// hueco (frente irregular) para ilustrar el problema de los vectores fijos.
 // ---------------------------------------------------------------------------
 const VB_W = 340;
 const VB_H = 296;
@@ -70,6 +70,9 @@ const sx = (u: number) => PAD.l + u * PW;
 const sy = (v: number) => PAD.t + (1 - v) * PH;
 
 const IDEAL = { x: 0.05, y: 0.05 };
+const IX = sx(IDEAL.x);
+const IY = sy(IDEAL.y);
+
 const frontPt = (t: number) => ({
   x: 0.08 + 0.86 * t,
   y: 0.05 + 0.9 * Math.pow(1 - t, 1.75),
@@ -96,7 +99,6 @@ const tForAngleDeg = (deg: number) => {
   return bt;
 };
 
-// Vectores de referencia con ángulos uniformes (NSGA-III / MOEA/D).
 const FIXED_RAYS = (() => {
   const K = 7;
   const dMax = 84;
@@ -110,17 +112,23 @@ const FIXED_RAYS = (() => {
   return out;
 })();
 
-// Vectores adaptativos: repartidos sobre el frente visible (MOEA-UD).
 const ADAPT_TS = [0.05, 0.2, 0.37, 0.63, 0.74, 0.85, 0.95];
-// Soluciones extra retenidas en el archivo externo (memoria).
 const ARCHIVE_TS = [0.13, 0.29, 0.69, 0.9];
 
 const sample = (a: number, b: number, n = 26) =>
   Array.from({ length: n + 1 }, (_, i) => frontPt(a + ((b - a) * i) / n));
 const SEG1 = sample(0, GAP0);
 const SEG2 = sample(GAP1, 1);
-const toPts = (arr: { x: number; y: number }[]) =>
-  arr.map((p) => `${sx(p.x).toFixed(1)},${sy(p.y).toFixed(1)}`).join(" ");
+const toPath = (arr: { x: number; y: number }[]) =>
+  arr
+    .map((p, i) => {
+      const x = sx(p.x).toFixed(1);
+      const y = sy(p.y).toFixed(1);
+      return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+    })
+    .join(" ");
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 function Axes() {
   return (
@@ -133,44 +141,158 @@ function Axes() {
       <text className="udx-axt" x={sx(0) - 20} y={sy(1) + 4}>
         f₂
       </text>
-      
-      <circle className="udx-ideal" cx={sx(IDEAL.x)} cy={sy(IDEAL.y)} r={3.4} />
+      <circle className="udx-ideal" cx={IX} cy={IY} r={3.4} />
     </>
   );
 }
 
-function Front() {
+function Front({ showGap, gapGradId }: { showGap: boolean; gapGradId: string }) {
+  const mid = frontPt((GAP0 + GAP1) / 2);
+  const gapLabel = {
+    x: sx(mid.x),
+    y: sy(mid.y) - 8,
+  };
+
   return (
     <>
-      <polyline className="udx-front" points={toPts(SEG1)} />
-      <polyline className="udx-front" points={toPts(SEG2)} />
+      <motion.path
+        className="udx-front"
+        d={toPath(SEG1)}
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 0.7, ease: EASE }}
+      />
+      <motion.path
+        className="udx-front"
+        d={toPath(SEG2)}
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
+      />
+      {showGap && (
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.35, delay: 0.35 }}
+        >
+          <defs>
+            <radialGradient id={gapGradId} cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#F28E2B" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#F28E2B" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <ellipse
+            cx={gapLabel.x}
+            cy={gapLabel.y + 10}
+            rx={28}
+            ry={22}
+            fill={`url(#${gapGradId})`}
+          />
+          <text
+            className="udx-gap-lbl"
+            x={gapLabel.x}
+            y={gapLabel.y}
+            textAnchor="middle"
+          >
+            hueco
+          </text>
+        </motion.g>
+      )}
     </>
   );
 }
 
-function FixedPanel() {
+function FixedPanel({ active }: { active: boolean }) {
   return (
-    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="udx-svg" role="img"
-      aria-label="Vectores de referencia fijos de NSGA-III y MOEA/D sobre un frente irregular">
+    <svg
+      viewBox={`0 0 ${VB_W} ${VB_H}`}
+      className="udx-svg"
+      role="img"
+      aria-label="Vectores de referencia fijos de NSGA-III y MOEA/D sobre un frente irregular"
+    >
       <Axes />
-      <Front />
+      <Front showGap gapGradId="udx-gap-grad" />
       {FIXED_RAYS.map(({ t, wasted }, i) => {
         const p = frontPt(t);
         const X = sx(p.x);
         const Y = sy(p.y);
+        const delay = 0.2 + i * 0.09;
+
         if (wasted) {
           return (
             <g key={i}>
-              <line className="udx-ray-wasted" x1={sx(IDEAL.x)} y1={sy(IDEAL.y)} x2={X} y2={Y} />
-              <line className="udx-mark-wasted" x1={X - 4} y1={Y - 4} x2={X + 4} y2={Y + 4} />
-              <line className="udx-mark-wasted" x1={X - 4} y1={Y + 4} x2={X + 4} y2={Y - 4} />
+              <motion.line
+                className="udx-ray-wasted"
+                x1={IX}
+                y1={IY}
+                x2={X}
+                y2={Y}
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={
+                  active
+                    ? { pathLength: 1, opacity: 0.95 }
+                    : { pathLength: 0, opacity: 0 }
+                }
+                transition={{ duration: 0.45, delay, ease: EASE }}
+              />
+              <motion.g
+                initial={{ opacity: 0, scale: 0.4 }}
+                animate={
+                  active
+                    ? { opacity: 1, scale: 1 }
+                    : { opacity: 0, scale: 0.4 }
+                }
+                transition={{ duration: 0.3, delay: delay + 0.35, ease: EASE }}
+                style={{ transformOrigin: `${X}px ${Y}px` }}
+              >
+                <line
+                  className="udx-mark-wasted"
+                  x1={X - 5}
+                  y1={Y - 5}
+                  x2={X + 5}
+                  y2={Y + 5}
+                />
+                <line
+                  className="udx-mark-wasted"
+                  x1={X - 5}
+                  y1={Y + 5}
+                  x2={X + 5}
+                  y2={Y - 5}
+                />
+              </motion.g>
             </g>
           );
         }
+
         return (
           <g key={i}>
-            <line className="udx-ray-fixed" x1={sx(IDEAL.x)} y1={sy(IDEAL.y)} x2={X} y2={Y} />
-            <circle className="udx-dot-fixed" cx={X} cy={Y} r={4.4} />
+            <motion.line
+              className="udx-ray-fixed"
+              x1={IX}
+              y1={IY}
+              x2={X}
+              y2={Y}
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={
+                active
+                  ? { pathLength: 1, opacity: 1 }
+                  : { pathLength: 0, opacity: 0 }
+              }
+              transition={{ duration: 0.45, delay, ease: EASE }}
+            />
+            <motion.circle
+              className="udx-dot-fixed"
+              cx={X}
+              cy={Y}
+              r={4.4}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={
+                active
+                  ? { scale: 1, opacity: 1 }
+                  : { scale: 0, opacity: 0 }
+              }
+              transition={{ duration: 0.28, delay: delay + 0.2, ease: EASE }}
+            />
           </g>
         );
       })}
@@ -178,32 +300,123 @@ function FixedPanel() {
   );
 }
 
-function AdaptivePanel() {
+function AdaptivePanel({ active }: { active: boolean }) {
   return (
-    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="udx-svg" role="img"
-      aria-label="Vectores adaptativos de MOEA-UD redistribuidos sobre el frente, con archivo externo">
+    <svg
+      viewBox={`0 0 ${VB_W} ${VB_H}`}
+      className="udx-svg"
+      role="img"
+      aria-label="Vectores adaptativos de MOEA-UD redistribuidos sobre el frente, con archivo externo"
+    >
       <Axes />
-      <Front />
+      <Front showGap={false} gapGradId="udx-gap-grad-adapt" />
+      {ADAPT_TS.map((t, i) => {
+        const from = frontPt(FIXED_RAYS[i].t);
+        const to = frontPt(t);
+        const xFrom = sx(from.x);
+        const yFrom = sy(from.y);
+        const xTo = sx(to.x);
+        const yTo = sy(to.y);
+        const delay = 0.15 + i * 0.07;
+
+        return (
+          <g key={i}>
+            <motion.line
+              className="udx-ray-adapt"
+              x1={IX}
+              y1={IY}
+              x2={xFrom}
+              y2={yFrom}
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={
+                active
+                  ? { pathLength: 1, opacity: 0.9, x2: xTo, y2: yTo }
+                  : { pathLength: 0, opacity: 0, x2: xFrom, y2: yFrom }
+              }
+              transition={{
+                pathLength: { duration: 0.4, delay, ease: EASE },
+                opacity: { duration: 0.25, delay },
+                x2: { duration: 0.85, delay: delay + 0.35, ease: EASE },
+                y2: { duration: 0.85, delay: delay + 0.35, ease: EASE },
+              }}
+            />
+            <motion.circle
+              className="udx-dot-adapt"
+              cx={xFrom}
+              cy={yFrom}
+              r={4.6}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={
+                active
+                  ? { cx: xTo, cy: yTo, scale: 1, opacity: 1 }
+                  : { cx: xFrom, cy: yFrom, scale: 0, opacity: 0 }
+              }
+              transition={{
+                scale: { duration: 0.25, delay: delay + 0.25, ease: EASE },
+                opacity: { duration: 0.25, delay: delay + 0.25 },
+                cx: { duration: 0.85, delay: delay + 0.35, ease: EASE },
+                cy: { duration: 0.85, delay: delay + 0.35, ease: EASE },
+              }}
+            />
+          </g>
+        );
+      })}
       {ARCHIVE_TS.map((t, i) => {
         const p = frontPt(t);
-        return <circle key={`a${i}`} className="udx-archive" cx={sx(p.x)} cy={sy(p.y)} r={3.2} />;
-      })}
-      {ADAPT_TS.map((t, i) => {
-        const p = frontPt(t);
-        const X = sx(p.x);
-        const Y = sy(p.y);
         return (
-          <g key={i}>
-            <line className="udx-ray-adapt" x1={sx(IDEAL.x)} y1={sy(IDEAL.y)} x2={X} y2={Y} />
-            <circle className="udx-dot-adapt" cx={X} cy={Y} r={4.6} />
-          </g>
+          <motion.circle
+            key={`a${i}`}
+            className="udx-archive"
+            cx={sx(p.x)}
+            cy={sy(p.y)}
+            r={3.2}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={
+              active
+                ? { scale: 1, opacity: 0.55 }
+                : { scale: 0, opacity: 0 }
+            }
+            transition={{
+              duration: 0.35,
+              delay: 1.15 + i * 0.08,
+              ease: EASE,
+            }}
+          />
         );
       })}
     </svg>
   );
 }
 
-export function Moeaud() {
+const CAPS = [
+  {
+    fixed: "Frente irregular con un hueco: la geometría no es continua.",
+    adaptive: "Misma geometría; aún sin redistribuir vectores.",
+  },
+  {
+    fixed: (
+      <>
+        Con ángulos fijos, <strong>2 de 7</strong> vectores caen en el hueco.
+      </>
+    ),
+    adaptive: "Los vectores fijos no se mueven aunque el hueco esté vacío.",
+  },
+  {
+    fixed: "Las referencias desperdiciadas no aportan cobertura útil.",
+    adaptive: (
+      <>
+        La señal UD <strong>reubica</strong> los vectores; el archivo retiene
+        soluciones.
+      </>
+    ),
+  },
+] as const;
+
+export function Moeaud({ step = 0 }: { step?: number }) {
+  const s = Math.max(0, Math.min(UD_MAX_STEP, step));
+  const showFixed = s >= 1;
+  const showAdapt = s >= 2;
+
   return (
     <motion.div
       className="ud"
@@ -216,10 +429,9 @@ export function Moeaud() {
         <h2 className="ud-title">MOEA-UD</h2>
         <p>
           <strong>NSGA-III y MOEA/D</strong> usan vectores de referencia{" "}
-          <strong>fijos</strong> durante toda la ejecución: sobre un frente
-          irregular varios apuntan a zonas vacías y la cobertura queda desigual.{" "}
-          <strong>MOEA-UD</strong> redistribuye sus vectores según el frente
-          observado y conserva las buenas soluciones en un archivo externo.
+          <strong>fijos</strong>: sobre un frente irregular varios apuntan a
+          zonas vacías. <strong>MOEA-UD</strong> los redistribuye según el
+          frente observado y conserva soluciones en un archivo externo.
         </p>
       </motion.div>
 
@@ -227,42 +439,41 @@ export function Moeaud() {
         <div className="udx-panels">
           <div className="udx-panel fixed">
             <div className="udx-panel-head">
-              <h4>Vectores de referencia fijos</h4>
-              <small>Cobertura desigual · referencias desperdiciadas en el hueco</small>
+              <h4>NSGA-III · MOEA/D</h4>
             </div>
-            <FixedPanel />
-            <p className="udx-cap">
-              Frente irregular: <strong>2 de 7</strong> vectores caen en el hueco
-              y el resto se agolpa, resultando en una cobertura desigual y referencias desperdiciadas.
-            </p>
+            <FixedPanel active={showFixed} />
+            <p className="udx-cap">{CAPS[s].fixed}</p>
           </div>
 
           <div className="udx-panel adaptive">
             <div className="udx-panel-head">
-              <h4>Vectores adaptativos + archivo</h4>
-              <small>Redistribuidos hacia el frente observado (señal UD)</small>
+              <h4>MOEA-UD</h4>
             </div>
-            <AdaptivePanel />
-            <p className="udx-cap">
-              La señal UD <strong>reubica los vectores</strong> sobre el frente, resultando en una cobertura uniforme; el archivo retiene las buenas soluciones.
-            </p>
+            <AdaptivePanel active={showAdapt} />
+            <p className="udx-cap">{CAPS[s].adaptive}</p>
           </div>
         </div>
 
         <div className="udx-legend" aria-label="Leyenda">
           <span className="udx-legend-item">
-            <i className="udx-sw fixed" /> vector fijo (NSGA-III · MOEA/D)
+            <i className="udx-sw fixed" /> vector fijo
           </span>
           <span className="udx-legend-item">
-            <i className="udx-sw wasted" /> referencia sin solución (hueco)
+            <i className="udx-sw wasted" /> referencia en el hueco
           </span>
           <span className="udx-legend-item">
-            <i className="udx-sw adapt" /> vector adaptativo (MOEA-UD)
+            <i className="udx-sw adapt" /> vector adaptativo
           </span>
           <span className="udx-legend-item">
             <i className="udx-sw archive" /> archivo externo
           </span>
         </div>
+
+        {s < UD_MAX_STEP && (
+          <p className="udx-hint" aria-hidden>
+            → continuar
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={fade} className="udx-concepts">

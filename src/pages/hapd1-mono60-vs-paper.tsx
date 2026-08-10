@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, Fragment, type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import {
+  fmtChar,
+  fmtSignedChar,
+  gravyTrait,
+  stabilityTrait,
+  ValueWithTrait,
+} from "../components/DesignCharacterization";
 import {
   EXPERIMENT_ARMS,
   formatDesignLabel,
@@ -37,7 +44,12 @@ type PaperAid = {
   complex_plddt: number | null;
   overall_score: number | null;
   plddt_chain_a?: number | null;
+  contact?: number | null;
+  bonus?: number | null;
   pdb: string;
+  rg?: number | null;
+  if_contacts?: number | null;
+  bsa?: number | null;
 } & PeptideProps;
 
 type Design = {
@@ -57,6 +69,7 @@ type Design = {
   plddt_a: number | null;
   iptm: number | null;
   pae_iface: number | null;
+  contact?: number | null;
   degenerate: boolean;
   al_fraction: number;
   pdb: string | null;
@@ -69,6 +82,9 @@ type Design = {
     pae: number | null;
   };
   best_iptm_aid_id: number;
+  rg?: number | null;
+  if_contacts?: number | null;
+  bsa?: number | null;
 } & PeptideProps;
 
 type AidRefMode = "nearest_identity" | "best_iptm" | number;
@@ -84,13 +100,27 @@ const ARM_META: Record<Arm, { label: string; short: string; color: string }> = {
 const DESIGNS = raw.designs as Design[];
 const AIDS = raw.paper_aids as PaperAid[];
 
-const VIEWABLE = DESIGNS.filter(
+const POOL = DESIGNS.filter(
   (d) => d.pdb_resolved && d.pdb && !d.degenerate
 );
-// Default: best resolved design by ipTM (prefer interface hits from 06–10 panel).
+
+/** Mejores mono-60: top-1 overall_score por brazo + top-2 ipTM AF2. */
+function pickBestMono(designs: Design[]): Design[] {
+  const byId = new Map<string, Design>();
+  for (const arm of ARM_ORDER) {
+    const best = designs
+      .filter((d) => d.arm === arm)
+      .sort((a, b) => a.overall_score - b.overall_score)[0];
+    if (best) byId.set(best.id, best);
+  }
+  const byIptm = [...designs].sort((a, b) => (b.iptm ?? -1) - (a.iptm ?? -1));
+  for (const d of byIptm.slice(0, 2)) byId.set(d.id, d);
+  return [...byId.values()].sort((a, b) => a.overall_score - b.overall_score);
+}
+
+const VIEWABLE = pickBestMono(POOL);
 const INITIAL =
   [...VIEWABLE].sort((a, b) => (b.iptm ?? -1) - (a.iptm ?? -1))[0] ??
-  VIEWABLE.find((d) => d.arm === "base" && d.criterion === "by_score") ??
   VIEWABLE[0];
 
 function fmt(v: number | null | undefined, digits = 2) {
@@ -98,8 +128,28 @@ function fmt(v: number | null | undefined, digits = 2) {
   return v.toFixed(digits);
 }
 
+function fmtSigned(v: number | null | undefined, digits = 1) {
+  if (v == null || Number.isNaN(v)) return "—";
+  const s = v.toFixed(digits);
+  return v > 0 ? `+${s}` : s;
+}
+
 function aidById(id: number) {
   return AIDS.find((a) => a.aid_id === id) ?? AIDS[0];
+}
+
+type DeltaTone = "win" | "lose" | "neutral";
+
+function deltaTone(
+  design: number | null | undefined,
+  aid: number | null | undefined,
+  higherIsBetter: boolean
+): DeltaTone {
+  if (design == null || aid == null || Number.isNaN(design) || Number.isNaN(aid))
+    return "neutral";
+  if (Math.abs(design - aid) < 1e-9) return "neutral";
+  const better = higherIsBetter ? design > aid : design < aid;
+  return better ? "win" : "lose";
 }
 
 /** Max sliding-window identity; returns alignment of shorter onto longer. */
@@ -139,78 +189,7 @@ function alignSequences(a: string, b: string) {
   };
 }
 
-type TraitTone = "ok" | "warn" | "neutral";
-
-function gravyTrait(gravy: number | null | undefined): { label: string; tone: TraitTone } {
-  if (gravy == null || Number.isNaN(gravy)) return { label: "—", tone: "neutral" };
-  if (gravy >= 0.5) return { label: "hidrofóbico", tone: "warn" };
-  if (gravy >= 0) return { label: "levemente hidrofóbico", tone: "neutral" };
-  return { label: "hidrofílico", tone: "ok" };
-}
-
-function stabilityTrait(ii: number | null | undefined): { label: string; tone: TraitTone } {
-  if (ii == null || Number.isNaN(ii)) return { label: "—", tone: "neutral" };
-  if (ii < 40) return { label: "estable", tone: "ok" };
-  if (ii < 65) return { label: "moderado", tone: "neutral" };
-  return { label: "inestable", tone: "warn" };
-}
-
-function chargeTrait(charge: number | null | undefined): { label: string; tone: TraitTone } {
-  if (charge == null || Number.isNaN(charge)) return { label: "—", tone: "neutral" };
-  if (Math.abs(charge) < 1) return { label: "casi neutro", tone: "neutral" };
-  if (charge > 0) return { label: "carga +", tone: "ok" };
-  return { label: "carga −", tone: "neutral" };
-}
-
-function fmtSigned(v: number | null | undefined, digits = 1) {
-  if (v == null || Number.isNaN(v)) return "—";
-  const s = v.toFixed(digits);
-  return v > 0 ? `+${s}` : s;
-}
-
-function PeptideMetrics({ p }: { p: PeptideProps }) {
-  const gravy = gravyTrait(p.gravy);
-  const charge = chargeTrait(p.charge);
-  const stability = stabilityTrait(p.instability);
-  return (
-    <div className="hapd1-peptide">
-      <div className="hapd1-metrics hapd1-peptide-metrics">
-        <div className="hapd1-metric">
-          <span>GRAVY</span>
-          <strong>{fmt(p.gravy, 3)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${gravy.tone}`}>{gravy.label}</em>
-        </div>
-        <div className="hapd1-metric">
-          <span>Carga pH 7</span>
-          <strong>{fmtSigned(p.charge, 1)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${charge.tone}`}>{charge.label}</em>
-        </div>
-        <div className="hapd1-metric">
-          <span>pI</span>
-          <strong>{fmt(p.pi, 2)}</strong>
-        </div>
-        <div className="hapd1-metric">
-          <span>II</span>
-          <strong>{fmt(p.instability, 1)}</strong>
-          <em className={`hapd1-trait hapd1-trait-${stability.tone}`}>
-            {stability.label}
-          </em>
-        </div>
-        <div className="hapd1-metric">
-          <span>Aromaticidad</span>
-          <strong>{fmt(p.aromaticity, 3)}</strong>
-        </div>
-        <div className="hapd1-metric">
-          <span>MW</span>
-          <strong>{fmt(p.mw_kda, 2)} kDa</strong>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function Hapd1Mono60VsPaper() {
-  const [armFilter, setArmFilter] = useState<Arm | "all">("all");
   const [designId, setDesignId] = useState(INITIAL.id);
   const [aidMode, setAidMode] = useState<AidRefMode>("nearest_identity");
   const [viewersActive, setViewersActive] = useState(false);
@@ -239,81 +218,238 @@ export function Hapd1Mono60VsPaper() {
     return () => window.clearTimeout(timer);
   }, [viewersActive]);
 
-  const designHint =
-    VIEWABLE.find((d) => d.id === designId) ??
-    (armFilter === "all"
-      ? VIEWABLE[0]
-      : VIEWABLE.find((d) => d.arm === armFilter)) ??
-    INITIAL;
+  const design =
+    VIEWABLE.find((d) => d.id === designId) ?? VIEWABLE[0] ?? INITIAL;
 
   const refAid = useMemo(() => {
-    if (aidMode === "nearest_identity") return aidById(designHint.nearest_aid_id);
-    if (aidMode === "best_iptm") return aidById(designHint.best_iptm_aid_id);
+    if (aidMode === "nearest_identity") return aidById(design.nearest_aid_id);
+    if (aidMode === "best_iptm") return aidById(design.best_iptm_aid_id);
     return aidById(aidMode);
-  }, [aidMode, designHint]);
-
-  const filtered = useMemo(() => {
-    const list =
-      armFilter === "all"
-        ? VIEWABLE
-        : VIEWABLE.filter((d) => d.arm === armFilter);
-    return [...list].sort((a, b) => a.id.localeCompare(b.id));
-  }, [armFilter]);
-
-  const design =
-    filtered.find((d) => d.id === designId) ?? filtered[0] ?? INITIAL;
+  }, [aidMode, design]);
 
   const seqAlign = useMemo(
     () => alignSequences(design.binder_seq, refAid.binder_seq),
     [design.binder_seq, refAid.binder_seq]
   );
 
+  const dPlddt =
+    design.plddt_a != null && refAid.plddt != null
+      ? design.plddt_a - refAid.plddt
+      : null;
+  const dIptm =
+    design.iptm != null && refAid.iptm != null
+      ? design.iptm - refAid.iptm
+      : null;
+  const dScore =
+    refAid.overall_score != null
+      ? design.overall_score - refAid.overall_score
+      : null;
+  const dPae =
+    design.pae_iface != null && refAid.pae != null
+      ? design.pae_iface - refAid.pae
+      : null;
+  const dContact =
+    design.contact != null && refAid.contact != null
+      ? design.contact - refAid.contact
+      : null;
+
+  const dRg =
+    design.rg != null && refAid.rg != null ? design.rg - refAid.rg : null;
+  const dIf =
+    design.if_contacts != null && refAid.if_contacts != null
+      ? design.if_contacts - refAid.if_contacts
+      : null;
+  const dBsa =
+    design.bsa != null && refAid.bsa != null ? design.bsa - refAid.bsa : null;
+  const dGravy =
+    design.gravy != null && refAid.gravy != null
+      ? design.gravy - refAid.gravy
+      : null;
+  const dCharge =
+    design.charge != null && refAid.charge != null
+      ? design.charge - refAid.charge
+      : null;
+  const dPi =
+    design.pi != null && refAid.pi != null ? design.pi - refAid.pi : null;
+  const dIi =
+    design.instability != null && refAid.instability != null
+      ? design.instability - refAid.instability
+      : null;
+  const dAro =
+    design.aromaticity != null && refAid.aromaticity != null
+      ? design.aromaticity - refAid.aromaticity
+      : null;
+  const dMw =
+    design.mw_kda != null && refAid.mw_kda != null
+      ? design.mw_kda - refAid.mw_kda
+      : null;
+
+  const aidGravy = gravyTrait(refAid.gravy);
+  const desGravy = gravyTrait(design.gravy);
+  const aidStab = stabilityTrait(refAid.instability);
+  const desStab = stabilityTrait(design.instability);
+
+  type CmpRow = {
+    key: string;
+    label: string;
+    section?: string;
+    design: ReactNode;
+    aid: ReactNode;
+    delta: string;
+    tone: DeltaTone;
+  };
+
+  const rows: CmpRow[] = [
+    {
+      key: "plddt",
+      label: "pLDDT péptido",
+      section: "AlphaFold",
+      design: fmt(design.plddt_a, 1),
+      aid: fmt(refAid.plddt, 1),
+      delta: fmtSigned(dPlddt, 1),
+      tone: deltaTone(design.plddt_a, refAid.plddt, true),
+    },
+    {
+      key: "contact",
+      label: "Puntuación de contacto",
+      design: fmt(design.contact, 1),
+      aid: fmt(refAid.contact, 1),
+      delta: fmtSigned(dContact, 1),
+      tone: deltaTone(design.contact, refAid.contact, true),
+    },
+    {
+      key: "iptm",
+      label: "ipTM",
+      design: fmt(design.iptm, 3),
+      aid: fmt(refAid.iptm, 3),
+      delta: fmtSigned(dIptm, 3),
+      tone: deltaTone(design.iptm, refAid.iptm, true),
+    },
+    {
+      key: "score",
+      label: "Aptitud",
+      design: fmt(design.overall_score, 1),
+      aid: refAid.overall_score == null ? "—" : fmt(refAid.overall_score, 1),
+      delta: fmtSigned(dScore, 1),
+      tone: deltaTone(design.overall_score, refAid.overall_score, false),
+    },
+    {
+      key: "pae",
+      label: "PAE iface",
+      design: `${fmt(design.pae_iface, 1)} Å`,
+      aid: `${fmt(refAid.pae, 1)} Å`,
+      delta: `${fmtSigned(dPae, 1)} Å`,
+      tone: deltaTone(design.pae_iface, refAid.pae, false),
+    },
+    {
+      key: "rg",
+      label: "Radio de giro",
+      section: "Estructura / péptido",
+      design: `${fmtChar(design.rg, 1)} Å`,
+      aid: `${fmtChar(refAid.rg, 1)} Å`,
+      delta: `${fmtSigned(dRg, 1)} Å`,
+      tone: "neutral",
+    },
+    {
+      key: "if",
+      label: "Contactos IF",
+      design: fmtChar(design.if_contacts, 0),
+      aid: fmtChar(refAid.if_contacts, 0),
+      delta: fmtSigned(dIf, 0),
+      tone: deltaTone(design.if_contacts, refAid.if_contacts, true),
+    },
+    {
+      key: "bsa",
+      label: "ΔSASA",
+      design: `${fmtChar(design.bsa, 0)} Å²`,
+      aid: `${fmtChar(refAid.bsa, 0)} Å²`,
+      delta: `${fmtSigned(dBsa, 0)} Å²`,
+      tone: deltaTone(design.bsa, refAid.bsa, true),
+    },
+    {
+      key: "gravy",
+      label: "GRAVY",
+      design: (
+        <ValueWithTrait value={fmtChar(design.gravy, 3)} trait={desGravy} />
+      ),
+      aid: (
+        <ValueWithTrait value={fmtChar(refAid.gravy, 3)} trait={aidGravy} />
+      ),
+      delta: fmtSigned(dGravy, 3),
+      tone: "neutral",
+    },
+    {
+      key: "charge",
+      label: "Carga pH 7",
+      design: fmtSignedChar(design.charge, 1),
+      aid: fmtSignedChar(refAid.charge, 1),
+      delta: fmtSigned(dCharge, 1),
+      tone: "neutral",
+    },
+    {
+      key: "pi",
+      label: "pI",
+      design: fmtChar(design.pi, 2),
+      aid: fmtChar(refAid.pi, 2),
+      delta: fmtSigned(dPi, 2),
+      tone: "neutral",
+    },
+    {
+      key: "ii",
+      label: "II",
+      design: (
+        <ValueWithTrait
+          value={fmtChar(design.instability, 1)}
+          trait={desStab}
+        />
+      ),
+      aid: (
+        <ValueWithTrait
+          value={fmtChar(refAid.instability, 1)}
+          trait={aidStab}
+        />
+      ),
+      delta: fmtSigned(dIi, 1),
+      tone: deltaTone(design.instability, refAid.instability, false),
+    },
+    {
+      key: "aro",
+      label: "Aromaticidad",
+      design: fmtChar(design.aromaticity, 3),
+      aid: fmtChar(refAid.aromaticity, 3),
+      delta: fmtSigned(dAro, 3),
+      tone: "neutral",
+    },
+    {
+      key: "mw",
+      label: "MW",
+      design: `${fmtChar(design.mw_kda, 2)} kDa`,
+      aid: `${fmtChar(refAid.mw_kda, 2)} kDa`,
+      delta: `${fmtSigned(dMw, 2)} kDa`,
+      tone: "neutral",
+    },
+  ];
+
   return (
     <motion.div
-      className="hapd1"
+      className="hapd1 hapd1-mono60"
       variants={fade}
       initial="hidden"
       whileInView="visible"
       viewport={{ amount: 0.12 }}
     >
-      <h2 className="validacion-title">Diseños HA-PD1 frente a AiDs experimentales</h2>
+      <h2 className="validacion-title">
+        Diseños HA-PD1 frente a AiDs experimentales
+      </h2>
       <p className="validacion-sub">
-        Diseños y AiDs se predicen con el mismo protocolo AlphaFold2 sobre
-        HA-PD1. La figura muestra confianza de interfaz (pLDDT, ipTM, PAE) y
-        ProtParam; el KD por SPR (Goudy et al. 2023) solo está disponible para
-        los cinco AiDs.
+        Mejores diseños del panel de 60 generaciones frente a AiDs de Goudy et
+        al. (2023). El KD experimental solo existe para los AiDs.
       </p>
 
       <div className="hapd1-grid">
         <aside className="hapd1-sidebar">
-          <section className="validacion-card hapd1-card hapd1-filters-card">
-            <div className="hapd1-filters">
-              <label className="hapd1-label">
-                Experimento
-                <select
-                  className="hapd1-select"
-                  value={armFilter}
-                  onChange={(e) => {
-                    const next = e.target.value as Arm | "all";
-                    setArmFilter(next);
-                    const nextList =
-                      next === "all"
-                        ? VIEWABLE
-                        : VIEWABLE.filter((d) => d.arm === next);
-                    if (!nextList.some((d) => d.id === designId) && nextList[0]) {
-                      setDesignId(nextList[0].id);
-                    }
-                  }}
-                >
-                  <option value="all">Todos</option>
-                  {(ARM_ORDER).map((arm) => (
-                    <option key={arm} value={arm}>
-                      {ARM_META[arm].label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
+          <section className="validacion-card hapd1-card hapd1-compare">
+            <div className="hapd1-filters hapd1-filters-2">
               <label className="hapd1-label">
                 Diseño
                 <select
@@ -321,7 +457,7 @@ export function Hapd1Mono60VsPaper() {
                   value={design.id}
                   onChange={(e) => setDesignId(e.target.value)}
                 >
-                  {filtered.map((d) => (
+                  {VIEWABLE.map((d) => (
                     <option key={d.id} value={d.id}>
                       {formatDesignLabel(d.id, d.arm)}
                     </option>
@@ -330,7 +466,7 @@ export function Hapd1Mono60VsPaper() {
               </label>
 
               <label className="hapd1-label">
-                Referencia AiD
+                AiD
                 <select
                   className="hapd1-select"
                   value={String(aidMode)}
@@ -344,147 +480,91 @@ export function Hapd1Mono60VsPaper() {
                   }}
                 >
                   <option value="nearest_identity">
-                    Mejor por identidad (AiD {design.nearest_aid_id})
+                    Más cercano (AiD {design.nearest_aid_id})
                   </option>
                   <option value="best_iptm">
-                    Mejor por ipTM (AiD {design.best_iptm_aid_id})
+                    Mejor ipTM (AiD {design.best_iptm_aid_id})
                   </option>
                   {AIDS.map((a) => (
                     <option key={a.aid_id} value={a.aid_id}>
-                      AiD {a.aid_id}
+                      AiD {a.aid_id} · KD {fmt(a.kd_nM, 1)} nM
                     </option>
                   ))}
                 </select>
               </label>
             </div>
-          </section>
 
-          <section className="validacion-card hapd1-card hapd1-compare">
-            <div className="hapd1-compare-cols">
-              <div>
-                <div className="hapd1-col-head">
-                  <span
-                    className="hapd1-tag"
-                    style={{ color: ARM_META[design.arm].color }}
-                  >
-                    {formatDesignLabel(design.id, design.arm)}
-                  </span>
-                </div>
-                <div className="hapd1-metrics">
-                  <div className="hapd1-metric">
-                    <span>overall_score</span>
-                    <strong>{fmt(design.overall_score, 2)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>pLDDT binder</span>
-                    <strong>{fmt(design.plddt_a, 1)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>ipTM</span>
-                    <strong>{fmt(design.iptm, 3)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>PAE iface</span>
-                    <strong>{fmt(design.pae_iface, 1)} Å</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="hapd1-col-head">
-                  <span className="hapd1-tag aid">AiD {refAid.aid_id}</span>
-                </div>
-                <div className="hapd1-metrics">
-                  <div className="hapd1-metric">
-                    <span>overall_score</span>
-                    <strong>
-                      {refAid.overall_score == null
-                        ? "—"
-                        : fmt(refAid.overall_score, 2)}
-                    </strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>pLDDT binder</span>
-                    <strong>{fmt(refAid.plddt, 1)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>ipTM</span>
-                    <strong>{fmt(refAid.iptm, 3)}</strong>
-                  </div>
-                  <div className="hapd1-metric">
-                    <span>PAE iface</span>
-                    <strong>{fmt(refAid.pae, 1)} Å</strong>
-                  </div>
-                </div>
-              </div>
+            <div className="hapd1-delta-head">
+              <span
+                className="hapd1-tag"
+                style={{ color: ARM_META[design.arm].color }}
+              >
+                {formatDesignLabel(design.id, design.arm)}
+              </span>
+              <span className="hapd1-delta-vs">vs</span>
+              <span className="hapd1-tag aid">AiD {refAid.aid_id}</span>
+              <span className="hapd1-kd">
+                KD <strong>{fmt(refAid.kd_nM, 1)} nM</strong>
+              </span>
             </div>
 
-            <div className="hapd1-seqs">
-              <div className="hapd1-seq-block">
-                <span className="hapd1-seq-label">
-                  {formatDesignLabel(design.id, design.arm)} ·{" "}
-                  {design.binder_seq.length} aa
-                </span>
-                <code className="hapd1-seq">{design.binder_seq}</code>
-              </div>
-              <div className="hapd1-seq-block">
-                <span className="hapd1-seq-label">
-                  AiD {refAid.aid_id} · {refAid.binder_seq.length} aa
-                </span>
-                <code className="hapd1-seq">{refAid.binder_seq}</code>
-              </div>
-              <div className="hapd1-seq-block hapd1-seq-align">
-                <span className="hapd1-seq-label">Alineamiento</span>
-                <div className="hapd1-align" aria-label="Alineamiento de secuencias">
-                  {seqAlign.long.split("").map((ch, i) => {
-                    const inWindow =
-                      i >= seqAlign.offset &&
-                      i < seqAlign.offset + seqAlign.short.length;
-                    const match =
-                      inWindow && seqAlign.matches[i - seqAlign.offset];
-                    return (
-                      <span
-                        key={`${ch}-${i}`}
+            <p className="hapd1-diff-key" aria-hidden>
+              <span className="hapd1-diff-swatch best" /> mejor valor
+              <span className="hapd1-diff-swatch delta" /> Δ = diseño − AiD
+            </p>
+
+            <table className="hapd1-delta-table hapd1-diff-table">
+              <thead>
+                <tr>
+                  <th>Indicador</th>
+                  <th>Diseño</th>
+                  <th>AiD</th>
+                  <th>Δ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <Fragment key={r.key}>
+                    {r.section ? (
+                      <tr className="hapd1-diff-section">
+                        <td colSpan={4}>{r.section}</td>
+                      </tr>
+                    ) : null}
+                    <tr className={`hapd1-diff-row tone-${r.tone}`}>
+                      <td>
+                        <span className="hapd1-delta-label">{r.label}</span>
+                      </td>
+                      <td
                         className={
-                          match
-                            ? "hapd1-aa match"
-                            : inWindow
-                              ? "hapd1-aa miss"
-                              : "hapd1-aa outside"
-                        }
-                        title={
-                          inWindow
-                            ? `${seqAlign.long[i]} vs ${seqAlign.short[i - seqAlign.offset]}`
-                            : ch
+                          r.tone === "win" ? "hapd1-val-best" : undefined
                         }
                       >
-                        {ch}
-                      </span>
-                    );
-                  })}
-                </div>
-                <div className="hapd1-align hapd1-align-short">
-                  {Array.from({ length: seqAlign.offset }, (_, i) => (
-                    <span key={`pad-${i}`} className="hapd1-aa pad">
-                      ·
-                    </span>
-                  ))}
-                  {seqAlign.short.split("").map((ch, i) => (
-                    <span
-                      key={`s-${ch}-${i}`}
-                      className={
-                        seqAlign.matches[i] ? "hapd1-aa match" : "hapd1-aa miss"
-                      }
-                    >
-                      {ch}
-                    </span>
-                  ))}
-                </div>
-                <p className="hapd1-ident">
-                  Identidad: {(seqAlign.identity * 100).toFixed(1)}%
-                </p>
-              </div>
-            </div>
+                        {r.design}
+                      </td>
+                      <td
+                        className={
+                          r.tone === "lose" ? "hapd1-val-best" : undefined
+                        }
+                      >
+                        {r.aid}
+                      </td>
+                      <td className={`hapd1-delta hapd1-delta-${r.tone}`}>
+                        {r.delta}
+                      </td>
+                    </tr>
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+
+            <p className="hapd1-ident-callout">
+              Identidad:{" "}
+              <strong>{(seqAlign.identity * 100).toFixed(1)}%</strong>
+              <span>
+                {" "}
+                · {design.binder_seq.length} aa · {refAid.binder_seq.length} aa
+              </span>
+            </p>
           </section>
         </aside>
 
@@ -499,10 +579,6 @@ export function Hapd1Mono60VsPaper() {
                 referenceUrl={refAid.pdb}
                 active={viewersActive ? true : undefined}
               />
-              <p className="hapd1-legend">
-                <span className="ablacion-chip target" /> HA-PD1 ·{" "}
-                <span className="ablacion-chip binder" /> AiD paper
-              </p>
             </div>
 
             <div className="validacion-card hapd1-card hapd1-viewer-card">
@@ -519,19 +595,12 @@ export function Hapd1Mono60VsPaper() {
                 referenceUrl={design.pdb}
                 active={designViewerActive ? true : undefined}
               />
-              <p className="hapd1-legend">
-                <span className="ablacion-chip target" /> HA-PD1 ·{" "}
-                <span className="ablacion-chip binder" /> diseño mono-60
-              </p>
             </div>
           </div>
-
-          <section className="validacion-card hapd1-card hapd1-peptide-panel">
-            <div className="hapd1-peptide-cols">
-              <PeptideMetrics p={refAid} />
-              <PeptideMetrics p={design} />
-            </div>
-          </section>
+          <p className="hapd1-legend hapd1-legend-shared">
+            <span className="ablacion-chip target" /> HA-PD1 ·{" "}
+            <span className="ablacion-chip binder" /> péptido (AiD | diseño)
+          </p>
         </section>
       </div>
     </motion.div>

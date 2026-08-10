@@ -166,8 +166,8 @@ export function Operadores() {
         Operadores evolutivos: EvoPro Base vs EvoPro Modificado
       </h2>
       <p className="ablacion-sub">
-        Comparación de las mejores soluciones sobre el{" "}
-        <strong>objetivo por defecto de EvoPro</strong>.
+        Comparación de las mejores soluciones sobre {" "}
+        <strong> PDL1</strong>.
       </p>
 
       <div className="ablacion-grid">
@@ -202,10 +202,7 @@ export function Operadores() {
               textAnchor="middle"
               transform={`rotate(-90 16 ${PAD.top + PH / 2})`}
             >
-              Mejor overall_score (↓ mejor)
-            </text>
-            <text x={PAD.left + 5} y={PAD.top + PH - 7} className="abl-best">
-              ↓ mejor
+              Mejor overall_score
             </text>
 
             <Box data={BASE} cx={X_BASE} color={COLOR_BASE} />

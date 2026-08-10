@@ -9,11 +9,11 @@ const list: Variants = {
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -30,29 +30,31 @@ export function Agenda() {
         Agenda
       </motion.h2>
 
-      <ol className="agenda-list">
-        <motion.li variants={item}>Recapitulación.</motion.li>
-
-        <motion.li variants={item}>
-          Actividades realizadas en este periodo (Diciembre 2025 - Abril 2026).
-          <ol className="agenda-sublist">
-            <li>Temperatura variable para ProteinMPNN.</li>
-            <li>Transición a optimización multiobjetivo.</li>
-            <li>MOEA-UD.</li>
-            <li>Mecanismo adaptativo de inyección de secuencias.</li>
-            <li>Mecanismo de selección de operador genético.</li>
+      <motion.ol variants={item} className="agenda-list">
+        <li>
+          Marco y contexto
+          <ol type="a">
+            <li>Objetivo general</li>
+            <li>EvoPro y HA-PD1</li>
+            <li>De mono a multiobjetivo</li>
           </ol>
-        </motion.li>
-
-        <motion.li variants={item}>
-          Actividades subsecuentes (Abril 2026 - Agosto 2026).
-          <ol className="agenda-sublist">
-            <li>Experimentos finales con objetivos selectos.</li>
+        </li>
+        <li>
+          Resultados VEGF-A y cribado (énfasis)
+          <ol type="a">
+            <li>Formulaciones y mecanismos adaptativos</li>
+            <li>Resultados de experimentos con mecanismos adaptativos</li>
+            <li>Cribado y selección final</li>
           </ol>
-        </motion.li>
-
-        <motion.li variants={item}>Cronograma de actividades.</motion.li>
-      </ol>
+        </li>
+        <li>
+          Síntesis y cierre
+          <ol type="a">
+            <li>Síntesis y trabajo pendiente</li>
+            <li>Referencias</li>
+          </ol>
+        </li>
+      </motion.ol>
     </motion.div>
   );
 }

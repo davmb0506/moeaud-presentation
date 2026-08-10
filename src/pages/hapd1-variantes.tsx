@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import { DesignCharacterization } from "../components/DesignCharacterization";
 import hapd1Data from "../data/hapd1Variantes.json";
 
 const fade: Variants = {
@@ -31,6 +32,9 @@ type RunRaw = {
   instability: number | null;
   mw_kda: number | null;
   pdb: string | null;
+  rg: number | null;
+  if_contacts: number | null;
+  bsa: number | null;
 };
 
 type ArmRaw = {
@@ -140,12 +144,34 @@ const BOXES = GROUPS.map((group) => ({
 }));
 
 const W = 560;
-const H = 398;
-const PAD = { left: 60, right: 18, top: 36, bottom: 78 };
+const H = 360;
+const PAD = { left: 56, right: 16, top: 32, bottom: 72 };
 const PW = W - PAD.left - PAD.right;
 const PH = H - PAD.top - PAD.bottom;
 const BOX_W = 56;
 const XS = [PAD.left + PW * 0.18, PAD.left + PW * 0.5, PAD.left + PW * 0.82];
+
+/** Mann–Whitney vs solo mutación (menor = mejor). Unilateral = H1: el brazo es mejor. */
+const STATS_ROWS = [
+  {
+    contrast: "Mut+cruza vs solo mutación",
+    test: "MW unilateral",
+    p: 0.0156,
+    sig: "*",
+  },
+  {
+    contrast: "Temp. variable vs solo mutación",
+    test: "MW unilateral",
+    p: 0.0445,
+    sig: "*",
+  },
+  {
+    contrast: "Temp. variable vs mut+cruza",
+    test: "MW unilateral",
+    p: 0.5451,
+    sig: "n.s.",
+  },
+] as const;
 
 const ALL_VALUES = GROUPS.flatMap((group) => group.values);
 const Y_MIN = Math.min(...ALL_VALUES);
@@ -270,10 +296,11 @@ export function Hapd1Variantes() {
     >
       <h2 className="ablacion-title">Comparación de variantes en HA-PD1</h2>
       <p className="ablacion-sub">
-        Mejor puntaje de diseño alcanzado por réplica (60 generaciones, 10
-        réplicas por variante): solo mutación, mutación y cruce, y mutación y
-        cruce con temperatura variable en el muestreo de secuencias. Incluye
-        propiedades ProtParam del binder.
+        Se ejecutaron{" "}
+        <strong>10 réplicas independientes de 60 generaciones</strong> para cada
+        una de tres variantes de operadores en el diseño monoobjetivo sobre
+        HA-PD1: solo mutación; mutación y cruce; y mutación y cruce con
+        temperatura variable en el muestreo de secuencias.
       </p>
 
       <div className="ablacion-grid hapd1var-grid">
@@ -291,7 +318,7 @@ export function Hapd1Variantes() {
               className="op-sig"
               textAnchor="middle"
             >
-              Distribución del mejor puntaje por variante (HA-PD1)
+              Distribución de la aptitud por variante (HA-PD1)
             </text>
 
             {TICKS.map((tick) => (
@@ -335,10 +362,7 @@ export function Hapd1Variantes() {
               textAnchor="middle"
               transform={`rotate(-90 18 ${PAD.top + PH / 2})`}
             >
-              Mejor puntaje de diseño (↓ mejor)
-            </text>
-            <text x={PAD.left + 5} y={PAD.top + PH - 7} className="abl-best">
-              ↓ mejor
+              Aptitud
             </text>
 
             {BOXES.map((group, index) => (
@@ -423,6 +447,36 @@ export function Hapd1Variantes() {
               </span>
             ))}
           </div>
+
+          <div className="hapd1var-stats">
+            <table className="hapd1var-stats-table">
+              <thead>
+                <tr>
+                  <th>Contraste</th>
+                  <th>Prueba</th>
+                  <th>p</th>
+                  <th>Sig.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {STATS_ROWS.map((row) => (
+                  <tr key={row.contrast}>
+                    <td>{row.contrast}</td>
+                    <td>{row.test}</td>
+                    <td className="hapd1var-stats-num">{row.p.toFixed(3)}</td>
+                    <td
+                      className={`hapd1var-stats-sig${
+                        row.sig === "n.s." ? " is-ns" : ""
+                      }`}
+                    >
+                      {row.sig}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="hapd1var-stats-key">* p &lt; 0.05 · n.s. = no significativo</p>
+          </div>
         </section>
 
         <section className="ablacion-viewer hapd1var-viewer">
@@ -446,11 +500,11 @@ export function Hapd1Variantes() {
             </div>
             <div className="op-metrics">
               <div className="op-metric">
-                <span className="op-metric-k">Puntaje general</span>
+                <span className="op-metric-k">Aptitud</span>
                 <span className="op-metric-v">{run.score.toFixed(2)}</span>
               </div>
               <div className="op-metric">
-                <span className="op-metric-k">pLDDT binder</span>
+                <span className="op-metric-k">pLDDT péptido</span>
                 <span className="op-metric-v">{fmt(run.plddt, 1)}</span>
               </div>
               <div className="op-metric">
@@ -458,38 +512,17 @@ export function Hapd1Variantes() {
                 <span className="op-metric-v">{fmt(run.iptm, 2)}</span>
               </div>
               <div className="op-metric">
-                <span className="op-metric-k">Score de contacto</span>
+                <span className="op-metric-k">Puntuación de contacto</span>
                 <span className="op-metric-v">{fmt(run.contact, 1)}</span>
               </div>
-              <div className="op-metric">
-                <span className="op-metric-k">GRAVY</span>
-                <span className="op-metric-v">{fmt(run.gravy, 3)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">Carga pH 7</span>
-                <span className="op-metric-v">{fmt(run.charge, 1)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">pI</span>
-                <span className="op-metric-v">{fmt(run.pi, 2)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">II</span>
-                <span className="op-metric-v">{fmt(run.instability, 1)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">Aromaticidad</span>
-                <span className="op-metric-v">{fmt(run.aromaticity, 3)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">MW</span>
-                <span className="op-metric-v">{fmt(run.mw_kda, 2)} kDa</span>
-              </div>
+            </div>
+            <div className="hapd1var-peptide">
+              <DesignCharacterization m={run} />
             </div>
             <code className="ablacion-info-seq">{run.binder}</code>
             <p className="ablacion-info-note">
               <span className="ablacion-chip target" /> objetivo (PD-1) ·{" "}
-              <span className="ablacion-chip binder" /> binder diseñado
+              <span className="ablacion-chip binder" /> péptido diseñado
             </p>
           </div>
         </section>

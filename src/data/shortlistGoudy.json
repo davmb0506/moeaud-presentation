@@ -1,13 +1,13 @@
 {
   "default_panel": "moea_pool1208",
-  "protocol": "Dual: HA-PD1 = Goudy paper (EvoPro); VEGF-A = Goudy adaptado (Shannon/GRAVY, epítopo VEGFR-2≥0.20, id≤0.70)",
+  "protocol": "Dual: HA-PD1 = Goudy paper (EvoPro); VEGF-A = Goudy adaptado (Shannon/GRAVY, ep\u00edtopo VEGFR-2\u22650.20, id\u22640.70)",
   "panels": {
     "moea_pool1208": {
-      "label": "MOEA VEGF-A (pool ND)",
+      "label": "MOEA VEGF-A (no dominados)",
       "target": "VEGF-A",
       "experiment_mode": "multiobjective",
       "protocol": "vegfa_adapted",
-      "protocol_label": "Goudy adaptado (péptido + epítopo VEGFR-2)",
+      "protocol_label": "Goudy adaptado (p\u00e9ptido + ep\u00edtopo VEGFR-2)",
       "diversity_label": "grupo",
       "groups_total": 6,
       "pdb_subdir": "shortlist-goudy",
@@ -16,29 +16,29 @@
       "status": "ready",
       "funnel": [
         {
-          "label": "Pool inicial",
+          "label": "Conjunto inicial",
           "value": 1208,
-          "note": "Diseños no dominados de los 6 grupos; aún sin filtro"
+          "note": "Qu\u00e9 mide: qui\u00e9n entra al cribado (frentes no dominados). Sin umbral de calidad."
         },
         {
-          "label": "Energía Rosetta",
+          "label": "Energ\u00eda Rosetta",
           "value": 1049,
-          "note": "Completan la relajación Rosetta; sin corte por energía"
+          "note": "Qu\u00e9 mide: si Rosetta relaja el complejo (\u2260 AF2). Criterio: relajaci\u00f3n correcta."
         },
         {
-          "label": "Top 100",
+          "label": "100 mejores",
           "value": 100,
-          "note": "Conserva los 100 de mejor energía de interfaz"
+          "note": "Qu\u00e9 mide: energ\u00eda de interfaz Rosetta (dG/dSASA\u00d7100). Criterio: 100 mejores."
         },
         {
           "label": "Control de calidad",
           "value": 90,
-          "note": "Filtra composición extrema y baja cobertura del epítopo"
+          "note": "Qu\u00e9 mide: calidad composicional + cobertura ep\u00edtopo VEGFR-2 \u2265 0.20."
         },
         {
-          "label": "Selección final",
+          "label": "Selecci\u00f3n final",
           "value": 10,
-          "note": "OmegaFold confirma el pliegue; a lo sumo 3 por grupo"
+          "note": "Qu\u00e9 mide: acuerdo AF2\u2013OmegaFold (RMSD) + diversidad entre grupos."
         }
       ],
       "total": 10,
@@ -92,7 +92,14 @@
           "plddt_a": 53.5,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -73.649,
+          "haddock_vs_native": 6.45,
+          "haddock_beats_native": false,
+          "haddock_model": "emref_3.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_nomech__0134_haddock_local.pdb",
+          "haddock_if_contacts": 45,
+          "haddock_dsasa": 1654.7
         },
         {
           "id": "ipsae_sc_nomech__0043",
@@ -135,7 +142,14 @@
           "plddt_a": null,
           "ipsae": 0.221,
           "design_sc": 0.749,
-          "af2_source": "moea_objectives_ipsae_sc"
+          "af2_source": "moea_objectives_ipsae_sc",
+          "haddock_score": -90.477,
+          "haddock_vs_native": -10.378,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_14.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/ipsae_sc_nomech__0043_haddock_local.pdb",
+          "haddock_if_contacts": 40,
+          "haddock_dsasa": 1637.6
         },
         {
           "id": "ipsae_sc_nomech__0112",
@@ -178,7 +192,14 @@
           "plddt_a": null,
           "ipsae": 0.231,
           "design_sc": 0.781,
-          "af2_source": "moea_objectives_ipsae_sc"
+          "af2_source": "moea_objectives_ipsae_sc",
+          "haddock_score": -73.576,
+          "haddock_vs_native": 6.523,
+          "haddock_beats_native": false,
+          "haddock_model": "emref_22.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/ipsae_sc_nomech__0112_haddock_local.pdb",
+          "haddock_if_contacts": 37,
+          "haddock_dsasa": 1434.1
         },
         {
           "id": "ipsae_sc_nomech__0071",
@@ -221,7 +242,14 @@
           "plddt_a": null,
           "ipsae": 0.104,
           "design_sc": 0.776,
-          "af2_source": "moea_objectives_ipsae_sc"
+          "af2_source": "moea_objectives_ipsae_sc",
+          "haddock_score": -96.564,
+          "haddock_vs_native": -16.465,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_6.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/ipsae_sc_nomech__0071_haddock_local.pdb",
+          "haddock_if_contacts": 48,
+          "haddock_dsasa": 1664.8
         },
         {
           "id": "interface_pae_plddt_nomech__0041",
@@ -264,7 +292,14 @@
           "plddt_a": 50.0,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -82.209,
+          "haddock_vs_native": -2.11,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_1.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_nomech__0041_haddock_local.pdb",
+          "haddock_if_contacts": 40,
+          "haddock_dsasa": 1485.5
         },
         {
           "id": "interface_pae_plddt_nomech__0121",
@@ -307,7 +342,14 @@
           "plddt_a": 57.4,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -81.412,
+          "haddock_vs_native": -1.313,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_15.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_nomech__0121_haddock_local.pdb",
+          "haddock_if_contacts": 35,
+          "haddock_dsasa": 1402.6
         },
         {
           "id": "interface_pae_plddt_mech__0136",
@@ -350,7 +392,14 @@
           "plddt_a": 52.4,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -108.521,
+          "haddock_vs_native": -28.422,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_31.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_mech__0136_haddock_local.pdb",
+          "haddock_if_contacts": 50,
+          "haddock_dsasa": 2027.3
         },
         {
           "id": "ipsae_sc_mech__0101",
@@ -393,7 +442,14 @@
           "plddt_a": null,
           "ipsae": 0.178,
           "design_sc": 0.807,
-          "af2_source": "moea_objectives_ipsae_sc"
+          "af2_source": "moea_objectives_ipsae_sc",
+          "haddock_score": -131.353,
+          "haddock_vs_native": -51.254,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_24.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/ipsae_sc_mech__0101_haddock_local.pdb",
+          "haddock_if_contacts": 45,
+          "haddock_dsasa": 1638.2
         },
         {
           "id": "interface_pae_plddt_mech__0035",
@@ -436,7 +492,14 @@
           "plddt_a": 46.0,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -84.028,
+          "haddock_vs_native": -3.929,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_7.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_mech__0035_haddock_local.pdb",
+          "haddock_if_contacts": 49,
+          "haddock_dsasa": 1821.0
         },
         {
           "id": "interface_pae_plddt_mech__0211",
@@ -479,7 +542,14 @@
           "plddt_a": 59.9,
           "ipsae": null,
           "design_sc": null,
-          "af2_source": "moea_objectives_interface_pae_plddt"
+          "af2_source": "moea_objectives_interface_pae_plddt",
+          "haddock_score": -110.595,
+          "haddock_vs_native": -30.496,
+          "haddock_beats_native": true,
+          "haddock_model": "emref_6.pdb",
+          "haddock_pdb": "/pdbs/shortlist-haddock/interface_pae_plddt_mech__0211_haddock_local.pdb",
+          "haddock_if_contacts": 40,
+          "haddock_dsasa": 1766.3
         }
       ],
       "missing_pdb": [],
@@ -489,14 +559,25 @@
         "best": -139.5,
         "method_label": "MM-GBSA (Amber14 / GBn2, OpenMM)"
       },
-      "note": null
+      "note": null,
+      "haddock": {
+        "status": "completed",
+        "n_completed": 10,
+        "n_beats_native": 8,
+        "native_control_score": -80.099,
+        "best_score": -131.353,
+        "source": "/home/david/Documents/Dev/Tesis/EvoPro_Mod/evopro/validation/cascade/haddock3_goudy_shortlist/shortlist_haddock_results.json",
+        "native_if_contacts": 46,
+        "native_dsasa": 1537.8,
+        "struct_metrics_note": "Contactos IF y \u0394SASA de poses HADDOCK (BioPython, cutoff 4.5 \u00c5 / Shrake\u2013Rupley); no son los n_interface_res / dSASA de Rosetta del embudo."
+      }
     },
     "hapd1_mono60": {
       "label": "HA-PD1 mono-60",
       "target": "HA-PD1",
       "experiment_mode": "monoobjective",
       "protocol": "paper",
-      "protocol_label": "Goudy paper (EvoPro idéntico)",
+      "protocol_label": "Goudy paper (EvoPro id\u00e9ntico)",
       "diversity_label": "brazo",
       "groups_total": 3,
       "pdb_subdir": "shortlist-goudy-hapd1",
@@ -505,29 +586,29 @@
       "status": "ready",
       "funnel": [
         {
-          "label": "Pool inicial",
+          "label": "Conjunto inicial",
           "value": 1042,
-          "note": "Última generación de los 3 brazos; aún sin filtro"
+          "note": "Qu\u00e9 mide: qui\u00e9n entra al cribado (\u00faltima generaci\u00f3n). Sin umbral de calidad."
         },
         {
-          "label": "Energía Rosetta",
+          "label": "Energ\u00eda Rosetta",
           "value": 860,
-          "note": "Completan la relajación Rosetta; sin corte por energía"
+          "note": "Qu\u00e9 mide: si Rosetta relaja el complejo (\u2260 AF2). Criterio: relajaci\u00f3n correcta."
         },
         {
-          "label": "Top 100",
+          "label": "100 mejores",
           "value": 100,
-          "note": "Conserva los 100 de mejor energía de interfaz"
+          "note": "Qu\u00e9 mide: energ\u00eda de interfaz Rosetta (dG/dSASA\u00d7100). Criterio: 100 mejores."
         },
         {
           "label": "Control de calidad",
           "value": 26,
-          "note": "Descarta secuencias degeneradas en Ala, Leu y Gln"
+          "note": "Qu\u00e9 mide: calidad composicional (Ala/Leu/Gln)."
         },
         {
-          "label": "Selección final",
+          "label": "Selecci\u00f3n final",
           "value": 5,
-          "note": "OmegaFold confirma el pliegue a <5 Å del modelo AF2"
+          "note": "Qu\u00e9 mide: acuerdo AF2\u2013OmegaFold (RMSD del p\u00e9ptido < 5 \u00c5 (umbral laxo))."
         }
       ],
       "total": 4,
@@ -714,29 +795,29 @@
   },
   "funnel": [
     {
-      "label": "Pool inicial",
+      "label": "Conjunto inicial",
       "value": 1208,
-      "note": "Diseños no dominados de los 6 grupos; aún sin filtro"
+      "note": "Qu\u00e9 mide: qui\u00e9n entra al cribado (frentes no dominados). Sin umbral de calidad."
     },
     {
-      "label": "Energía Rosetta",
+      "label": "Energ\u00eda Rosetta",
       "value": 1049,
-      "note": "Completan la relajación Rosetta; sin corte por energía"
+      "note": "Qu\u00e9 mide: si Rosetta relaja el complejo (\u2260 AF2). Criterio: relajaci\u00f3n correcta."
     },
     {
-      "label": "Top 100",
+      "label": "100 mejores",
       "value": 100,
-      "note": "Conserva los 100 de mejor energía de interfaz"
+      "note": "Qu\u00e9 mide: energ\u00eda de interfaz Rosetta (dG/dSASA\u00d7100). Criterio: 100 mejores."
     },
     {
       "label": "Control de calidad",
       "value": 90,
-      "note": "Filtra composición extrema y baja cobertura del epítopo"
+      "note": "Qu\u00e9 mide: calidad composicional + cobertura ep\u00edtopo VEGFR-2 \u2265 0.20."
     },
     {
-      "label": "Selección final",
+      "label": "Selecci\u00f3n final",
       "value": 10,
-      "note": "OmegaFold confirma el pliegue; a lo sumo 3 por grupo"
+      "note": "Qu\u00e9 mide: acuerdo AF2\u2013OmegaFold (RMSD) + diversidad entre grupos."
     }
   ],
   "total": 10,
