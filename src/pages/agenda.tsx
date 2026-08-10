@@ -40,7 +40,7 @@ export function Agenda() {
           </ol>
         </li>
         <li>
-          Resultados VEGF-A y cribado (énfasis)
+          Resultados VEGF-A y cribado
           <ol type="a">
             <li>Formulaciones y mecanismos adaptativos</li>
             <li>Resultados de experimentos con mecanismos adaptativos</li>
