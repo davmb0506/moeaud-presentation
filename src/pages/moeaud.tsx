@@ -388,30 +388,6 @@ function AdaptivePanel({ active }: { active: boolean }) {
   );
 }
 
-const CAPS = [
-  {
-    fixed: "Frente irregular con un hueco: la geometría no es continua.",
-    adaptive: "Misma geometría; aún sin redistribuir vectores.",
-  },
-  {
-    fixed: (
-      <>
-        Con ángulos fijos, <strong>2 de 7</strong> vectores caen en el hueco.
-      </>
-    ),
-    adaptive: "Los vectores fijos no se mueven aunque el hueco esté vacío.",
-  },
-  {
-    fixed: "Las referencias desperdiciadas no aportan cobertura útil.",
-    adaptive: (
-      <>
-        La señal UD <strong>reubica</strong> los vectores; el archivo retiene
-        soluciones.
-      </>
-    ),
-  },
-] as const;
-
 export function Moeaud({ step = 0 }: { step?: number }) {
   const s = Math.max(0, Math.min(UD_MAX_STEP, step));
   const showFixed = s >= 1;
@@ -442,7 +418,6 @@ export function Moeaud({ step = 0 }: { step?: number }) {
               <h4>NSGA-III · MOEA/D</h4>
             </div>
             <FixedPanel active={showFixed} />
-            <p className="udx-cap">{CAPS[s].fixed}</p>
           </div>
 
           <div className="udx-panel adaptive">
@@ -450,7 +425,6 @@ export function Moeaud({ step = 0 }: { step?: number }) {
               <h4>MOEA-UD</h4>
             </div>
             <AdaptivePanel active={showAdapt} />
-            <p className="udx-cap">{CAPS[s].adaptive}</p>
           </div>
         </div>
 
@@ -469,11 +443,6 @@ export function Moeaud({ step = 0 }: { step?: number }) {
           </span>
         </div>
 
-        {s < UD_MAX_STEP && (
-          <p className="udx-hint" aria-hidden>
-            → continuar
-          </p>
-        )}
       </motion.div>
 
       <motion.div variants={fade} className="udx-concepts">

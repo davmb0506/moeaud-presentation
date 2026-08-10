@@ -30,9 +30,8 @@ export function WrapUp() {
       <motion.ol variants={fade} className="sintesis-list">
         <li>
           En la formulación monoobjetivo (dominio autoinhibitorio de HA-PD1),
-          añadir el operador de cruza mejoró el valor de la función de aptitud.
-          Según la predicción de AF2, los diseños son comparables a los AiDs del
-          artículo.
+          tanto el operador de cruza como ProteinMPNN con temperatura variable
+          mejoraron el valor de la función de aptitud frente a la base.
         </li>
         <li>
           En la formulación multiobjetivo sobre VEGF-A, los mecanismos
@@ -53,15 +52,10 @@ export function WrapUp() {
 
       <motion.ol variants={fade} className="sintesis-list">
         <li>Redactar y completar el documento de tesis.</li>
+        <li> Desarrollo de interfaz gráfica para uso general del framework.</li>
         <li>
-          Documentar datos y versiones de este periodo: embudos, selecciones
-          finales, paneles de acoplamiento y comparaciones con/sin mecanismos,
-          con rutas y versiones usadas.
-        </li>
-        <li>
-          Fuera del alcance de este avance: validación experimental de los 10
-          candidatos VEGF-A (unión y competencia con VEGFR-2). Un rediseño con
-          objetivos de epítopo sobre el dímero queda como posible continuación.
+          Fuera del alcance: validación experimental de los 10
+          candidatos VEGF-A (unión y competencia con VEGFR-2).
         </li>
       </motion.ol>
     </motion.div>

@@ -16,18 +16,22 @@ const fade: Variants = {
   },
 };
 
+/** Ambos son de interfaz; cambia la agregación, no el foco. */
+const IPAE_VS_IPSAE =
+  "Ambos miran la interfaz (pares entre cadenas). Interface-PAE (iPAE) = promedio del error esperado en Å (↓ mejor). ipSAE = score 0–1 derivado de esa misma PAE de interfaz (↑ mejor); no es el promedio en Å.";
+
 const FORMULATIONS = [
   {
     pair: "Interface-PAE / pLDDT",
     f1: {
-      name: "Interface-PAE",
+      name: "Interface-PAE (iPAE)",
       meaning:
-        "Confianza de AlphaFold en la pose relativa VEGF-A–péptido (error esperado en la interfaz).",
+        "Error esperado (Å) de la pose relativa VEGF-A–péptido: promedio de PAE en pares intercadena. Menor = mejor.",
     },
     f2: {
       name: "pLDDT",
       meaning:
-        "Pliegue: si la estructura local se ve bien resuelta (no dice si la unión es la correcta).",
+        "Pliegue: si la estructura local se ve bien resuelta.",
     },
   },
   {
@@ -40,14 +44,15 @@ const FORMULATIONS = [
     f2: {
       name: "TM-score",
       meaning:
-        "Similitud del pliegue del péptido en el complejo vs el mismo péptido solo (AF2).",
+        "Similitud del plegamiento del péptido en el complejo vs el mismo péptido solo (AF2).",
     },
   },
   {
     pair: "ipSAE / SC",
     f1: {
       name: "ipSAE",
-      meaning: "Confianza de AlphaFold sobre la interfaz (señal de la red).",
+      meaning:
+        "Score 0–1 de confianza de interfaz a partir de la matriz PAE.",
     },
     f2: {
       name: "SC",
@@ -94,6 +99,7 @@ export function FormulacionesMecanismos({
       <motion.div variants={fade} className="formech-head">
         <h2 className="formech-title">Formulaciones y mecanismos</h2>
         <p className="formech-sub">Se eligieron 3 pares de objetivos.</p>
+        <p className="formech-contrast">{IPAE_VS_IPSAE}</p>
       </motion.div>
 
       <motion.div variants={fade} className="formech-viz">
@@ -139,28 +145,30 @@ export function FormulacionesMecanismos({
             ))}
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active.pair}
-              className="formech-pair"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <h4 className="formech-pair-title">{active.pair}</h4>
-              <dl className="formech-axes">
-                <div className="formech-axis">
-                  <dt>{active.f1.name}</dt>
-                  <dd>{active.f1.meaning}</dd>
-                </div>
-                <div className="formech-axis">
-                  <dt>{active.f2.name}</dt>
-                  <dd>{active.f2.meaning}</dd>
-                </div>
-              </dl>
-            </motion.div>
-          </AnimatePresence>
+          <div className="formech-pair-stage">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active.pair}
+                className="formech-pair"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <h4 className="formech-pair-title">{active.pair}</h4>
+                <dl className="formech-axes">
+                  <div className="formech-axis">
+                    <dt>{active.f1.name}</dt>
+                    <dd>{active.f1.meaning}</dd>
+                  </div>
+                  <div className="formech-axis">
+                    <dt>{active.f2.name}</dt>
+                    <dd>{active.f2.meaning}</dd>
+                  </div>
+                </dl>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </section>
 
         <section className="formech-block formech-mech-col">

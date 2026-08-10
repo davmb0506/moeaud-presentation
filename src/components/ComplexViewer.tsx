@@ -552,13 +552,7 @@ async function applyRepr(viewer: any, repr: Repr, roles: ChainRoles) {
       { cartoon: { color: COLOR_TARGET } }
     );
     if (binderChain) {
-      viewer.setStyle(
-        { chain: binderChain },
-        {
-          cartoon: { color: COLOR_BINDER },
-          stick: { radius: 0.18, color: COLOR_BINDER_STICK },
-        }
-      );
+      viewer.setStyle({ chain: binderChain }, { cartoon: { color: COLOR_BINDER } });
     }
   }
   viewer.render();

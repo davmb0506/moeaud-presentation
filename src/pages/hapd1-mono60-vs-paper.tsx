@@ -231,6 +231,9 @@ export function Hapd1Mono60VsPaper() {
     () => alignSequences(design.binder_seq, refAid.binder_seq),
     [design.binder_seq, refAid.binder_seq]
   );
+  const matchCount = seqAlign.matches.filter(Boolean).length;
+  const comparedLen = seqAlign.short.length;
+  const diffCount = Math.max(0, comparedLen - matchCount);
 
   const dPlddt =
     design.plddt_a != null && refAid.plddt != null
@@ -596,6 +599,26 @@ export function Hapd1Mono60VsPaper() {
                 active={designViewerActive ? true : undefined}
               />
             </div>
+          </div>
+          <div className="validacion-card hapd1-card hapd1-seq-under">
+            <div className="hapd1-seq-row">
+              <span className="hapd1-seq-label aid">AiD {refAid.aid_id}</span>
+              <code className="hapd1-seq-code">{refAid.binder_seq}</code>
+            </div>
+            <div className="hapd1-seq-row">
+              <span
+                className="hapd1-seq-label"
+                style={{ color: ARM_META[design.arm].color }}
+              >
+                {formatDesignLabel(design.id, design.arm)}
+              </span>
+              <code className="hapd1-seq-code">{design.binder_seq}</code>
+            </div>
+            <p className="hapd1-seq-meta">
+              Identidad local <strong>{(seqAlign.identity * 100).toFixed(1)}%</strong>
+              {" · "}
+              cambios <strong>{diffCount}</strong> / {comparedLen} residuos
+            </p>
           </div>
           <p className="hapd1-legend hapd1-legend-shared">
             <span className="ablacion-chip target" /> HA-PD1 ·{" "}

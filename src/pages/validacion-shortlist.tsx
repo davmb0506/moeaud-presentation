@@ -511,17 +511,7 @@ export function ValidacionShortlist() {
 
             {compareAids || compareNative ? (
               <>
-                {compareAids ? (
-                  <p className="hapd1-diff-key" aria-hidden>
-                    <span className="hapd1-diff-swatch best" /> mejor valor
-                  </p>
-                ) : (
-                  <p className="hapd1-diff-key">
-                    Docking del nativo es referencia de protocolo (VEGFR ≫
-                    péptido). Contactos IF y ΔSASA usan el mismo método en ambas
-                    poses de docking.
-                  </p>
-                )}
+                
                 <table className="hapd1-delta-table hapd1-diff-table">
                   <thead>
                     <tr>
@@ -726,9 +716,7 @@ export function ValidacionShortlist() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="hapd1-diff-section">
-                        <td colSpan={2}>Solo diseño (no aplica al nativo)</td>
-                      </tr>
+                      
                       {(
                         [
                           {

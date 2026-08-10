@@ -67,7 +67,7 @@ function stageMeta(panelId: PanelId, index: number): StageMeta {
       ? {
           does: "Composición de secuencia y contacto con VEGFR-2",
           criterion:
-            "Shannon ≥ 2.8 · GRAVY ∈ [−1.5, 1.5] · A+L ≤ 0.50 · Ala ≤ 0.45 · epítopo ≥ 0.20",
+            "Shannon ≥ 2.8 · GRAVY ∈ [−1.5, 1.5] · epítopo ≥ 0.20",
         }
       : {
           does: "Composición de secuencia",
