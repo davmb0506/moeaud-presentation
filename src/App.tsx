@@ -2,26 +2,28 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import "./App.css";
 import { MoleculeViewer } from "./components/MoleculeViewer";
-import { Agenda } from "./pages/agenda";
-import { EvoproIntro } from "./pages/evopro-intro";
-import { Multiobjetivo, MO_MAX_STEP } from "./pages/multiobjetivo";
-import { Hapd1Variantes } from "./pages/hapd1-variantes";
-import { Hapd1Mono60VsPaper } from "./pages/hapd1-mono60-vs-paper";
-import { Moeaud, UD_MAX_STEP } from "./pages/moeaud";
-import { AblacionConvergencia } from "./pages/ablacion-convergencia";
-import { Ablacion } from "./pages/ablacion";
-import { FormulacionesMecanismos, FORMECH_MAX_STEP } from "./pages/formulaciones-mecanismos";
+import { Agenda } from "./pages/02-agenda";
+import { TrabajoPendientePrevio } from "./pages/03-trabajo-pendiente-previo";
+import { EvoproIntro } from "./pages/05-evopro-intro";
+import { Hapd1Variantes } from "./pages/06-hapd1-variantes";
+import { Hapd1Representativos } from "./pages/07-hapd1-representativos";
+import { Multiobjetivo, MO_MAX_STEP } from "./pages/08-multiobjetivo";
+import { Moeaud, UD_MAX_STEP } from "./pages/09-moeaud";
+import { FormulacionesMecanismos, FORMECH_MAX_STEP } from "./pages/10-formulaciones-mecanismos";
+import { AblacionConvergencia } from "./pages/11-ablacion-convergencia";
+import { Ablacion } from "./pages/12-ablacion";
+import { CompositeFront } from "./pages/13-composite-front";
+import { IpsaeScFront } from "./pages/14-ipsae-sc-front";
+import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/15-validacion-sintesis";
+import { ValidacionShortlist } from "./pages/16-validacion-shortlist";
+import { WrapUp } from "./pages/17-wrap-up";
+import { Referencias } from "./pages/18-referencias";
 /* Inactivos en avances (redundantes con HA-PD1):
 import { Experimentos } from "./pages/experimentos";
 import { Hapd1Stats } from "./pages/hapd1-stats";
 import { Operadores } from "./pages/operadores";
+import { Hapd1Mono60VsPaper } from "./pages/hapd1-mono60-vs-paper";
 */
-import { CompositeFront } from "./pages/composite-front";
-import { IpsaeScFront } from "./pages/ipsae-sc-front";
-import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/validacion-sintesis";
-import { ValidacionShortlist } from "./pages/validacion-shortlist";
-import { WrapUp } from "./pages/wrap-up";
-import { Referencias } from "./pages/referencias";
 
 /* Imports del deck completo (inactivos en avances):
 import { Temperatura } from "./pages/temperatura";
@@ -33,7 +35,7 @@ import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 17;
+const TOTAL_SLIDES = 18;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -217,8 +219,13 @@ export default function App() {
     <main className="app">
       {/* ============================================================ */}
       {/* === DECK AVANCES (activo) — énfasis en RESULTADOS === */}
+      {/* 01 Portada · 02 Agenda · 03 Pendiente previo · 04 Objetivo · 05 EvoPro */}
+      {/* 06 HA-PD1 variantes · 07 HA-PD1 reps · 08 Mono→multi · 09 MOEA-UD */}
+      {/* 10 Formulaciones · 11 Ablación HV · 12 Frente PAE/pLDDT · 13 Composite/TM */}
+      {/* 14 ipSAE/SC · 15 Cribado · 16 Shortlist · 17 Síntesis · 18 Referencias */}
       {/* ============================================================ */}
 
+      {/* 01 · Portada */}
       <motion.section
         className="cover slide"
         variants={slideContainer}
@@ -257,6 +264,7 @@ export default function App() {
         <SlideNo n={1} />
       </motion.section>
 
+      {/* 02 · Agenda */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -268,6 +276,19 @@ export default function App() {
         <SlideNo n={2} />
       </motion.section>
 
+      {/* 03 · Trabajo pendiente tras el avance anterior */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <TrabajoPendientePrevio />
+        <SlideNo n={3} />
+      </motion.section>
+
+      {/* 04 · Objetivo general / Importancia biológica */}
       <motion.section
         className="showcase slide"
         data-step="bio"
@@ -357,10 +378,10 @@ export default function App() {
             </motion.p>
           </motion.div>
         </div>
-        <SlideNo n={3} />
+        <SlideNo n={4} />
       </motion.section>
 
-      {/* --- Contexto método + resultados mono (HA-PD1) --- */}
+      {/* 05 · EvoPro */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -369,9 +390,10 @@ export default function App() {
         viewport={viewport}
       >
         <EvoproIntro />
-        <SlideNo n={4} />
+        <SlideNo n={5} />
       </motion.section>
 
+      {/* 06 · HA-PD1 · comparación de variantes */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -380,9 +402,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <Hapd1Variantes />
-        <SlideNo n={5} />
+        <SlideNo n={6} />
       </motion.section>
 
+      {/* 07 · HA-PD1 · soluciones representativas */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -390,11 +413,11 @@ export default function App() {
         whileInView="visible"
         viewport={{ amount: 0.12 }}
       >
-        <Hapd1Mono60VsPaper />
-        <SlideNo n={6} />
+        <Hapd1Representativos />
+        <SlideNo n={7} />
       </motion.section>
 
-      {/* --- De mono a multi → MOEA-UD --- */}
+      {/* 08 · De monoobjetivo a multiobjetivo */}
       <motion.section
         className="showcase slide"
         data-step="mo"
@@ -404,9 +427,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <Multiobjetivo step={moStep} />
-        <SlideNo n={7} />
+        <SlideNo n={8} />
       </motion.section>
 
+      {/* 09 · MOEA-UD */}
       <motion.section
         className="showcase slide"
         data-step="ud"
@@ -416,10 +440,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Moeaud step={udStep} />
-        <SlideNo n={8} />
+        <SlideNo n={9} />
       </motion.section>
 
-      {/* --- Resultados VEGF-A --- */}
+      {/* 10 · Formulaciones multiobjetivo */}
       <motion.section
         className="showcase slide"
         data-step="formech"
@@ -429,9 +453,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <FormulacionesMecanismos step={formechStep} onStepChange={setFormech} />
-        <SlideNo n={9} />
+        <SlideNo n={10} />
       </motion.section>
 
+      {/* 11 · Ablación · convergencia HV */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -440,9 +465,10 @@ export default function App() {
         viewport={{ amount: 0.3 }}
       >
         <AblacionConvergencia />
-        <SlideNo n={10} />
+        <SlideNo n={11} />
       </motion.section>
 
+      {/* 12 · Ablación · frente Interface-PAE / pLDDT */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -451,9 +477,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Ablacion />
-        <SlideNo n={11} />
+        <SlideNo n={12} />
       </motion.section>
 
+      {/* 13 · Ablación · frente Composite / TM-score */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -462,9 +489,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <CompositeFront />
-        <SlideNo n={12} />
+        <SlideNo n={13} />
       </motion.section>
 
+      {/* 14 · Ablación · frente ipSAE / SC */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -473,9 +501,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <IpsaeScFront />
-        <SlideNo n={13} />
+        <SlideNo n={14} />
       </motion.section>
 
+      {/* 15 · Cribado computacional */}
       <motion.section
         className="showcase slide"
         data-step="goudy"
@@ -485,9 +514,10 @@ export default function App() {
         viewport={{ amount: 0.18 }}
       >
         <ValidacionSintesis step={goudyStep} onStepChange={setGoudy} />
-        <SlideNo n={14} />
+        <SlideNo n={15} />
       </motion.section>
 
+      {/* 16 · Shortlist / selección final */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -496,10 +526,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <ValidacionShortlist />
-        <SlideNo n={15} />
+        <SlideNo n={16} />
       </motion.section>
 
-      {/* --- Cierre --- */}
+      {/* 17 · Síntesis */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -508,9 +538,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <WrapUp />
-        <SlideNo n={16} />
+        <SlideNo n={17} />
       </motion.section>
 
+      {/* 18 · Referencias */}
       <motion.section
         className="refs-slide slide"
         variants={slideContainer}
@@ -519,7 +550,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={17} />
+        <SlideNo n={18} />
       </motion.section>
 
       {/* ============================================================ */}

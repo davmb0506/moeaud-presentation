@@ -34,15 +34,17 @@ export function Agenda() {
         <li>
           Recapitulación
           <ol type="a">
+            <li>Actividades subsecuentes del avance anterior</li>
             <li>Objetivo general</li>
             <li>EvoPro como punto de partida</li>
-            <li>Transición a multiobjeivo</li>
+            <li>Variantes monoobjetivo en HA-PD1</li>
+            <li>Transición a multiobjetivo</li>
           </ol>
         </li>
         <li>
           Resultados
           <ol type="a">
-            <li>Formulaciones y mecanismos adaptativos</li>
+            <li>Formulaciones multiobjetivo</li>
             <li>Resultados de experimentos con mecanismos adaptativos</li>
             <li>Cribado y selección final</li>
           </ol>

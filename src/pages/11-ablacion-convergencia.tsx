@@ -6,7 +6,6 @@ import overheadRaw from "../data/ablationOverhead.json";
 
 const MECH = ABLATION_CONDS.con.color;
 const NOMECH = ABLATION_CONDS.sin.color;
-const GREEN = "#2f8f5f"; // anotaciones / mensaje
 
 type OverheadReplica = {
   id: string;
@@ -97,13 +96,11 @@ type SlideData =
       img: string;
       alt: string;
       rows: Test[];
-      msg: string;
     }
   | {
       kind: "overhead";
       title: string;
       sub: ReactNode;
-      msg: string | null;
     };
 
 const H0_BI =
@@ -133,7 +130,6 @@ const SLIDES: SlideData[] = [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.00911", sig: "**", reject: true },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.00455", sig: "**", reject: true },
     ],
-    msg: "En esta formulación, los mecanismos adaptativos (MA) mejoran de forma significativa el mejor hipervolumen alcanzado a lo largo de la ejecución.",
   },
   {
     kind: "stats",
@@ -153,7 +149,6 @@ const SLIDES: SlideData[] = [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2406", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.8942", sig: "n.s.", reject: false },
     ],
-    msg: "Las trayectorias acumuladas son muy similares y no hay evidencia de que MA mejore el mejor HV alcanzado en esta formulación.",
   },
   {
     kind: "stats",
@@ -172,13 +167,11 @@ const SLIDES: SlideData[] = [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2755", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.1378", sig: "n.s.", reject: false },
     ],
-    msg: "La comparación sigue siendo no concluyente: ambas condiciones alcanzan techos muy parecidos y la variabilidad entre réplicas domina la diferencia media.",
   },
   {
     kind: "overhead",
     title: "Costo computacional adicional de los mecanismos adaptativos",
     sub: null,
-    msg: null,
   },
 ];
 const TOTAL = SLIDES.length;
@@ -262,13 +255,6 @@ function SlideView({ data }: { data: SlideData }) {
             </tbody>
           </table>
         </div>
-
-        {data.msg ? (
-          <p className="exp-msg" style={{ color: GREEN }}>
-            {data.msg}
-          </p>
-        ) : null}
-        
       </motion.div>
     );
   }
@@ -316,16 +302,6 @@ function SlideView({ data }: { data: SlideData }) {
             ))}
           </tbody>
         </table>
-
-        <p className="exp-msg" style={{ color: GREEN }}>
-          {data.msg}
-        </p>
-        <p className="exp-foot">
-          *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. = no significativo.
-          Hipervolumen final por réplica; n = 10 réplicas
-          independientes por condición. Línea sólida: media; línea discontinua:
-          mediana; banda sombreada: rango intercuartil (Q1–Q3) entre réplicas.
-        </p>
       </div>
     </motion.div>
   );

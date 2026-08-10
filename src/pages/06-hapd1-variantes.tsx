@@ -1,7 +1,4 @@
-import { useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
-import { ComplexViewer } from "../components/ComplexViewer";
-import { DesignCharacterization } from "../components/DesignCharacterization";
 import hapd1Data from "../data/hapd1Variantes.json";
 
 const fade: Variants = {
@@ -15,37 +12,13 @@ const fade: Variants = {
 
 type ArmId = "base" | "temp" | "mutation";
 
-type RunRaw = {
-  id: string;
-  arm: ArmId;
-  replica: number;
-  generation_budget: number;
-  score: number;
-  binder: string;
-  plddt: number | null;
-  iptm: number | null;
-  contact: number | null;
-  gravy: number | null;
-  charge: number | null;
-  pi: number | null;
-  aromaticity: number | null;
-  instability: number | null;
-  mw_kda: number | null;
-  pdb: string | null;
-  rg: number | null;
-  if_contacts: number | null;
-  bsa: number | null;
-};
-
 type ArmRaw = {
   id: ArmId;
   label: string;
-  shortLabel: string;
   color: string;
   mean: number;
   std: number;
   values: number[];
-  runs: RunRaw[];
 };
 
 type BoxStats = {
@@ -56,26 +29,10 @@ type BoxStats = {
   q3: number;
 };
 
-type PlotPoint = {
-  key: string;
-  arm: ArmId;
-  x: number;
-  y: number;
-  run: RunRaw & { viewerPdbUrl: string | null };
-};
-
 const ARMS = hapd1Data.arms as ArmRaw[];
 
 function formatSummary(avg: number, sdValue: number) {
   return `${avg.toFixed(1)} ± ${sdValue.toFixed(1)}`;
-}
-
-function toPublicPdbUrl(pdb: string | null) {
-  if (!pdb) return null;
-  const base = import.meta.env.BASE_URL.endsWith("/")
-    ? import.meta.env.BASE_URL
-    : `${import.meta.env.BASE_URL}/`;
-  return `${base}${pdb.replace(/^\/+/, "")}`;
 }
 
 function quantile(sorted: number[], q: number): number {
@@ -116,26 +73,12 @@ function jitter(index: number) {
   return (((index * 2654435761) % 1000) / 1000) * 2 - 1;
 }
 
-function fmt(value: number | null, digits: number) {
-  return value === null || Number.isNaN(value) ? "—" : value.toFixed(digits);
-}
-
-function displayRunId(run: RunRaw) {
-  const group = ARMS.find((arm) => arm.id === run.arm);
-  const label = group?.shortLabel ?? run.arm;
-  return `${label} · réplica ${String(run.replica).padStart(2, "0")}`;
-}
-
 const GROUPS = ARMS.map((arm) => ({
   id: arm.id,
   label: arm.label,
   color: arm.color,
   values: arm.values,
   summaryLabel: formatSummary(arm.mean, arm.std),
-  runs: arm.runs.map((run) => ({
-    ...run,
-    viewerPdbUrl: toPublicPdbUrl(run.pdb),
-  })),
 }));
 
 const BOXES = GROUPS.map((group) => ({
@@ -143,12 +86,12 @@ const BOXES = GROUPS.map((group) => ({
   stats: boxStats(group.values),
 }));
 
-const W = 560;
-const H = 360;
-const PAD = { left: 56, right: 16, top: 32, bottom: 72 };
+const W = 720;
+const H = 380;
+const PAD = { left: 56, right: 20, top: 32, bottom: 72 };
 const PW = W - PAD.left - PAD.right;
 const PH = H - PAD.top - PAD.bottom;
-const BOX_W = 56;
+const BOX_W = 64;
 const XS = [PAD.left + PW * 0.18, PAD.left + PW * 0.5, PAD.left + PW * 0.82];
 
 /** Mann–Whitney vs solo mutación (menor = mejor). Unilateral = H1: el brazo es mejor. */
@@ -184,21 +127,15 @@ const TICKS = niceTicks(SCALE_MIN, SCALE_MAX);
 const sy = (value: number) =>
   PAD.top + ((SCALE_MAX - value) / (SCALE_MAX - SCALE_MIN)) * PH;
 
-const PLOT_POINTS: PlotPoint[] = GROUPS.flatMap((group, groupIndex) =>
-  group.runs.map((run, index) => ({
-    key: run.id,
-    arm: group.id,
+const PLOT_POINTS = GROUPS.flatMap((group, groupIndex) =>
+  group.values.map((score, index) => ({
+    key: `${group.id}-${index}`,
+    arm: group.id as ArmId,
     x: XS[groupIndex] + jitter(index) * (BOX_W / 2 - 8),
-    y: sy(run.score),
-    run,
+    y: sy(score),
+    score,
   }))
 );
-
-const INITIAL_RUN =
-  PLOT_POINTS.filter((point) => point.run.viewerPdbUrl).reduce(
-    (best, point) => (point.run.score < best.run.score ? point : best),
-    PLOT_POINTS.find((point) => point.run.viewerPdbUrl) ?? PLOT_POINTS[0]
-  ).run;
 
 const COLOR_BY_ARM: Record<ArmId, string> = {
   base: GROUPS.find((g) => g.id === "base")!.color,
@@ -263,29 +200,6 @@ function Box({
 }
 
 export function Hapd1Variantes() {
-  const [pinnedId, setPinnedId] = useState(INITIAL_RUN.id);
-  const [hoverId, setHoverId] = useState<string | null>(null);
-
-  const activeKey = hoverId ?? pinnedId;
-  const activePoint = useMemo(
-    () => PLOT_POINTS.find((point) => point.key === activeKey) ?? null,
-    [activeKey]
-  );
-  const run = activePoint?.run ?? INITIAL_RUN;
-  const armLabel =
-    GROUPS.find((group) => group.id === run.arm)?.label ?? run.arm;
-
-  const legendGroups = GROUPS.map((group) => ({
-    ...group,
-    swatchStyle:
-      group.id === "temp"
-        ? {
-            background: "rgba(29, 138, 122, 0.14)",
-            border: `1px dashed ${group.color}`,
-          }
-        : { background: group.color },
-  }));
-
   return (
     <motion.div
       className="ablacion variant-slide hapd1var-slide"
@@ -303,14 +217,13 @@ export function Hapd1Variantes() {
         temperatura variable en el muestreo de secuencias.
       </p>
 
-      <div className="ablacion-grid hapd1var-grid">
+      <div className="hapd1var-solo">
         <section className="ablacion-plot hapd1var-plot">
           <svg
             viewBox={`0 0 ${W} ${H}`}
             className="ablacion-svg variant-svg hapd1var-svg"
             role="img"
             aria-label="Diagramas de caja comparando mutación sola, mutación con cruce, y mutación con cruce y temperatura variable en HA-PD1"
-            onMouseLeave={() => setHoverId(null)}
           >
             <text
               x={PAD.left + PW / 2}
@@ -374,47 +287,18 @@ export function Hapd1Variantes() {
               />
             ))}
 
-            {PLOT_POINTS.map((point) => {
-              const isPinned = point.key === pinnedId;
-              const isHover = point.key === hoverId;
-              const highlighted = isPinned || isHover;
-              const hasPdb = Boolean(point.run.viewerPdbUrl);
-              return (
-                <g key={point.key}>
-                  {highlighted && (
-                    <circle
-                      cx={point.x}
-                      cy={point.y}
-                      r={9}
-                      className={`abl-ring ${isPinned ? "pinned" : "hover"}`}
-                      style={{ stroke: COLOR_BY_ARM[point.arm] }}
-                    />
-                  )}
-                  <circle
-                    cx={point.x}
-                    cy={point.y}
-                    r={highlighted ? 5.5 : 4}
-                    className="abl-dot"
-                    style={{
-                      fill: COLOR_BY_ARM[point.arm],
-                      cursor: hasPdb ? "pointer" : "default",
-                      opacity: hasPdb ? 1 : 0.45,
-                    }}
-                    onMouseEnter={
-                      hasPdb ? () => setHoverId(point.key) : undefined
-                    }
-                    onClick={
-                      hasPdb ? () => setPinnedId(point.key) : undefined
-                    }
-                  />
-                  <title>
-                    {`${displayRunId(point.run)} · ${point.run.score.toFixed(
-                      2
-                    )}${hasPdb ? "" : " · sin estructura"}`}
-                  </title>
-                </g>
-              );
-            })}
+            {PLOT_POINTS.map((point) => (
+              <circle
+                key={point.key}
+                cx={point.x}
+                cy={point.y}
+                r={4}
+                className="abl-dot"
+                style={{ fill: COLOR_BY_ARM[point.arm] }}
+              >
+                <title>{`${point.score.toFixed(2)}`}</title>
+              </circle>
+            ))}
 
             {GROUPS.map((group, index) => (
               <g key={`${group.id}-label`}>
@@ -440,92 +324,56 @@ export function Hapd1Variantes() {
           </svg>
 
           <div className="ablacion-legend">
-            {legendGroups.map((group) => (
+            {GROUPS.map((group) => (
               <span key={group.id} className="ablacion-legend-item">
-                <span className="ablacion-swatch" style={group.swatchStyle} />
+                <span
+                  className="ablacion-swatch"
+                  style={
+                    group.id === "temp"
+                      ? {
+                          background: "rgba(29, 138, 122, 0.14)",
+                          border: `1px dashed ${group.color}`,
+                        }
+                      : { background: group.color }
+                  }
+                />
                 {group.label} · {group.summaryLabel}
               </span>
             ))}
           </div>
+        </section>
 
-          <div className="hapd1var-stats">
-            <table className="hapd1var-stats-table">
-              <thead>
-                <tr>
-                  <th>Contraste</th>
-                  <th>Prueba</th>
-                  <th>p</th>
-                  <th>Sig.</th>
+        <div className="hapd1var-stats">
+          <table className="hapd1var-stats-table">
+            <thead>
+              <tr>
+                <th>Contraste</th>
+                <th>Prueba</th>
+                <th>p</th>
+                <th>Sig.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {STATS_ROWS.map((row) => (
+                <tr key={row.contrast}>
+                  <td>{row.contrast}</td>
+                  <td>{row.test}</td>
+                  <td className="hapd1var-stats-num">{row.p.toFixed(3)}</td>
+                  <td
+                    className={`hapd1var-stats-sig${
+                      row.sig === "n.s." ? " is-ns" : ""
+                    }`}
+                  >
+                    {row.sig}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {STATS_ROWS.map((row) => (
-                  <tr key={row.contrast}>
-                    <td>{row.contrast}</td>
-                    <td>{row.test}</td>
-                    <td className="hapd1var-stats-num">{row.p.toFixed(3)}</td>
-                    <td
-                      className={`hapd1var-stats-sig${
-                        row.sig === "n.s." ? " is-ns" : ""
-                      }`}
-                    >
-                      {row.sig}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="hapd1var-stats-key">* p &lt; 0.05 · n.s. = no significativo</p>
-          </div>
-        </section>
-
-        <section className="ablacion-viewer hapd1var-viewer">
-          <ComplexViewer
-            key={run.id}
-            pdbUrl={run.viewerPdbUrl}
-            referenceUrl={run.viewerPdbUrl}
-          />
-
-          <div className="ablacion-info">
-            <div className="ablacion-info-head">
-              <span
-                className="ablacion-info-tag"
-                style={{ background: COLOR_BY_ARM[run.arm] }}
-              >
-                {armLabel}
-              </span>
-              <span className="ablacion-info-id">
-                Réplica {String(run.replica).padStart(2, "0")}
-              </span>
-            </div>
-            <div className="op-metrics">
-              <div className="op-metric">
-                <span className="op-metric-k">Aptitud</span>
-                <span className="op-metric-v">{run.score.toFixed(2)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">pLDDT péptido</span>
-                <span className="op-metric-v">{fmt(run.plddt, 1)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">ipTM</span>
-                <span className="op-metric-v">{fmt(run.iptm, 2)}</span>
-              </div>
-              <div className="op-metric">
-                <span className="op-metric-k">Puntuación de contacto</span>
-                <span className="op-metric-v">{fmt(run.contact, 1)}</span>
-              </div>
-            </div>
-            <div className="hapd1var-peptide">
-              <DesignCharacterization m={run} />
-            </div>
-            <code className="ablacion-info-seq">{run.binder}</code>
-            <p className="ablacion-info-note">
-              <span className="ablacion-chip target" /> objetivo (PD-1) ·{" "}
-              <span className="ablacion-chip binder" /> péptido diseñado
-            </p>
-          </div>
-        </section>
+              ))}
+            </tbody>
+          </table>
+          <p className="hapd1var-stats-key">
+            * p &lt; 0.05 · n.s. = no significativo
+          </p>
+        </div>
       </div>
     </motion.div>
   );

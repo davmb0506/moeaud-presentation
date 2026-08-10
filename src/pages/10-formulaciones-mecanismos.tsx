@@ -16,51 +16,84 @@ const fade: Variants = {
   },
 };
 
-/** Ambos son de interfaz; cambia la agregación, no el foco. */
-const IPAE_VS_IPSAE =
-  "Ambos miran la interfaz (pares entre cadenas). Interface-PAE (iPAE) = promedio del error esperado en Å (↓ mejor). ipSAE = score 0–1 derivado de esa misma PAE de interfaz (↑ mejor); no es el promedio en Å.";
+type Axis = {
+  name: string;
+  units: string;
+  better: "↓" | "↑";
+  meaning: string;
+};
 
-const FORMULATIONS = [
+type Formulation = {
+  pair: string;
+  seeks: string;
+  conflict: string;
+  f1: Axis;
+  f2: Axis;
+};
+
+const FORMULATIONS: Formulation[] = [
   {
     pair: "Interface-PAE / pLDDT",
+    seeks:
+      "Pose de unión confiable sin sacrificar la calidad del pliegue local.",
+    conflict:
+      "AF puede mejorar la confianza de la interfaz degradando la del pliegue (o al revés).",
     f1: {
       name: "Interface-PAE (iPAE)",
+      units: "Å",
+      better: "↓",
       meaning:
-        "Error esperado (Å) de la pose relativa VEGF-A–péptido: promedio de PAE en pares intercadena. Menor = mejor.",
+        "Error esperado de la pose relativa VEGF-A–péptido (PAE intercadena).",
     },
     f2: {
       name: "pLDDT",
-      meaning:
-        "Pliegue: si la estructura local se ve bien resuelta.",
+      units: "0–100",
+      better: "↑",
+      meaning: "Si la estructura local se ve bien resuelta (confianza de pliegue).",
     },
   },
   {
     pair: "Compuesto / TM-score",
+    seeks:
+      "Buena calidad de unión sin exigir un cambio grande de pliegue al unirse.",
+    conflict:
+      "A veces mejorar el contacto pide deformar el péptido respecto a su forma sola.",
     f1: {
       name: "Compuesto",
-      meaning:
-        "Calidad de la unión: combina ipSAE, SC y ΔSASA.",
+      units: "0–1",
+      better: "↑",
+      meaning: "Calidad de la unión: combina ipSAE, SC y ΔSASA.",
     },
     f2: {
       name: "TM-score",
+      units: "0–1",
+      better: "↑",
       meaning:
-        "Similitud del plegamiento del péptido en el complejo vs el mismo péptido solo (AF2).",
+        "Similitud del pliegue del péptido solo vs en el complejo (AF2).",
     },
   },
   {
     pair: "ipSAE / SC",
+    seeks:
+      "Interfaz que la red confía y que además encaja geométricamente.",
+    conflict:
+      "Alta confianza de AF no implica buen encaje de formas (y al revés).",
     f1: {
       name: "ipSAE",
+      units: "0–1",
+      better: "↑",
       meaning:
-        "Score 0–1 de confianza de interfaz a partir de la matriz PAE.",
+        "Score de confianza de interfaz a partir de la matriz PAE (no es iPAE en Å).",
     },
     f2: {
       name: "SC",
+      units: "0–1",
+      better: "↑",
       meaning:
-        "Encaje de formas: si las superficies se complementan en el contacto.",
+        "Complementaridad de formas en el contacto (geometría 3D, no AF).",
     },
   },
-] as const;
+];
 
 const MECHANISMS = [
   {
@@ -72,6 +105,20 @@ const MECHANISMS = [
     why: "Si el hipervolumen se estanca, inyecta secuencias nuevas (exploración, refinamiento o extremos del frente).",
   },
 ] as const;
+
+function AxisCard({ axis }: { axis: Axis }) {
+  return (
+    <div className="formech-axis">
+      <div className="formech-axis-top">
+        <dt>{axis.name}</dt>
+        <span className="formech-axis-meta">
+          {axis.units} · {axis.better} mejor
+        </span>
+      </div>
+      <dd>{axis.meaning}</dd>
+    </div>
+  );
+}
 
 export function FormulacionesMecanismos({
   step = 0,
@@ -97,9 +144,7 @@ export function FormulacionesMecanismos({
       viewport={{ amount: 0.15 }}
     >
       <motion.div variants={fade} className="formech-head">
-        <h2 className="formech-title">Formulaciones y mecanismos</h2>
-        <p className="formech-sub">Se eligieron 3 pares de objetivos.</p>
-        <p className="formech-contrast">{IPAE_VS_IPSAE}</p>
+        <h2 className="formech-title">Formulaciones multiobjetivo</h2>
       </motion.div>
 
       <motion.div variants={fade} className="formech-viz">
@@ -156,16 +201,21 @@ export function FormulacionesMecanismos({
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h4 className="formech-pair-title">{active.pair}</h4>
+
+                <p className="formech-seek">
+                  <span className="formech-seek-k">Qué busca</span>
+                  {active.seeks}
+                </p>
+
                 <dl className="formech-axes">
-                  <div className="formech-axis">
-                    <dt>{active.f1.name}</dt>
-                    <dd>{active.f1.meaning}</dd>
-                  </div>
-                  <div className="formech-axis">
-                    <dt>{active.f2.name}</dt>
-                    <dd>{active.f2.meaning}</dd>
-                  </div>
+                  <AxisCard axis={active.f1} />
+                  <AxisCard axis={active.f2} />
                 </dl>
+
+                <p className="formech-conflict">
+                  <span className="formech-conflict-k">Conflicto</span>
+                  {active.conflict}
+                </p>
               </motion.div>
             </AnimatePresence>
           </div>

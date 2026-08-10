@@ -289,17 +289,7 @@ export function Multiobjetivo({ step = 0 }: { step?: number }) {
 
       <motion.div variants={fade} className="mo-compare">
         <div className="mo-panels">
-          <div className="mo-panel">
-            <div className="mo-panel-head">
-              <h4>Monoobjetivo</h4>
-              <small>
-                min<sub>x</sub> s(x)
-              </small>
-            </div>
-            <MonoChart active={monoActive} />
-          </div>
-
-          <div className="mo-divider" aria-hidden />
+          
 
           <div className="mo-panel">
             <div className="mo-panel-head">
