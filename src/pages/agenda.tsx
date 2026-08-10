@@ -35,12 +35,12 @@ export function Agenda() {
           Recapitulación
           <ol type="a">
             <li>Objetivo general</li>
-            <li>EvoPro y HA-PD1</li>
-            <li>De mono a multiobjetivo</li>
+            <li>EvoPro como punto de partida</li>
+            <li>Transición a multiobjeivo</li>
           </ol>
         </li>
         <li>
-          Resultados VEGF-A y cribado
+          Resultados
           <ol type="a">
             <li>Formulaciones y mecanismos adaptativos</li>
             <li>Resultados de experimentos con mecanismos adaptativos</li>
