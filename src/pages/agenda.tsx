@@ -32,7 +32,7 @@ export function Agenda() {
 
       <motion.ol variants={item} className="agenda-list">
         <li>
-          Marco y contexto
+          Recapitulación
           <ol type="a">
             <li>Objetivo general</li>
             <li>EvoPro y HA-PD1</li>
