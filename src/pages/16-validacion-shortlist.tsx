@@ -152,13 +152,6 @@ export function ValidacionShortlist() {
 
   const hl = VEGF_HLS.find((h) => h.id === activeId) ?? VEGF_HLS[0];
   const active = all.find((c) => c.id === hl.id) ?? null;
-  const highlights = useMemo(
-    () =>
-      VEGF_HLS.map((h) => all.find((c) => c.id === h.id)).filter(
-        (c): c is Candidate => !!c
-      ),
-    [all]
-  );
   const validation = useMemo(() => {
     const pairIds: number[] = [];
     for (let i = 0; i < all.length; i++) {
@@ -177,7 +170,6 @@ export function ValidacionShortlist() {
     const maxEpi = epitopes.length
       ? Math.round(100 * Math.max(...epitopes))
       : null;
-    const epiCount = epitopes.length;
     const competitionCount = all.filter((c) => {
       const grp = c.grupo.replace(/__\d+$/, "");
       const entry = COMPETITION_BY_GROUP[grp];
