@@ -42,7 +42,7 @@ type Arm = {
   runs: Run[];
 };
 
-type MetricKey = "score" | "iptm" | "pae_iface" | "if_contacts";
+type MetricKey = "score" | "plddt" | "iptm" | "pae_iface" | "if_contacts";
 
 const ARMS = hapd1Data.arms as Arm[];
 const ARM_ORDER: ArmId[] = ["mutation", "base", "temp"];
@@ -79,6 +79,13 @@ const METRICS: {
     digits: 1,
     higherBetter: false,
     why: "objetivo optimizado",
+  },
+  {
+    key: "plddt",
+    label: "pLDDT",
+    digits: 1,
+    higherBetter: true,
+    why: "confianza del pliegue",
   },
   {
     key: "iptm",

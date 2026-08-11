@@ -1,7 +1,7 @@
 import { motion, type Variants } from "framer-motion";
 
 /** 0 intro · 1–2 mantienen compatibilidad con teclas del deck */
-export const MO_MAX_STEP = 2;
+export const MO_MAX_STEP = 0;
 
 const wrap: Variants = {
   hidden: { opacity: 0 },

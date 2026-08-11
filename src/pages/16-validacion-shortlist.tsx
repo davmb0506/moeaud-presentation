@@ -161,30 +161,37 @@ export function ValidacionShortlist() {
   );
   const validation = useMemo(() => {
     const pairIds: number[] = [];
-    for (let i = 0; i < highlights.length; i++) {
-      for (let j = i + 1; j < highlights.length; j++) {
+    for (let i = 0; i < all.length; i++) {
+      for (let j = i + 1; j < all.length; j++) {
         pairIds.push(
-          seqIdentity(highlights[i].binder_seq, highlights[j].binder_seq)
+          seqIdentity(all[i].binder_seq, all[j].binder_seq)
         );
       }
     }
-    const epitopes = highlights
+    const epitopes = all
       .map((c) => c.epitope_coverage)
       .filter((n): n is number => n != null && !Number.isNaN(n));
+    const minEpi = epitopes.length
+      ? Math.round(100 * Math.min(...epitopes))
+      : null;
     const maxEpi = epitopes.length
       ? Math.round(100 * Math.max(...epitopes))
       : null;
-    const competitionCount = highlights.filter((c) => {
+    const epiCount = epitopes.length;
+    const competitionCount = all.filter((c) => {
       const grp = c.grupo.replace(/__\d+$/, "");
       const entry = COMPETITION_BY_GROUP[grp];
       return entry && entry.p < 0.05;
     }).length;
     return {
       pairwise: pctRange(pairIds),
-      epitope: maxEpi != null ? `hasta ${maxEpi} %` : "—",
-      competition: `${competitionCount} de ${highlights.length}`,
+      epitope:
+        maxEpi != null
+          ? `${minEpi}–${maxEpi} %`
+          : "—",
+      competition: `${competitionCount} de ${all.length}`,
     };
-  }, [highlights]);
+  }, [all]);
   const designPdb =
     hl.pose === "haddock"
       ? active?.haddock_pdb ?? active?.pdb
@@ -229,9 +236,6 @@ export function ValidacionShortlist() {
     >
       <header className="vhl-head">
         <h2 className="vhl-title">Diseños destacados</h2>
-        <p className="vhl-sub">
-          Cuatro de los 10 del filtro, cada uno por un criterio distinto.
-        </p>
       </header>
 
       <div className="vhl-grid">
@@ -321,11 +325,6 @@ export function ValidacionShortlist() {
           <span>Identidad entre finalistas</span>
           <strong>{validation.pairwise}</strong>
           <em>soluciones diversas al mismo problema</em>
-        </div>
-        <div className="vhl-vstat">
-          <span>Oclusión de VEGFR-2</span>
-          <strong>{validation.competition}</strong>
-          <em>compiten por el sitio del receptor</em>
         </div>
         <div className="vhl-vstat">
           <span>Epítopo emergente</span>

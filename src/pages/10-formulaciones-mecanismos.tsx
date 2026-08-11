@@ -133,14 +133,14 @@ export function FormulacionesMecanismos() {
 
           {/* Inputs → MOEA (ortogonal: baja, une, baja) */}
           <path
-            d={`M 160 72 V 95 H ${moeaCx} V ${moea.y}`}
+            d={`M 200 86 V 102 H ${moeaCx} V ${moea.y}`}
             fill="none"
             stroke={STROKE}
             strokeWidth={1.4}
             markerEnd="url(#fexp-arrow)"
           />
           <path
-            d={`M 740 72 V 95 H ${moeaCx}`}
+            d={`M 700 86 V 102 H ${moeaCx}`}
             fill="none"
             stroke={STROKE}
             strokeWidth={1.4}
@@ -222,12 +222,17 @@ export function FormulacionesMecanismos() {
             );
           })}
 
-          {/* Input boxes */}
-          <Box x={70} y={24} w={180} h={48} />
-          <Label x={160} y={48} text="Semilla (21 aa)" size={14} />
+          {/* Input section header */}
+          <Label x={450} y={12} text="Entradas del algoritmo" size={13} weight={700} fill={MUTED} />
 
-          <Box x={650} y={24} w={180} h={48} />
-          <Label x={740} y={48} text="VEGF-A (blanco)" size={14} />
+          {/* Input boxes */}
+          <Box x={70} y={30} w={260} h={56} />
+          <Label x={200} y={48} text="Péptido semilla (21 aa)" size={13} weight={700} />
+          <Label x={200} y={68} text="Población inicial por mutación" size={10.5} fill={MUTED} weight={500} />
+
+          <Box x={570} y={30} w={260} h={56} />
+          <Label x={700} y={48} text="VEGF-A (proteína blanco)" size={13} weight={700} />
+          <Label x={700} y={68} text="Estructura 3D para evaluación" size={10.5} fill={MUTED} weight={500} />
 
           {/* MOEA-UD */}
           <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
@@ -267,6 +272,7 @@ export function FormulacionesMecanismos() {
             weight={700}
             fill={MUTED}
           />
+
         </svg>
       </motion.div>
     </motion.div>

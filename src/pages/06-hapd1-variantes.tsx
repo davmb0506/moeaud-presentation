@@ -208,7 +208,7 @@ export function Hapd1Variantes() {
       whileInView="visible"
       viewport={{ amount: 0.15 }}
     >
-      <h2 className="ablacion-title">Comparación de variantes en HA-PD1</h2>
+      <h2 className="ablacion-title">Comparación de variantes de formulación monoobjetivo</h2>
       <p className="ablacion-sub">
         Se ejecutaron{" "}
         <strong>10 réplicas independientes de 60 generaciones</strong> para cada
