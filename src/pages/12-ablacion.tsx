@@ -132,8 +132,7 @@ export function Ablacion() {
         Ablación de mecanismos — Interface-PAE / pLDDT
       </h2>
       <p className="ablacion-sub">
-        Aproximación del frente de una <strong>réplica representativa</strong>{" "}
-        por condición (cercana a la media de no dominadas).
+        Aproximación del frente de una <strong>réplica representativa</strong>.
       </p>
 
       <div className="ablacion-grid">

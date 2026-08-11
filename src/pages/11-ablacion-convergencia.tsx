@@ -330,11 +330,10 @@ export function AblacionConvergencia() {
       if ((!isNext && !isPrev) || !section) return;
 
       const slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
-      const y = window.scrollY;
       let curEl: HTMLElement | null = null;
       let best = Infinity;
       slides.forEach((s) => {
-        const d = Math.abs(s.offsetTop - y);
+        const d = Math.abs(s.getBoundingClientRect().top);
         if (d < best) {
           best = d;
           curEl = s;

@@ -8756,6 +8756,52 @@
   max-width: 52rem;
 }
 
+.vhl-foot {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text);
+  opacity: 0.75;
+  max-width: none;
+}
+
+.vhl-validation {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vhl-vstat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+}
+
+.vhl-vstat span {
+  font-size: 11px;
+  color: var(--text);
+  opacity: 0.75;
+}
+
+.vhl-vstat strong {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-h);
+  letter-spacing: -0.02em;
+}
+
+.vhl-vstat em {
+  font-style: normal;
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--text);
+  opacity: 0.85;
+}
+
 .vhl-grid {
   display: grid;
   grid-template-columns: minmax(240px, 300px) 1fr;
@@ -8934,6 +8980,10 @@
 
   .vhl-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vhl-validation {
+    grid-template-columns: 1fr;
   }
 }
 

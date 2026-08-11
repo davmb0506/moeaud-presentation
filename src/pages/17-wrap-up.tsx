@@ -29,20 +29,17 @@ export function WrapUp() {
 
       <motion.ol variants={fade} className="sintesis-list">
         <li>
-          En la formulación monoobjetivo (dominio autoinhibitorio de HA-PD1),
-          tanto el operador de cruza como ProteinMPNN con temperatura variable
-          mejoraron el valor de la función de aptitud frente a la base.
+          Formulación monoobjetivo (HA-PD1): cruza y temperatura variable
+          mejoran la aptitud frente a la formulación base.
         </li>
         <li>
-          En la formulación multiobjetivo sobre VEGF-A, los mecanismos
-          adaptativos mejoraron el hipervolumen y el tamaño del archivo solo
-          en Interface-PAE / pLDDT.
+          Formulación multiobjetivo (VEGF-A): los mecanismos adaptativos
+          mejoran hipervolumen y archivo solo en Interface-PAE / pLDDT.
         </li>
         <li>
-          A partir del conjunto no dominado (1208 secuencias), el cribado
-          deja <strong>10</strong> candidatos finales. En docking local se
-          reporta el score de cada uno junto a la referencia del complejo
-          nativo VEGF–VEGFR-2 (−80.1); el mejor del panel llega a −131.4.
+          Los diseños muestran oclusión estérica significativa del sitio
+          VEGFR-2, posicionándolos como <em>leads</em> computacionales
+          pendientes de validación experimental.
         </li>
       </motion.ol>
 

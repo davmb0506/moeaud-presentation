@@ -19,13 +19,7 @@ type Item = { text: string; sub?: readonly string[] };
 /** Texto del slide “Actividades subsecuentes” del avance de abril. */
 const PENDING: readonly Item[] = [
   { text: "Experimentos finales con objetivos seleccionados." },
-  {
-    text: "Validación de diseños in silico.",
-    sub: [
-      "Re-predecir candidatos prometedores.",
-      "Comparación con herramientas de docking.",
-    ],
-  },
+  { text: "Validación de diseños in silico." },
   { text: "Redacción de tesis." },
 ];
 
@@ -39,7 +33,7 @@ export function TrabajoPendientePrevio() {
       viewport={{ amount: 0.2 }}
     >
       <motion.h2 variants={fade} className="sintesis-title">
-        Actividades pendientes
+        Actividades pendientes del periodo pasado
       </motion.h2>
 
       <motion.ol variants={fade} className="sintesis-list pendiente-list">

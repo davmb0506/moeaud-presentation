@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { motion, type Variants } from "framer-motion";
 import shortlistData from "../data/shortlistGoudy.json";
 
@@ -85,16 +85,6 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
       blurb: isMoea
         ? "Corta secuencias raras o sesgadas y exige ≥20 % del epítopo VEGFR-2."
         : "Corta sesgos de composición (Ala, Leu, Gln) del protocolo de Goudy.",
-      bullets: isMoea
-        ? [
-            "Entropía de Shannon",
-            "Composición de las secuencias",
-            "Cobertura del epítopo",
-          ]
-        : [
-            "Composición de las secuencias",
-            "Límites de Ala / Ala+Leu / Ala+Gln",
-          ],
       badge: v(3),
       kind: "qc",
     },
@@ -102,7 +92,7 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
       id: "reprod",
       title: "Repredicción AF2 – OmegaFold",
       blurb: isMoea
-        ? "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å), y reparte cupo entre grupos."
+        ? "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å)."
         : "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å).",
       subtitle: isMoea ? "RMSD < 5 Å · diversidad entre grupos" : "RMSD < 5 Å",
       badge: v(4),
@@ -116,18 +106,12 @@ const NARRATED = [1, 2, 3, 4, 5] as const;
 
 export function ValidacionSintesis({
   step = 0,
-  onStepChange,
 }: {
   step?: number;
   onStepChange?: (next: number) => void;
 }) {
+  const panelId: PanelId = "moea_pool1208";
   const panels = (raw.panels ?? {}) as Record<PanelId, Panel>;
-  const ids = (Object.keys(panels) as PanelId[]).length
-    ? (Object.keys(panels) as PanelId[])
-    : (["moea_pool1208"] as PanelId[]);
-  const [panelId, setPanelId] = useState<PanelId>(
-    raw.default_panel ?? "moea_pool1208"
-  );
   const panel = panels[panelId];
 
   const funnel: FunnelNode[] = useMemo(() => {
@@ -152,11 +136,6 @@ export function ValidacionSintesis({
     ? NARRATED[Math.min(step - 1, NARRATED.length - 1)]
     : -1;
 
-  const selectPanel = (id: PanelId) => {
-    setPanelId(id);
-    onStepChange?.(0);
-  };
-
   return (
     <motion.div
       className={`validacion vflow-slide cflow-slide${
@@ -174,21 +153,9 @@ export function ValidacionSintesis({
       </p>
 
       <div className="dockstory-case-controls cflow-controls">
-        {ids.map((id) => (
-          <button
-            key={id}
-            type="button"
-            className="dockstory-case-nav-btn"
-            onClick={() => selectPanel(id)}
-            style={{
-              opacity: id === panelId ? 1 : 0.55,
-              fontWeight: id === panelId ? 700 : 400,
-            }}
-          >
-            {panels[id]?.label ?? id}
-            {panels[id]?.status === "pending" ? " (…)" : ""}
-          </button>
-        ))}
+        <span className="dockstory-case-nav-btn" style={{ fontWeight: 700 }}>
+          {panel?.label ?? "MOEA VEGF-A (no dominados)"}
+        </span>
       </div>
 
       {pending ? (

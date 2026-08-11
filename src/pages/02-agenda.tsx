@@ -37,7 +37,7 @@ export function Agenda() {
             <li>Objetivo general</li>
             <li>EvoPro como punto de partida</li>
             <li>Variantes monoobjetivo en HA-PD1</li>
-            <li>Actividades pendientes</li>
+            <li>Actividades pendientes del periodo pasado</li>
             <li>Transición a multiobjetivo</li>
           </ol>
         </li>
