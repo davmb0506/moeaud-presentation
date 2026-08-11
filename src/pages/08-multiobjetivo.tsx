@@ -41,18 +41,6 @@ function dominatesUV(a: UV, b: UV) {
   return a.u <= b.u && a.v <= b.v && (a.u < b.u || a.v < b.v);
 }
 
-/* Mono: trayectoria irregular. */
-const CONV: Pt[] = (() => {
-  const raw = [
-    0.9, 0.78, 0.71, 0.64, 0.58, 0.54, 0.5, 0.47, 0.45, 0.43, 0.42, 0.415,
-    0.41, 0.408, 0.405,
-  ];
-  return raw.map((s, i) => ({
-    x: sx(i / (raw.length - 1)),
-    y: sy(s),
-  }));
-})();
-
 /**
  * Frente no dominado del archivo Interface-PAE / (100−pLDDT).
  * Incluye extremos y rodilla; la nube se filtra contra este conjunto.
@@ -151,53 +139,6 @@ function Axes({ xLabel, yLabel }: { xLabel: string; yLabel: string }) {
   );
 }
 
-function MonoChart({ active }: { active: boolean }) {
-  return (
-    <svg
-      viewBox={`0 0 ${VB_W} ${VB_H}`}
-      className="mo-svg"
-      role="img"
-      aria-label="Convergencia del escalar s respecto a la generación"
-    >
-      <Axes xLabel="generación" yLabel="s" />
-      <motion.path
-        className="mo-line"
-        d={toPath(CONV)}
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={
-          active
-            ? { pathLength: 1, opacity: 1 }
-            : { pathLength: 0, opacity: 0 }
-        }
-        transition={{ duration: 1.05, ease: EASE }}
-      />
-      {CONV.map((p, i) => {
-        const isEnd = i === CONV.length - 1;
-        return (
-          <motion.circle
-            key={i}
-            className={isEnd ? "mo-dot" : "mo-tick"}
-            cx={p.x}
-            cy={p.y}
-            r={isEnd ? 5 : 2.2}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={
-              active
-                ? { scale: 1, opacity: isEnd ? 1 : 0.55 }
-                : { scale: 0, opacity: 0 }
-            }
-            transition={{
-              duration: 0.22,
-              delay: active ? (i / (CONV.length - 1)) * 0.95 : 0,
-              ease: EASE,
-            }}
-          />
-        );
-      })}
-    </svg>
-  );
-}
-
 function MultiChart({ step }: { step: number }) {
   const show = step >= 2;
 
@@ -258,7 +199,6 @@ function MultiChart({ step }: { step: number }) {
 
 export function Multiobjetivo({ step = 0 }: { step?: number }) {
   const s = Math.max(0, Math.min(MO_MAX_STEP, step));
-  const monoActive = s >= 1;
 
   return (
     <motion.div
