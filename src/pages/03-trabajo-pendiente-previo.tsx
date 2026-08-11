@@ -27,7 +27,6 @@ const PENDING: readonly Item[] = [
     ],
   },
   { text: "Redacción de tesis." },
-  { text: "Implementación de interfaz gráfica." },
 ];
 
 export function TrabajoPendientePrevio() {
@@ -40,12 +39,8 @@ export function TrabajoPendientePrevio() {
       viewport={{ amount: 0.2 }}
     >
       <motion.h2 variants={fade} className="sintesis-title">
-        Actividades subsecuentes (Abril 2026 – Agosto 2026)
+        Actividades pendientes
       </motion.h2>
-
-      <motion.p variants={fade} className="pendiente-sub">
-        Trabajo pendiente planteado en el avance anterior:
-      </motion.p>
 
       <motion.ol variants={fade} className="sintesis-list pendiente-list">
         {PENDING.map((item) => (

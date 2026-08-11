@@ -34,7 +34,7 @@ type Point = {
 };
 
 const POINTS = frontData.points as Point[];
-const COUNTS = frontData.counts as Record<string, number>;
+const STATS = frontData.stats as Record<string, { mean: number; sd: number }>;
 
 const COND_COLOR: Record<string, string> = {
   con: ABLATION_CONDS.con.color,
@@ -118,11 +118,11 @@ export function IpsaeScFront() {
       viewport={{ amount: 0.15 }}
     >
       <h2 className="ablacion-title">
-        Ablación de mecanismos — ipSAE / Shape Complementarity
+        Ablación de mecanismos — ipSAE / SC
       </h2>
       <p className="ablacion-sub">
-        Aproximación del frente <strong>agregada</strong> (10 réplicas por
-        condición).
+        Aproximación del frente de una <strong>réplica representativa</strong>{" "}
+        por condición (cercana a la media de no dominadas).
       </p>
 
       <div className="ablacion-grid">
@@ -211,7 +211,7 @@ export function IpsaeScFront() {
             {(["con", "sin"] as const).map((c) => (
               <span key={c} className="ablacion-legend-item">
                 <span className="ablacion-swatch" style={{ background: COND_COLOR[c] }} />
-                {COND_LABEL[c]} · {COUNTS[c]} no dominadas
+                {COND_LABEL[c]} · {STATS[c].mean} ± {STATS[c].sd} no dom./réplica
               </span>
             ))}
           </div>

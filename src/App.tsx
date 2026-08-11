@@ -9,7 +9,7 @@ import { Hapd1Variantes } from "./pages/06-hapd1-variantes";
 import { Hapd1Representativos } from "./pages/07-hapd1-representativos";
 import { Multiobjetivo, MO_MAX_STEP } from "./pages/08-multiobjetivo";
 import { Moeaud, UD_MAX_STEP } from "./pages/09-moeaud";
-import { FormulacionesMecanismos, FORMECH_MAX_STEP } from "./pages/10-formulaciones-mecanismos";
+import { FormulacionesMecanismos } from "./pages/10-formulaciones-mecanismos";
 import { AblacionConvergencia } from "./pages/11-ablacion-convergencia";
 import { Ablacion } from "./pages/12-ablacion";
 import { CompositeFront } from "./pages/13-composite-front";
@@ -100,14 +100,6 @@ export default function App() {
     setUdStep(next);
   };
 
-  // Pasos intra-slide formulaciones (pares de objetivos + viewer).
-  const [formechStep, setFormechStep] = useState(0);
-  const formechRef = useRef(0);
-  const setFormech = (n: number) => {
-    const next = Math.max(0, Math.min(FORMECH_MAX_STEP, n));
-    formechRef.current = next;
-    setFormechStep(next);
-  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -120,15 +112,11 @@ export default function App() {
       );
       if (!slides.length) return;
 
-      const y =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
+      // getBoundingClientRect tolera zoom/#root mejor que offsetTop vs scrollY.
       let current = 0;
       let best = Infinity;
       slides.forEach((s, i) => {
-        const d = Math.abs(s.offsetTop - y);
+        const d = Math.abs(s.getBoundingClientRect().top);
         if (d < best) {
           best = d;
           current = i;
@@ -181,32 +169,19 @@ export default function App() {
         return;
       }
 
-      if (
-        step === "formech" &&
-        isNext &&
-        formechRef.current < FORMECH_MAX_STEP
-      ) {
-        e.preventDefault();
-        setFormech(formechRef.current + 1);
-        return;
-      }
-      if (step === "formech" && isPrev && formechRef.current > 0) {
-        e.preventDefault();
-        setFormech(formechRef.current - 1);
-        return;
-      }
-
       const target = isNext
         ? Math.min(current + 1, slides.length - 1)
         : Math.max(current - 1, 0);
 
       if (target !== current) {
         e.preventDefault();
-        if (step === "bio") revealBio(false);
-        if (step === "goudy") setGoudy(0);
-        if (step === "mo") setMo(0);
-        if (step === "ud") setUd(0);
-        if (step === "formech") setFormech(0);
+        // Resetear el destino (no el origen): si se resetea el origen durante
+        // scroll suave, la siguiente tecla reentra a los pasos internos.
+        const destStep = slides[target]?.dataset.step;
+        if (destStep === "bio") revealBio(false);
+        if (destStep === "goudy") setGoudy(0);
+        if (destStep === "mo") setMo(0);
+        if (destStep === "ud") setUd(0);
         slides[target].scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
@@ -219,8 +194,8 @@ export default function App() {
     <main className="app">
       {/* ============================================================ */}
       {/* === DECK AVANCES (activo) — énfasis en RESULTADOS === */}
-      {/* 01 Portada · 02 Agenda · 03 Pendiente previo · 04 Objetivo · 05 EvoPro */}
-      {/* 06 HA-PD1 variantes · 07 HA-PD1 reps · 08 Mono→multi · 09 MOEA-UD */}
+      {/* 01 Portada · 02 Agenda · 03 Objetivo · 04 EvoPro · 05 HA-PD1 variantes */}
+      {/* 06 HA-PD1 reps · 07 Actividades pendientes · 08 Mono→multi · 09 MOEA-UD */}
       {/* 10 Formulaciones · 11 Ablación HV · 12 Frente PAE/pLDDT · 13 Composite/TM */}
       {/* 14 ipSAE/SC · 15 Cribado · 16 Shortlist · 17 Síntesis · 18 Referencias */}
       {/* ============================================================ */}
@@ -276,19 +251,7 @@ export default function App() {
         <SlideNo n={2} />
       </motion.section>
 
-      {/* 03 · Trabajo pendiente tras el avance anterior */}
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewport}
-      >
-        <TrabajoPendientePrevio />
-        <SlideNo n={3} />
-      </motion.section>
-
-      {/* 04 · Objetivo general / Importancia biológica */}
+      {/* 03 · Objetivo general / Importancia biológica */}
       <motion.section
         className="showcase slide"
         data-step="bio"
@@ -378,10 +341,10 @@ export default function App() {
             </motion.p>
           </motion.div>
         </div>
-        <SlideNo n={4} />
+        <SlideNo n={3} />
       </motion.section>
 
-      {/* 05 · EvoPro */}
+      {/* 04 · EvoPro */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -390,10 +353,10 @@ export default function App() {
         viewport={viewport}
       >
         <EvoproIntro />
-        <SlideNo n={5} />
+        <SlideNo n={4} />
       </motion.section>
 
-      {/* 06 · HA-PD1 · comparación de variantes */}
+      {/* 05 · HA-PD1 · comparación de variantes */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -402,10 +365,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <Hapd1Variantes />
-        <SlideNo n={6} />
+        <SlideNo n={5} />
       </motion.section>
 
-      {/* 07 · HA-PD1 · soluciones representativas */}
+      {/* 06 · HA-PD1 · soluciones representativas */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -414,6 +377,18 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Hapd1Representativos />
+        <SlideNo n={6} />
+      </motion.section>
+
+      {/* 07 · Actividades pendientes */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <TrabajoPendientePrevio />
         <SlideNo n={7} />
       </motion.section>
 
@@ -446,13 +421,12 @@ export default function App() {
       {/* 10 · Formulaciones multiobjetivo */}
       <motion.section
         className="showcase slide"
-        data-step="formech"
         variants={slideContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ amount: 0.15 }}
       >
-        <FormulacionesMecanismos step={formechStep} onStepChange={setFormech} />
+        <FormulacionesMecanismos />
         <SlideNo n={10} />
       </motion.section>
 

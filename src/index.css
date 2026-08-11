@@ -53,6 +53,8 @@ body {
   margin: 0 auto;
   padding: 0 24px 64px;
   box-sizing: border-box;
+  /* Escala tipografía y UI del deck (~+8%) sin retocar cada px. */
+  zoom: 1.08;
 }
 
 h1,

@@ -133,7 +133,7 @@ const SLIDES: SlideData[] = [
   },
   {
     kind: "stats",
-    title: "Ablación de mecanismos — Composite / TM-score",
+    title: "Ablación de mecanismos — Compuesto / TM-score",
     sub: (
       <>
         <O>Base</O> termina ligeramente por encima en hipervolumen
@@ -144,7 +144,7 @@ const SLIDES: SlideData[] = [
       </>
     ),
     img: `/figures/ablation_cumhv_composite_tmscore.png?v=${ABLATION_FIGURE_VERSION}`,
-    alt: "Curva de convergencia del hipervolumen — Composite / TM-score: MA frente a Base.",
+    alt: "Curva de convergencia del hipervolumen — Compuesto / TM-score: MA frente a Base.",
     rows: [
       { test: "Mann-Whitney U (bilateral)", h0: H0_BI, h1: H1_BI, p: "0.2406", sig: "n.s.", reject: false },
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.8942", sig: "n.s.", reject: false },

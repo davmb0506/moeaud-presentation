@@ -1,139 +1,101 @@
-import { AnimatePresence, motion, type Variants } from "framer-motion";
-
-export const FORMECH_MAX_STEP = 2;
+import { motion, type Variants } from "framer-motion";
 
 const wrap: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
 };
 
 const fade: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
-type Axis = {
-  name: string;
-  units: string;
-  better: "↓" | "↑";
-  meaning: string;
-};
+const STROKE = "#1e293b";
+const FILL = "#ffffff";
+const MUTED = "#64748b";
 
-type Formulation = {
-  pair: string;
-  seeks: string;
-  conflict: string;
-  f1: Axis;
-  f2: Axis;
-};
-
-const FORMULATIONS: Formulation[] = [
-  {
-    pair: "Interface-PAE / pLDDT",
-    seeks:
-      "Pose de unión confiable sin sacrificar la calidad del pliegue local.",
-    conflict:
-      "AF puede mejorar la confianza de la interfaz degradando la del pliegue (o al revés).",
-    f1: {
-      name: "Interface-PAE (iPAE)",
-      units: "Å",
-      better: "↓",
-      meaning:
-        "Error esperado de la pose relativa VEGF-A–péptido (PAE intercadena).",
-    },
-    f2: {
-      name: "pLDDT",
-      units: "0–100",
-      better: "↑",
-      meaning: "Si la estructura local se ve bien resuelta (confianza de pliegue).",
-    },
-  },
-  {
-    pair: "Compuesto / TM-score",
-    seeks:
-      "Buena calidad de unión sin exigir un cambio grande de pliegue al unirse.",
-    conflict:
-      "A veces mejorar el contacto pide deformar el péptido respecto a su forma sola.",
-    f1: {
-      name: "Compuesto",
-      units: "0–1",
-      better: "↑",
-      meaning: "Calidad de la unión: combina ipSAE, SC y ΔSASA.",
-    },
-    f2: {
-      name: "TM-score",
-      units: "0–1",
-      better: "↑",
-      meaning:
-        "Similitud del pliegue del péptido solo vs en el complejo (AF2).",
-    },
-  },
-  {
-    pair: "ipSAE / SC",
-    seeks:
-      "Interfaz que la red confía y que además encaja geométricamente.",
-    conflict:
-      "Alta confianza de AF no implica buen encaje de formas (y al revés).",
-    f1: {
-      name: "ipSAE",
-      units: "0–1",
-      better: "↑",
-      meaning:
-        "Score de confianza de interfaz a partir de la matriz PAE (no es iPAE en Å).",
-    },
-    f2: {
-      name: "SC",
-      units: "0–1",
-      better: "↑",
-      meaning:
-        "Complementaridad de formas en el contacto (geometría 3D, no AF).",
-    },
-  },
-];
-
-const MECHANISMS = [
-  {
-    name: "Selección de operadores",
-    why: "Reajusta las proporciones de mutación, ProteinMPNN y variantes locales según si el hipervolumen mejora o no.",
-  },
-  {
-    name: "Inyección de diversidad",
-    why: "Si el hipervolumen se estanca, inyecta secuencias nuevas (exploración, refinamiento o extremos del frente).",
-  },
-] as const;
-
-function AxisCard({ axis }: { axis: Axis }) {
+function Box({
+  x,
+  y,
+  w,
+  h,
+  r = 8,
+  strokeWidth = 1.5,
+}: {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  r?: number;
+  strokeWidth?: number;
+}) {
   return (
-    <div className="formech-axis">
-      <div className="formech-axis-top">
-        <dt>{axis.name}</dt>
-        <span className="formech-axis-meta">
-          {axis.units} · {axis.better} mejor
-        </span>
-      </div>
-      <dd>{axis.meaning}</dd>
-    </div>
+    <rect
+      x={x}
+      y={y}
+      width={w}
+      height={h}
+      rx={r}
+      ry={r}
+      fill={FILL}
+      stroke={STROKE}
+      strokeWidth={strokeWidth}
+    />
   );
 }
 
-export function FormulacionesMecanismos({
-  step = 0,
-  onStepChange,
+function Label({
+  x,
+  y,
+  text,
+  size = 13,
+  weight = 600,
+  fill = STROKE,
 }: {
-  step?: number;
-  onStepChange?: (next: number) => void;
+  x: number;
+  y: number;
+  text: string;
+  size?: number;
+  weight?: number;
+  fill?: string;
 }) {
-  const s = Math.max(0, Math.min(FORMECH_MAX_STEP, step));
-  const active = FORMULATIONS[s];
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fill={fill}
+      fontSize={size}
+      fontWeight={weight}
+      fontFamily="inherit"
+    >
+      {text}
+    </text>
+  );
+}
 
-  const go = (next: number) => {
-    const n = Math.max(0, Math.min(FORMECH_MAX_STEP, next));
-    onStepChange?.(n);
-  };
+const PAIRS = [
+  { name: "Interface-PAE / pLDDT", cx: 150 },
+  { name: "Compuesto / TM-score", cx: 450 },
+  { name: "ipSAE / SC", cx: 750 },
+] as const;
+
+export function FormulacionesMecanismos() {
+  const pairY = 248;
+  const pairW = 220;
+  const pairH = 40;
+  const leafY = 360;
+  const leafW = 88;
+  const leafH = 32;
+  const moea = { x: 300, y: 118, w: 300, h: 58 };
+  const moeaCx = moea.x + moea.w / 2;
+  const moeaBottom = moea.y + moea.h;
+  const forkY = 210;
 
   return (
     <motion.div
@@ -144,94 +106,168 @@ export function FormulacionesMecanismos({
       viewport={{ amount: 0.15 }}
     >
       <motion.div variants={fade} className="formech-head">
-        <h2 className="formech-title">Formulaciones multiobjetivo</h2>
+        <h2 className="formech-title">Diseño experimental</h2>
       </motion.div>
 
-      <motion.div variants={fade} className="formech-viz">
-        <section className="formech-block">
-          <div className="formech-pair-head">
-            <h3 className="formech-label">Pares de objetivos</h3>
-            <div className="formech-pair-nav" role="group" aria-label="Par de objetivos">
-              <button
-                type="button"
-                className="formech-nav-btn"
-                onClick={() => go(s - 1)}
-                disabled={s === 0}
-                aria-label="Par anterior"
-              >
-                ←
-              </button>
-              <span className="formech-step-idx">
-                {s + 1} / {FORMULATIONS.length}
-              </span>
-              <button
-                type="button"
-                className="formech-nav-btn"
-                onClick={() => go(s + 1)}
-                disabled={s === FORMECH_MAX_STEP}
-                aria-label="Par siguiente"
-              >
-                →
-              </button>
-            </div>
-          </div>
+      <motion.div variants={fade} className="fexp-wrap">
+        <svg
+          className="fexp-svg"
+          viewBox="0 0 900 470"
+          role="img"
+          aria-label="Flujo del experimento multiobjetivo: entradas, MOEA-UD, tres pares de objetivos con y sin mecanismos adaptativos, y seis frentes no dominados"
+        >
+          <defs>
+            <marker
+              id="fexp-arrow"
+              viewBox="0 0 12 12"
+              refX="10"
+              refY="6"
+              markerWidth="8"
+              markerHeight="8"
+              orient="auto"
+              markerUnits="userSpaceOnUse"
+            >
+              <path d="M2 2 L10 6 L2 10 Z" fill={STROKE} />
+            </marker>
+          </defs>
 
-          <div className="formech-pips" role="tablist" aria-label="Elegir par">
-            {FORMULATIONS.map((f, i) => (
-              <button
-                key={f.pair}
-                type="button"
-                role="tab"
-                aria-selected={i === s}
-                className={"formech-pip" + (i === s ? " is-on" : "")}
-                onClick={() => go(i)}
-                aria-label={f.pair}
-              />
-            ))}
-          </div>
+          {/* Inputs → MOEA (ortogonal: baja, une, baja) */}
+          <path
+            d={`M 160 72 V 95 H ${moeaCx} V ${moea.y}`}
+            fill="none"
+            stroke={STROKE}
+            strokeWidth={1.4}
+            markerEnd="url(#fexp-arrow)"
+          />
+          <path
+            d={`M 740 72 V 95 H ${moeaCx}`}
+            fill="none"
+            stroke={STROKE}
+            strokeWidth={1.4}
+          />
 
-          <div className="formech-pair-stage">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active.pair}
-                className="formech-pair"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <h4 className="formech-pair-title">{active.pair}</h4>
+          {/* MOEA → fork bar → pairs */}
+          <line
+            x1={moeaCx}
+            y1={moeaBottom}
+            x2={moeaCx}
+            y2={forkY}
+            stroke={STROKE}
+            strokeWidth={1.4}
+          />
+          <line
+            x1={PAIRS[0].cx}
+            y1={forkY}
+            x2={PAIRS[2].cx}
+            y2={forkY}
+            stroke={STROKE}
+            strokeWidth={1.4}
+          />
+          {PAIRS.map((p) => (
+            <line
+              key={`down-${p.name}`}
+              x1={p.cx}
+              y1={forkY}
+              x2={p.cx}
+              y2={pairY}
+              stroke={STROKE}
+              strokeWidth={1.4}
+              markerEnd="url(#fexp-arrow)"
+            />
+          ))}
 
-                <p className="formech-seek">
-                  <span className="formech-seek-k">Qué busca</span>
-                  {active.seeks}
-                </p>
+          {/* Pair → leaves */}
+          {PAIRS.map((p) => {
+            const leftCx = p.cx - 52;
+            const rightCx = p.cx + 52;
+            const pairBottom = pairY + pairH;
+            const splitY = pairBottom + 18;
+            return (
+              <g key={`pair-lines-${p.name}`}>
+                <line
+                  x1={p.cx}
+                  y1={pairBottom}
+                  x2={p.cx}
+                  y2={splitY}
+                  stroke={STROKE}
+                  strokeWidth={1.3}
+                />
+                <line
+                  x1={leftCx}
+                  y1={splitY}
+                  x2={rightCx}
+                  y2={splitY}
+                  stroke={STROKE}
+                  strokeWidth={1.3}
+                />
+                <line
+                  x1={leftCx}
+                  y1={splitY}
+                  x2={leftCx}
+                  y2={leafY}
+                  stroke={STROKE}
+                  strokeWidth={1.3}
+                  markerEnd="url(#fexp-arrow)"
+                />
+                <line
+                  x1={rightCx}
+                  y1={splitY}
+                  x2={rightCx}
+                  y2={leafY}
+                  stroke={STROKE}
+                  strokeWidth={1.3}
+                  markerEnd="url(#fexp-arrow)"
+                />
+              </g>
+            );
+          })}
 
-                <dl className="formech-axes">
-                  <AxisCard axis={active.f1} />
-                  <AxisCard axis={active.f2} />
-                </dl>
+          {/* Input boxes */}
+          <Box x={70} y={24} w={180} h={48} />
+          <Label x={160} y={48} text="Semilla (21 aa)" size={14} />
 
-                <p className="formech-conflict">
-                  <span className="formech-conflict-k">Conflicto</span>
-                  {active.conflict}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </section>
+          <Box x={650} y={24} w={180} h={48} />
+          <Label x={740} y={48} text="VEGF-A (blanco)" size={14} />
 
-        <section className="formech-block formech-mech-col">
-          <h3 className="formech-label">Mecanismos adaptativos (MA)</h3>
-          <ol className="formech-list formech-list-mech">
-            {MECHANISMS.map((m) => (
-              <li key={m.name}>
-                <strong>{m.name}</strong>
-                <span>{m.why}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
+          {/* MOEA-UD */}
+          <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
+          <Label x={moeaCx} y={moea.y + 22} text="MOEA-UD" size={16} weight={800} />
+          <Label
+            x={moeaCx}
+            y={moea.y + 42}
+            text="pop. 50 · 200 gen · 10 réplicas"
+            size={11}
+            weight={500}
+            fill={MUTED}
+          />
+
+          {/* Pair boxes + leaves */}
+          {PAIRS.map((p) => {
+            const leftCx = p.cx - 52;
+            const rightCx = p.cx + 52;
+            return (
+              <g key={p.name}>
+                <Box x={p.cx - pairW / 2} y={pairY} w={pairW} h={pairH} />
+                <Label x={p.cx} y={pairY + pairH / 2} text={p.name} size={12.5} />
+
+                <Box x={leftCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
+                <Label x={leftCx} y={leafY + leafH / 2} text="con MA" size={12} />
+
+                <Box x={rightCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
+                <Label x={rightCx} y={leafY + leafH / 2} text="sin MA" size={12} />
+              </g>
+            );
+          })}
+
+          <Label
+            x={450}
+            y={440}
+            text="6 frentes no dominados"
+            size={13}
+            weight={700}
+            fill={MUTED}
+          />
+        </svg>
       </motion.div>
     </motion.div>
   );

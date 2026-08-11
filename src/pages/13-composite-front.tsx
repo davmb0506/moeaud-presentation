@@ -34,7 +34,7 @@ type Point = {
 };
 
 const POINTS = frontData.points as Point[];
-const COUNTS = frontData.counts as Record<string, number>;
+const STATS = frontData.stats as Record<string, { mean: number; sd: number }>;
 
 const COND_COLOR: Record<string, string> = {
   con: ABLATION_CONDS.con.color,
@@ -118,11 +118,11 @@ export function CompositeFront() {
       viewport={{ amount: 0.15 }}
     >
       <h2 className="ablacion-title">
-        Ablación de mecanismos — Composite / TM-score
+        Ablación de mecanismos — Compuesto / TM-score
       </h2>
       <p className="ablacion-sub">
-        Aproximación del frente <strong>agregada</strong> (10 réplicas por
-        condición).
+        Aproximación del frente de una <strong>réplica representativa</strong>{" "}
+        por condición (cercana a la media de no dominadas).
       </p>
 
       <div className="ablacion-grid">
@@ -131,7 +131,7 @@ export function CompositeFront() {
             viewBox={`0 0 ${W} ${H}`}
             className="ablacion-svg"
             role="img"
-            aria-label="Aproximación del frente 1 - Composite contra 1 - TM-score"
+            aria-label="Aproximación del frente 1 - Compuesto contra 1 - TM-score"
             onMouseLeave={() => setHoverId(null)}
           >
             {xTicks.map((t) => (
@@ -154,7 +154,7 @@ export function CompositeFront() {
             <line x1={PAD.left} y1={PAD.top + PH} x2={PAD.left + PW} y2={PAD.top + PH} className="abl-axis" />
             <line x1={PAD.left} y1={PAD.top} x2={PAD.left} y2={PAD.top + PH} className="abl-axis" />
             <text x={PAD.left + PW / 2} y={H - 6} className="abl-axis-label" textAnchor="middle">
-              f₁: 1 − Composite
+              f₁: 1 − Compuesto
             </text>
             <text
               x={14}
@@ -211,7 +211,7 @@ export function CompositeFront() {
             {(["con", "sin"] as const).map((c) => (
               <span key={c} className="ablacion-legend-item">
                 <span className="ablacion-swatch" style={{ background: COND_COLOR[c] }} />
-                {COND_LABEL[c]} · {COUNTS[c]} no dominadas
+                {COND_LABEL[c]} · {STATS[c].mean} ± {STATS[c].sd} no dom./réplica
               </span>
             ))}
           </div>
@@ -226,7 +226,7 @@ export function CompositeFront() {
                   {COND_LABEL[active.cond]}
                 </span>
                 <span className="ablacion-info-metrics">
-                  1−Composite <strong>{active.f1.toFixed(3)}</strong> · 1−TM-score{" "}
+                  1−Compuesto <strong>{active.f1.toFixed(3)}</strong> · 1−TM-score{" "}
                   <strong>{active.f2.toFixed(3)}</strong>
                 </span>
               </div>

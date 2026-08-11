@@ -1,5 +1,12 @@
 import { motion, type Variants } from "framer-motion";
 import { ComplexViewer } from "../components/ComplexViewer";
+import {
+  CHAR_LABELS,
+  fmtChar,
+  fmtSignedChar,
+  gravyTrait,
+  stabilityTrait,
+} from "../components/DesignCharacterization";
 import hapd1Data from "../data/hapd1Variantes.json";
 
 const fade: Variants = {
@@ -22,6 +29,10 @@ type Run = {
   pae_iface: number | null;
   if_contacts: number | null;
   pdb: string | null;
+  binder?: string | null;
+  gravy?: number | null;
+  charge?: number | null;
+  instability?: number | null;
 };
 
 type Arm = {
@@ -139,38 +150,71 @@ export function Hapd1Representativos() {
       </h2>
 
       <div className="hapd1rep-grid">
-        {REPS.map(({ arm, run }) => (
-          <article key={arm.id} className="hapd1rep-card">
-            <header className="hapd1rep-head">
-              <span className="hapd1rep-tag" style={{ color: arm.color }}>
-                {arm.label}
-              </span>
-            </header>
+        {REPS.map(({ arm, run }) => {
+          const gravy = gravyTrait(run.gravy);
+          const stability = stabilityTrait(run.instability);
+          return (
+            <article key={arm.id} className="hapd1rep-card">
+              <header className="hapd1rep-head">
+                <span className="hapd1rep-tag" style={{ color: arm.color }}>
+                  {arm.label}
+                </span>
+              </header>
 
-            <div className="hapd1rep-viewer">
-              <ComplexViewer pdbUrl={run.pdb} referenceUrl={run.pdb} />
-            </div>
+              <div className="hapd1rep-viewer">
+                <ComplexViewer pdbUrl={run.pdb} referenceUrl={run.pdb} />
+              </div>
 
-            <dl className="hapd1rep-metrics">
-              {METRICS.map((m) => {
-                const v = metricValue(run, m.key);
-                const isBest = BEST_BY_METRIC[m.key] === arm.id;
-                return (
-                  <div
-                    key={m.key}
-                    className={isBest ? "is-best" : undefined}
-                    title={m.why}
-                  >
-                    <dt>{m.label}</dt>
-                    <dd style={isBest ? { color: arm.color } : undefined}>
-                      {fmt(v, m.digits, m.unit)}
-                    </dd>
-                  </div>
-                );
-              })}
-            </dl>
-          </article>
-        ))}
+              <dl className="hapd1rep-metrics">
+                {METRICS.map((m) => {
+                  const v = metricValue(run, m.key);
+                  const isBest = BEST_BY_METRIC[m.key] === arm.id;
+                  return (
+                    <div
+                      key={m.key}
+                      className={isBest ? "is-best" : undefined}
+                      title={m.why}
+                    >
+                      <dt>{m.label}</dt>
+                      <dd style={isBest ? { color: arm.color } : undefined}>
+                        {fmt(v, m.digits, m.unit)}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+
+              <dl className="hapd1rep-char">
+                <div>
+                  <dt>{CHAR_LABELS.gravy}</dt>
+                  <dd>
+                    {fmtChar(run.gravy, 2)}
+                    <span className={`hapd1rep-trait is-${gravy.tone}`}>
+                      {gravy.label}
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{CHAR_LABELS.charge}</dt>
+                  <dd>{fmtSignedChar(run.charge, 1)}</dd>
+                </div>
+                <div>
+                  <dt>{CHAR_LABELS.instability}</dt>
+                  <dd>
+                    {fmtChar(run.instability, 1)}
+                    <span className={`hapd1rep-trait is-${stability.tone}`}>
+                      {stability.label}
+                    </span>
+                  </dd>
+                </div>
+              </dl>
+
+              {run.binder ? (
+                <code className="hapd1rep-seq">{run.binder}</code>
+              ) : null}
+            </article>
+          );
+        })}
       </div>
     </motion.div>
   );

@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
-import { motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 
-export const UD_MAX_STEP = 2;
+export const UD_MAX_STEP = 3;
 
 const wrap: Variants = {
   hidden: { opacity: 0 },
@@ -16,24 +16,6 @@ const fade: Variants = {
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
-
-const POINTS = [
-  {
-    no: "01",
-    title: "Vectores adaptativos",
-    text: "A diferencia de NSGA-III y MOEA/D, no conserva direcciones rígidas toda la corrida: las redistribuye hacia las zonas útiles del frente.",
-  },
-  {
-    no: "02",
-    title: "Archivo externo",
-    text: "Las soluciones no dominadas se guardan fuera de la población actual, así que actúan como memoria estable del frente.",
-  },
-  {
-    no: "03",
-    title: "Señal UD",
-    text: "Los indicadores de uniformidad y diversidad detectan si el frente quedó mal repartido o mal cubierto y guían la redistribución.",
-  },
-] as const;
 
 const REFERENCES: ReactNode[] = [
   <>
@@ -392,6 +374,7 @@ export function Moeaud({ step = 0 }: { step?: number }) {
   const s = Math.max(0, Math.min(UD_MAX_STEP, step));
   const showFixed = s >= 1;
   const showAdapt = s >= 2;
+  const showMech = s >= 3;
 
   return (
     <motion.div
@@ -442,20 +425,23 @@ export function Moeaud({ step = 0 }: { step?: number }) {
             <i className="udx-sw archive" /> archivo externo
           </span>
         </div>
-
       </motion.div>
 
-      <motion.div variants={fade} className="udx-concepts">
-        {POINTS.map((item) => (
-          <article key={item.no} className="ud-point-card">
-            <span className="ud-point-no">{item.no}</span>
-            <div>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </div>
-          </article>
-        ))}
-      </motion.div>
+      <AnimatePresence>
+        {showMech && (
+          <motion.aside
+            className="ud-mech-note"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <strong>Mecanismos adaptativos.</strong> Sobre esta base se
+            añadieron dos mecanismos: selección de operadores e inyección de
+            diversidad, ambos guiados por el hipervolumen.
+          </motion.aside>
+        )}
+      </AnimatePresence>
 
       <motion.ol variants={fade} className="ud-cites">
         {REFERENCES.map((reference, index) => (

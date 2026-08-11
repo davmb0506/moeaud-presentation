@@ -1,6 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 
-/** 0 ejes · 1 mono · 2 nube + frente */
+/** 0 intro · 1–2 mantienen compatibilidad con teclas del deck */
 export const MO_MAX_STEP = 2;
 
 const wrap: Variants = {
@@ -22,9 +22,9 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 type Pt = { x: number; y: number };
 type UV = { u: number; v: number };
 
-const VB_W = 360;
-const VB_H = 280;
-const PAD = { l: 40, r: 14, t: 14, b: 36 };
+const VB_W = 520;
+const VB_H = 360;
+const PAD = { l: 56, r: 28, t: 22, b: 48 };
 const PW = VB_W - PAD.l - PAD.r;
 const PH = VB_H - PAD.t - PAD.b;
 const sx = (u: number) => PAD.l + u * PW;
@@ -80,15 +80,7 @@ function stairUV(front: UV[]): UV[] {
   return out;
 }
 
-/** Contorno del cono: rayos desde extremos + escalera (región dominada al NE). */
-function dominanceBoundaryUV(front: UV[]): UV[] {
-  if (front.length === 0) return [];
-  const first = front[0];
-  const last = front[front.length - 1];
-  return [{ u: first.u, v: 1 }, ...stairUV(front), { u: 1, v: last.v }];
-}
-
-const CONE_EDGE = toPath(dominanceBoundaryUV(FRONT_UV).map(map));
+const FRONT_STAIR = toPath(stairUV(FRONT_UV).map(map));
 
 const CLOUD_UV_RAW: UV[] = [
   { u: 0.758, v: 0.15 },
@@ -118,38 +110,39 @@ const CLOUD = CLOUD_UV_RAW.filter((p) =>
   FRONT_UV.some((f) => dominatesUV(f, p))
 ).map(map);
 
-function Axes({ xLabel, yLabel }: { xLabel: string; yLabel: string }) {
+function Axes() {
+  const xMid = sx(0.5);
+  const yMid = PAD.t + PH / 2;
   return (
     <>
       <line className="mo-axis" x1={sx(0)} y1={sy(0)} x2={sx(1)} y2={sy(0)} />
       <line className="mo-axis" x1={sx(0)} y1={sy(0)} x2={sx(0)} y2={sy(1)} />
-      <text className="mo-axt" x={sx(1)} y={sy(0) + 24} textAnchor="end">
-        {xLabel}
+
+      <text className="mo-axt" x={xMid} y={VB_H - 10} textAnchor="middle">
+        Interface-PAE → peor
       </text>
       <text
         className="mo-axt"
-        x={14}
-        y={PAD.t + PH / 2}
+        x={16}
+        y={yMid}
         textAnchor="middle"
-        transform={`rotate(-90 14 ${PAD.t + PH / 2})`}
+        transform={`rotate(-90 16 ${yMid})`}
       >
-        {yLabel}
+        100 − pLDDT → peor
       </text>
     </>
   );
 }
 
-function MultiChart({ step }: { step: number }) {
-  const show = step >= 2;
-
+function MultiChart() {
   return (
     <svg
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       className="mo-svg"
       role="img"
-      aria-label="Frente Interface-PAE frente a 100 menos pLDDT"
+      aria-label="Frente de Pareto Interface-PAE frente a 100 menos pLDDT"
     >
-      <Axes xLabel="Interface-PAE" yLabel="100 − pLDDT" />
+      <Axes />
 
       {CLOUD.map((p, i) => (
         <motion.circle
@@ -157,25 +150,19 @@ function MultiChart({ step }: { step: number }) {
           className="mo-cloud"
           cx={p.x}
           cy={p.y}
-          r={2.8}
+          r={4}
           initial={{ scale: 0, opacity: 0 }}
-          animate={
-            show ? { scale: 1, opacity: 0.7 } : { scale: 0, opacity: 0 }
-          }
+          animate={{ scale: 1, opacity: 0.75 }}
           transition={{ duration: 0.22, delay: 0.02 * i, ease: EASE }}
         />
       ))}
 
       <motion.path
         className="mo-front"
-        d={CONE_EDGE}
+        d={FRONT_STAIR}
         initial={{ pathLength: 0, opacity: 0 }}
-        animate={
-          show
-            ? { pathLength: 1, opacity: 1 }
-            : { pathLength: 0, opacity: 0 }
-        }
-        transition={{ duration: 0.9, delay: show ? 0.35 : 0, ease: EASE }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 0.9, delay: 0.25, ease: EASE }}
       />
       {FRONT.map((p, i) => (
         <motion.circle
@@ -183,12 +170,12 @@ function MultiChart({ step }: { step: number }) {
           className="mo-dot multi"
           cx={p.x}
           cy={p.y}
-          r={3.6}
+          r={4.4}
           initial={{ scale: 0, opacity: 0 }}
-          animate={show ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{
             duration: 0.22,
-            delay: show ? 0.45 + 0.025 * i : 0,
+            delay: 0.35 + 0.02 * i,
             ease: EASE,
           }}
         />
@@ -198,7 +185,7 @@ function MultiChart({ step }: { step: number }) {
 }
 
 export function Multiobjetivo({ step = 0 }: { step?: number }) {
-  const s = Math.max(0, Math.min(MO_MAX_STEP, step));
+  void step;
 
   return (
     <motion.div
@@ -227,20 +214,19 @@ export function Multiobjetivo({ step = 0 }: { step?: number }) {
         </p>
       </motion.div>
 
-      <motion.div variants={fade} className="mo-compare">
-        <div className="mo-panels">
-          
+      <motion.div variants={fade} className="mo-chart-block">
+        <MultiChart />
 
-          <div className="mo-panel">
-            <div className="mo-panel-head">
-              <h4>Multiobjetivo</h4>
-              <small>
-                min<sub>x</sub> F(x)
-              </small>
-            </div>
-            <MultiChart step={s} />
-          </div>
-        </div>
+        <ul className="mo-legend" aria-label="Leyenda">
+          <li>
+            <span className="mo-leg-swatch mo-leg-front" aria-hidden />
+            Frente no dominado
+          </li>
+          <li>
+            <span className="mo-leg-swatch mo-leg-cloud" aria-hidden />
+            Soluciones dominadas
+          </li>
+        </ul>
       </motion.div>
 
       <motion.p variants={fade} className="mo-cite">

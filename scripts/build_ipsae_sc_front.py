@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Frente de Pareto agregado (ipSAE / SC) con vs sin mecanismos.
+"""Frente de Pareto (ipSAE / SC) — réplica representativa.
 
-Combina las 10 réplicas de cada condición, calcula el frente no dominado
-(minimización de f1 = 1 - ipSAE y f2 = 1 - SC; las columnas ipsae/sc del
-archivo ya vienen transformadas a 1 - valor por EvoPro), copia el PDB del
-complejo de cada solución del frente y genera src/data/ipsaeScFront.json.
+Elige, por condición, la réplica cuyo tamaño de archivo está más cerca de la
+media de no dominadas; copia ese archivo final y genera
+src/data/ipsaeScFront.json.
+
+Nota: las columnas ipsae/sc del archivo ya vienen como 1 − valor (minimización).
 """
+from __future__ import annotations
+
 import csv
 import glob
 import json
-import os
 import shutil
+import statistics
 import sys
 from pathlib import Path
 
@@ -32,57 +35,75 @@ PDB_SUBDIR = {
 }
 
 
-def gather(base: Path, pat: str):
-    pts = []
+def list_runs(base: Path, pat: str) -> list[Path]:
+    out = []
     for d in sorted(glob.glob(str(base / pat))):
-        outputs = os.path.join(d, "outputs")
-        fa = os.path.join(outputs, "final_archive.csv")
-        if not os.path.isfile(fa):
-            continue
-        with open(fa) as fh:
-            for i, r in enumerate(csv.DictReader(fh)):
-                try:
-                    f1 = float(r["ipsae"])
-                    f2 = float(r["sc"])
-                except (ValueError, KeyError):
-                    continue
-                pdb = os.path.join(outputs, "final_pdbs", "archive", f"archive_{i + 1}_pred1.pdb")
-                if not os.path.isfile(pdb):
-                    continue
-                pts.append(
-                    {
-                        "f1": round(f1, 4),
-                        "f2": round(f2, 4),
-                        "binder": r["sequence"].split(",")[0],
-                        "pdb_src": pdb,
-                    }
-                )
-    return pts
+        outputs = Path(d) / "outputs"
+        if (outputs / "final_archive.csv").is_file():
+            out.append(outputs)
+    return out
 
 
-def non_dominated(pts):
-    front = []
-    for i, p in enumerate(pts):
-        dominated = False
-        for j, q in enumerate(pts):
-            if j == i:
+def archive_size(outputs: Path) -> int:
+    with open(outputs / "final_archive.csv") as fh:
+        return sum(1 for _ in csv.DictReader(fh))
+
+
+def pick_representative(runs: list[Path]) -> tuple[Path, dict]:
+    sizes = [archive_size(r) for r in runs]
+    mean = statistics.mean(sizes)
+    sd = statistics.stdev(sizes) if len(sizes) > 1 else 0.0
+    best = min(runs, key=lambda r: abs(archive_size(r) - mean))
+    stats = {"mean": round(mean, 1), "sd": round(sd, 1)}
+    return best, stats
+
+
+def read_archive(outputs: Path) -> list[dict]:
+    rows = []
+    with open(outputs / "final_archive.csv") as fh:
+        for i, r in enumerate(csv.DictReader(fh)):
+            try:
+                f1 = float(r["ipsae"])
+                f2 = float(r["sc"])
+            except (ValueError, KeyError):
                 continue
-            if q["f1"] <= p["f1"] and q["f2"] <= p["f2"] and (q["f1"] < p["f1"] or q["f2"] < p["f2"]):
-                dominated = True
-                break
-        if not dominated:
-            front.append(p)
-    return front
+            pdb = outputs / "final_pdbs" / "archive" / f"archive_{i + 1}_pred1.pdb"
+            if not pdb.is_file():
+                continue
+            rows.append(
+                {
+                    "f1": round(f1, 4),
+                    "f2": round(f2, 4),
+                    "binder": r["sequence"].split(",")[0],
+                    "pdb_src": pdb,
+                    "idx": i + 1,
+                }
+            )
+    rows.sort(key=lambda p: p["f1"])
+    return rows
 
 
 def main():
+    if PUB.exists():
+        shutil.rmtree(PUB)
+    PUB.mkdir(parents=True, exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
+
     points = []
+    stats_out: dict[str, dict] = {}
+    chosen: dict[str, str] = {}
+
     for cond, (base, pat) in SOURCES.items():
+        runs = list_runs(base, pat)
+        if not runs:
+            raise SystemExit(f"Sin réplicas para {cond} en {base}/{pat}")
+        outputs, stats = pick_representative(runs)
+        stats_out[cond] = stats
+        chosen[cond] = str(outputs.parent.name)
+
         pdb_subdir = PDB_SUBDIR[cond]
         (PUB / pdb_subdir).mkdir(parents=True, exist_ok=True)
-        front = non_dominated(gather(base, pat))
-        front.sort(key=lambda p: p["f1"])
-        for k, p in enumerate(front):
+        for k, p in enumerate(read_archive(outputs)):
             name = f"{cond}_{k}.pdb"
             shutil.copyfile(p["pdb_src"], PUB / pdb_subdir / name)
             points.append(
@@ -98,17 +119,23 @@ def main():
             )
 
     out = {
-        "objectives": {"x": "1 − ipSAE", "y": "1 − SC (Shape Complementarity)"},
+        "objectives": {
+            "x": "1 − ipSAE",
+            "y": "1 − SC (Shape Complementarity)",
+        },
         "counts": {
             "con": sum(1 for p in points if p["cond"] == "con"),
             "sin": sum(1 for p in points if p["cond"] == "sin"),
         },
+        "stats": stats_out,
+        "representative_runs": chosen,
         "points": points,
     }
-    DATA.mkdir(parents=True, exist_ok=True)
     with open(DATA / "ipsaeScFront.json", "w") as fh:
         json.dump(out, fh, ensure_ascii=False, indent=2)
     print("counts:", out["counts"])
+    print("stats:", stats_out)
+    print("reps:", chosen)
     print("PDBs en", PUB)
 
 

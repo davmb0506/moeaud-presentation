@@ -128,10 +128,12 @@ export function Ablacion() {
       whileInView="visible"
       viewport={{ amount: 0.15 }}
     >
-      <h2 className="ablacion-title">Ablación de mecanismos adaptativos</h2>
+      <h2 className="ablacion-title">
+        Ablación de mecanismos — Interface-PAE / pLDDT
+      </h2>
       <p className="ablacion-sub">
-        Aproximación del frente <strong>Interface-PAE / pLDDT</strong> (archivo
-        de no dominadas).
+        Aproximación del frente de una <strong>réplica representativa</strong>{" "}
+        por condición (cercana a la media de no dominadas).
       </p>
 
       <div className="ablacion-grid">

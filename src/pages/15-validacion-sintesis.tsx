@@ -32,6 +32,7 @@ type Panel = {
 type FlowNode = {
   id: string;
   title: string;
+  blurb?: string;
   subtitle?: string;
   bullets?: readonly string[];
   badge?: string | number;
@@ -57,24 +58,33 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
       title: isMoea
         ? "Secuencias del frente agregado"
         : "Última generación",
+      blurb: isMoea
+        ? "Entran las no dominadas de los 6 grupos."
+        : "Entra la última generación de cada brazo EvoPro.",
       badge: v(0),
       kind: "step",
     },
     {
       id: "rosetta",
       title: "Energía de Rosetta",
+      blurb:
+        "Rosetta mueve átomos para bajar la energía del complejo; si esa minimización no termina, la secuencia se descarta.",
       badge: v(1),
       kind: "step",
     },
     {
       id: "top100",
       title: "Rankear top 100",
+      blurb: "Se queda con las 100 de menor energía de interfaz (dG/dSASA).",
       badge: v(2),
       kind: "step",
     },
     {
       id: "qc",
       title: "Control de calidad",
+      blurb: isMoea
+        ? "Corta secuencias raras o sesgadas y exige ≥20 % del epítopo VEGFR-2."
+        : "Corta sesgos de composición (Ala, Leu, Gln) del protocolo de Goudy.",
       bullets: isMoea
         ? [
             "Entropía de Shannon",
@@ -91,6 +101,9 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
     {
       id: "reprod",
       title: "Repredicción AF2 – OmegaFold",
+      blurb: isMoea
+        ? "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å), y reparte cupo entre grupos."
+        : "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å).",
       subtitle: isMoea ? "RMSD < 5 Å · diversidad entre grupos" : "RMSD < 5 Å",
       badge: v(4),
       kind: "end",
@@ -211,6 +224,9 @@ export function ValidacionSintesis({
                         <span className="cflow-badge">{node.badge}</span>
                       ) : null}
                     </div>
+                    {node.blurb ? (
+                      <p className="cflow-blurb">{node.blurb}</p>
+                    ) : null}
                     {node.bullets ? (
                       <ul className="cflow-bullets">
                         {node.bullets.map((b) => (
