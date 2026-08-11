@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import shortlistData from "../data/shortlistGoudy.json";
 
 const fade: Variants = {
@@ -29,11 +29,13 @@ type Panel = {
   note?: string | null;
 };
 
-type StageMeta = {
-  /** Qué hace el filtro (siempre visible en la tarjeta). */
-  does: string;
-  /** Umbral / regla (visible en la tarjeta y resaltado al avanzar). */
-  criterion: string;
+type FlowNode = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  bullets?: readonly string[];
+  badge?: string | number;
+  kind?: "start" | "step" | "qc" | "end";
 };
 
 const raw = shortlistData as {
@@ -44,53 +46,60 @@ const raw = shortlistData as {
 
 export const GOUDY_MAX_STEP = 5;
 
-function stageMeta(panelId: PanelId, index: number): StageMeta {
+function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
+  const v = (i: number) => funnel[i]?.value ?? "—";
   const isMoea = panelId === "moea_pool1208";
-  const stages: StageMeta[] = [
+
+  return [
+    { id: "start", title: "Inicio", kind: "start" },
     {
-      does: isMoea
-        ? "Frentes no dominados agregados"
+      id: "pool",
+      title: isMoea
+        ? "Secuencias del frente agregado"
         : "Última generación",
-      criterion: isMoea
-        ? "6 grupos MOEA, sin umbral aún"
-        : "Sin umbral de energía ni secuencia",
+      badge: v(0),
+      kind: "step",
     },
     {
-      does: "Energía Rosetta del complejo",
-      criterion: "Relajación correcta del complejo AF2",
+      id: "rosetta",
+      title: "Energía de Rosetta",
+      badge: v(1),
+      kind: "step",
     },
     {
-      does: "Ranking por energía de interfaz",
-      criterion: "dG/dSASA × 100; se conservan los 100 mejores",
+      id: "top100",
+      title: "Rankear top 100",
+      badge: v(2),
+      kind: "step",
     },
-    isMoea
-      ? {
-          does: "Composición de secuencia y contacto con VEGFR-2",
-          criterion:
-            "Shannon ≥ 2.8 · GRAVY ∈ [−1.5, 1.5] · epítopo ≥ 0.20",
-        }
-      : {
-          does: "Composición de secuencia",
-          criterion: "A+L ≤ 0.45 · Ala ≤ 0.40 · A+Q ≤ 0.55",
-        },
-    isMoea
-      ? {
-          does: "Acuerdo AF2–OmegaFold y diversidad",
-          criterion: "RMSD < 5 Å · < 3 Å · ≤ 3/grupo · id. ≤ 0.70",
-        }
-      : {
-          does: "Acuerdo AF2–OmegaFold",
-          criterion: "RMSD < 5 Å · < 3 Å",
-        },
+    {
+      id: "qc",
+      title: "Control de calidad",
+      bullets: isMoea
+        ? [
+            "Entropía de Shannon",
+            "Composición de las secuencias",
+            "Cobertura del epítopo",
+          ]
+        : [
+            "Composición de las secuencias",
+            "Límites de Ala / Ala+Leu / Ala+Gln",
+          ],
+      badge: v(3),
+      kind: "qc",
+    },
+    {
+      id: "reprod",
+      title: "Repredicción AF2 – OmegaFold",
+      subtitle: isMoea ? "RMSD < 5 Å · diversidad entre grupos" : "RMSD < 5 Å",
+      badge: v(4),
+      kind: "end",
+    },
   ];
-  return stages[index] ?? stages[0];
 }
 
-function exitsFromFunnel(funnel: FunnelNode[]) {
-  const nums = funnel.map((n) => Number(n.value));
-  if (nums.length < 2 || nums.some((n) => Number.isNaN(n))) return [];
-  return nums.slice(0, -1).map((n, i) => String(-(n - nums[i + 1])));
-}
+/** Índices del flowchart que se narran con teclas (sin “Inicio”). */
+const NARRATED = [1, 2, 3, 4, 5] as const;
 
 export function ValidacionSintesis({
   step = 0,
@@ -119,16 +128,16 @@ export function ValidacionSintesis({
     ];
   }, [panel]);
 
-  const exits = exitsFromFunnel(
-    funnel.filter((n) => !Number.isNaN(Number(n.value)))
+  const nodes = useMemo(
+    () => flowForPanel(panelId, funnel),
+    [panelId, funnel]
   );
 
   const pending = panel?.status === "pending";
   const explaining = step >= 1;
-  const activeIdx = explaining ? Math.min(step - 1, funnel.length - 1) : -1;
-  const activeMeta = explaining ? stageMeta(panelId, activeIdx) : null;
-  const delta =
-    explaining && step >= 2 && exits[step - 2] ? exits[step - 2] : null;
+  const activeFlowIdx = explaining
+    ? NARRATED[Math.min(step - 1, NARRATED.length - 1)]
+    : -1;
 
   const selectPanel = (id: PanelId) => {
     setPanelId(id);
@@ -137,8 +146,8 @@ export function ValidacionSintesis({
 
   return (
     <motion.div
-      className={`validacion vflow-slide vflow-slide-compact${
-        explaining ? " vflow-explaining" : ""
+      className={`validacion vflow-slide cflow-slide${
+        explaining ? " is-explaining" : ""
       }`}
       variants={fade}
       initial="hidden"
@@ -151,7 +160,7 @@ export function ValidacionSintesis({
         experimental.
       </p>
 
-      <div className="dockstory-case-controls" style={{ marginBottom: 10, gap: 8 }}>
+      <div className="dockstory-case-controls cflow-controls">
         {ids.map((id) => (
           <button
             key={id}
@@ -173,66 +182,59 @@ export function ValidacionSintesis({
         <p className="validacion-sub">{panel?.note ?? "Filtro en curso…"}</p>
       ) : null}
 
-      <section className="validacion-card vflow-rail-card">
-        <div className="vflow-main vflow-main-filled">
-          {funnel.map((node, index) => {
-            const isActive = index === activeIdx;
-            const dimmed = explaining && !isActive;
-            const meta = stageMeta(panelId, index);
-            const dropped = exits[index];
-            return (
-              <div
-                key={`${panelId}-${node.label}`}
-                className="vflow-main-fragment"
-              >
-                <article
-                  className={`vflow-node vflow-node-filled${
-                    isActive ? " is-active" : ""
-                  }${dimmed ? " is-dimmed" : ""}`}
-                >
-                  <span className="vflow-node-label">{node.label}</span>
-                  <strong className="vflow-node-value">
-                    {String(node.value)}
-                  </strong>
-                  <p className="vflow-node-does">{meta.does}</p>
-                  <p className="vflow-node-rule">{meta.criterion}</p>
-                  {dropped != null ? (
-                    <span className="vflow-node-drop">salen {dropped}</span>
-                  ) : null}
-                </article>
-                {index < funnel.length - 1 ? (
-                  <span className="vflow-connector" aria-hidden />
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      <ol className="cflow" aria-label="Diagrama de flujo del cribado">
+        {nodes.map((node, index) => {
+          const isActive = index === activeFlowIdx;
+          const dimmed = explaining && !isActive && node.kind !== "start";
+          const showArrow = index < nodes.length - 1;
 
-      <AnimatePresence mode="wait">
-        {activeMeta ? (
-          <motion.div
-            key={`${panelId}-${step}`}
-            className="vflow-detail-bar validacion-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="vflow-explain-kicker">
-              Fase {step} / {GOUDY_MAX_STEP}
-            </span>
-            <strong className="vflow-detail-title">
-              {funnel[activeIdx]?.label}
-            </strong>
-            <span className="vflow-detail-does">{activeMeta.does}</span>
-            <span className="vflow-detail-rule">{activeMeta.criterion}</span>
-            {delta ? (
-              <span className="vflow-detail-delta">salen {delta}</span>
-            ) : null}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+          return (
+            <li
+              key={`${panelId}-${node.id}`}
+              className={[
+                "cflow-item",
+                node.kind ? `cflow-item--${node.kind}` : "",
+                isActive ? "is-active" : "",
+                dimmed ? "is-dimmed" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <article className="cflow-node">
+                {node.kind === "start" ? (
+                  <span className="cflow-start-label">{node.title}</span>
+                ) : (
+                  <>
+                    <div className="cflow-node-top">
+                      <h3 className="cflow-node-title">{node.title}</h3>
+                      {node.badge != null ? (
+                        <span className="cflow-badge">{node.badge}</span>
+                      ) : null}
+                    </div>
+                    {node.bullets ? (
+                      <ul className="cflow-bullets">
+                        {node.bullets.map((b) => (
+                          <li key={b}>{b}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {node.subtitle ? (
+                      <p className="cflow-criterion">{node.subtitle}</p>
+                    ) : null}
+                  </>
+                )}
+              </article>
+
+              {showArrow ? (
+                <div className="cflow-arrow" aria-hidden>
+                  <span className="cflow-arrow-line" />
+                  <span className="cflow-arrow-head" />
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
     </motion.div>
   );
 }
