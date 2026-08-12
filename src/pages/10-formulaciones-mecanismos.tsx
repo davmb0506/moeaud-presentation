@@ -188,7 +188,7 @@ export function FormulacionesMecanismos() {
       viewport={{ amount: 0.15 }}
     >
       <motion.div variants={fade} className="formech-head">
-        <h2 className="formech-title">Diseño experimental</h2>
+        <h2 className="formech-title">Diseño experimental — Fase de búsqueda</h2>
       </motion.div>
 
       <motion.div variants={fade} className="fexp-wrap">

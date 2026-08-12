@@ -1,7 +1,7 @@
 {
   "objectives": {
-    "x": "1 \u2212 ipSAE",
-    "y": "1 \u2212 SC (Shape Complementarity)"
+    "x": "1 − ipSAE",
+    "y": "1 − SC (Shape Complementarity)"
   },
   "counts": {
     "con": 10,
@@ -395,36 +395,6 @@
       "mw_kda": 2.4,
       "aromaticity": 0.19,
       "instability": -20.5
-    }
-  ],
-  "shortlist": [
-    {
-      "id": "ipsae_sc_nomech__0043",
-      "cond": "sin",
-      "f1": 0.779,
-      "f2": 0.251,
-      "label": "0043"
-    },
-    {
-      "id": "ipsae_sc_nomech__0112",
-      "cond": "sin",
-      "f1": 0.769,
-      "f2": 0.219,
-      "label": "0112"
-    },
-    {
-      "id": "ipsae_sc_nomech__0071",
-      "cond": "sin",
-      "f1": 0.896,
-      "f2": 0.224,
-      "label": "0071"
-    },
-    {
-      "id": "ipsae_sc_mech__0101",
-      "cond": "con",
-      "f1": 0.822,
-      "f2": 0.193,
-      "label": "0101"
     }
   ]
 }

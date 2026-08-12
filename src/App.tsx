@@ -16,7 +16,7 @@ import { CompositeFront } from "./pages/13-composite-front";
 import { IpsaeScFront } from "./pages/14-ipsae-sc-front";
 import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/15-validacion-sintesis";
 import { ValidacionShortlist } from "./pages/16-validacion-shortlist";
-import { WrapUp } from "./pages/17-wrap-up";
+import { WrapUp, TrabajoPendiente } from "./pages/17-wrap-up";
 import { Referencias } from "./pages/18-referencias";
 /* Inactivos en avances (redundantes con HA-PD1):
 import { Experimentos } from "./pages/experimentos";
@@ -465,7 +465,19 @@ export default function App() {
         <SlideNo n={13} />
       </motion.section>
 
-      {/* 14 · HA-PD1 · soluciones representativas */}
+      {/* 14 · Trabajo pendiente */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <TrabajoPendiente />
+        <SlideNo n={14} />
+      </motion.section>
+
+      {/* 15 · HA-PD1 · soluciones representativas */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -474,10 +486,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Hapd1Representativos />
-        <SlideNo n={14} />
+        <SlideNo n={15} />
       </motion.section>
 
-      {/* 15 · Referencias */}
+      {/* 16 · Referencias */}
       <motion.section
         className="refs-slide slide"
         variants={slideContainer}
@@ -486,7 +498,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={15} />
+        <SlideNo n={16} />
       </motion.section>
 
       {/* ============================================================ */}

@@ -220,6 +220,7 @@ export function Ablacion() {
                 </g>
               );
             })}
+
           </svg>
 
           <div className="ablacion-legend">

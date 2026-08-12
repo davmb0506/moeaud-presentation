@@ -32,8 +32,8 @@ PDB_SUBDIR = {
 
 # Estadísticas globales (todas las réplicas) para la leyenda.
 STATS = {
-    "con": {"mean": 43.9, "sd": 5.6},
-    "sin": {"mean": 30.8, "sd": 6.1},
+    "con": {"mean": 43.9, "sd": 5.9},
+    "sin": {"mean": 30.8, "sd": 6.4},
 }
 
 PUB = PRES / "public" / "fronts"

@@ -8,6 +8,7 @@ import {
   stabilityTrait,
 } from "../components/DesignCharacterization";
 import hapd1Data from "../data/hapd1Variantes.json";
+import shortlistData from "../data/shortlistGoudy.json";
 
 const fade: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -143,6 +144,48 @@ const BEST_BY_METRIC = Object.fromEntries(
   METRICS.map((m) => [m.key, bestArmFor(m.key, m.higherBetter)])
 ) as Record<MetricKey, ArmId | null>;
 
+type HaPd1Candidate = {
+  id: string;
+  binder_seq: string;
+  rmsd_A: number | null;
+  omega_class: string;
+  score_rosetta: number | null;
+  overall_score: number | null;
+  plddt_a: number | null;
+  iptm: number | null;
+  pae_iface: number | null;
+  n_interface_res: number | null;
+  pdb: string | null;
+  gravy: number | null;
+  charge: number | null;
+  instability: number | null;
+  mw_kda: number | null;
+  pI: number | null;
+};
+
+const HAPD1_PANEL = (shortlistData as any).panels?.hapd1_mono60;
+const HAPD1_CANDIDATES: HaPd1Candidate[] = HAPD1_PANEL?.candidates ?? [];
+const HAPD1_BEST = HAPD1_CANDIDATES.length > 0
+  ? HAPD1_CANDIDATES.reduce((a, b) => ((a.rmsd_A ?? 99) < (b.rmsd_A ?? 99) ? a : b))
+  : null;
+
+const VALIDATED_RUN: Run | null = HAPD1_BEST
+  ? {
+      id: HAPD1_BEST.id,
+      arm: "temp" as ArmId,
+      score: HAPD1_BEST.overall_score ?? 0,
+      plddt: HAPD1_BEST.plddt_a,
+      iptm: HAPD1_BEST.iptm,
+      pae_iface: HAPD1_BEST.pae_iface,
+      if_contacts: HAPD1_BEST.n_interface_res,
+      pdb: HAPD1_BEST.pdb,
+      binder: HAPD1_BEST.binder_seq,
+      gravy: HAPD1_BEST.gravy,
+      charge: HAPD1_BEST.charge,
+      instability: HAPD1_BEST.instability,
+    }
+  : null;
+
 export function Hapd1Representativos() {
   return (
     <motion.div
@@ -222,6 +265,65 @@ export function Hapd1Representativos() {
             </article>
           );
         })}
+
+        {VALIDATED_RUN && (() => {
+          const run = VALIDATED_RUN;
+          const gravy = gravyTrait(run.gravy);
+          const stability = stabilityTrait(run.instability);
+          const armColor = ARMS.find((a) => a.id === "temp")?.color ?? "#ea580c";
+          return (
+            <article className="hapd1rep-card hapd1rep-card--validated">
+              <header className="hapd1rep-head">
+                <span className="hapd1rep-tag" style={{ color: armColor }}>
+                  AID validado
+                </span>
+              </header>
+
+              <div className="hapd1rep-viewer">
+                <ComplexViewer pdbUrl={run.pdb} referenceUrl={run.pdb} />
+              </div>
+
+              <dl className="hapd1rep-metrics">
+                {METRICS.map((m) => {
+                  const v = metricValue(run, m.key);
+                  return (
+                    <div key={m.key} title={m.why}>
+                      <dt>{m.label}</dt>
+                      <dd>{fmt(v, m.digits, m.unit)}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+
+              <dl className="hapd1rep-char">
+                <div>
+                  <dt>{CHAR_LABELS.gravy}</dt>
+                  <dd>
+                    {fmtChar(run.gravy, 2)}
+                    <span className={`hapd1rep-trait is-${gravy.tone}`}>
+                      {gravy.label}
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{CHAR_LABELS.charge}</dt>
+                  <dd>{fmtSignedChar(run.charge, 1)}</dd>
+                </div>
+                <div>
+                  <dt>{CHAR_LABELS.instability}</dt>
+                  <dd>
+                    {fmtChar(run.instability, 1)}
+                    <span className={`hapd1rep-trait is-${stability.tone}`}>
+                      {stability.label}
+                    </span>
+                  </dd>
+                </div>
+              </dl>
+
+              <code className="hapd1rep-seq">{run.binder}</code>
+            </article>
+          );
+        })()}
       </div>
     </motion.div>
   );

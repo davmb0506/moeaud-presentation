@@ -34,27 +34,45 @@ export function WrapUp() {
         </li>
         <li>
           Formulación multiobjetivo (VEGF-A): los mecanismos adaptativos
-          mejoran hipervolumen y archivo solo en Interface-PAE / pLDDT.
+          mejoran el rendimiento y aumentan el tamaño del conjunto final de
+          secuencias en el par de objetivos Interface-PAE / pLDDT.
         </li>
         <li>
           Los diseños muestran oclusión estérica significativa del sitio
-          VEGFR-2, posicionándolos como <em>leads</em> computacionales
+          VEGFR-2, posicionándolos como candidatos computacionales
           pendientes de validación experimental.
         </li>
       </motion.ol>
+    </motion.div>
+  );
+}
 
-      <motion.h3 variants={fade} className="sintesis-section">
+export function TrabajoPendiente() {
+  return (
+    <motion.div
+      className="sintesis sintesis--split"
+      variants={wrap}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ amount: 0.2 }}
+    >
+      <motion.h2 variants={fade} className="sintesis-title">
         Trabajo pendiente
-      </motion.h3>
+      </motion.h2>
 
-      <motion.ol variants={fade} className="sintesis-list">
-        <li>Redactar y completar el documento de tesis.</li>
-        <li> Desarrollo de interfaz gráfica para uso general del framework.</li>
-        <li>
-          Fuera del alcance: validación experimental de los 10
-          candidatos VEGF-A (unión y competencia con VEGFR-2).
-        </li>
-      </motion.ol>
+      <div className="sintesis-columns">
+        <motion.ol variants={fade} className="sintesis-list">
+          <li>Continuar redactando el documento de tesis. Se escribieron los capitulos 1, 2 y 3, actualmente escribiendo el cuarto y aplicando las correcciones sugeridas.</li>
+          
+        </motion.ol>
+
+        <motion.div variants={fade} className="sintesis-cronograma">
+          <img
+            src="/img/cronograma.png"
+            alt="Cronograma actualizado"
+          />
+        </motion.div>
+      </div>
     </motion.div>
   );
 }

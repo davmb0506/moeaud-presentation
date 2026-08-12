@@ -205,6 +205,7 @@ export function IpsaeScFront() {
                 </g>
               );
             })}
+
           </svg>
 
           <div className="ablacion-legend">
