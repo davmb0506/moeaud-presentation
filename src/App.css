@@ -7152,7 +7152,7 @@
 }
 
 .ablacion-front .ablacion-info-seq {
-  font-size: 11.5px;
+  font-size: 14px;
   padding: 6px 8px;
 }
 
@@ -8343,15 +8343,16 @@
   color: var(--text);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .ablacion-chip {
   display: inline-block;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 3px;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .ablacion-chip.target {

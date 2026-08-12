@@ -1,7 +1,7 @@
 {
   "objectives": {
-    "x": "Interface-PAE (Å)",
-    "y": "100 − pLDDT"
+    "x": "Interface-PAE (\u00c5)",
+    "y": "100 \u2212 pLDDT"
   },
   "counts": {
     "con": 44,
@@ -1349,6 +1349,56 @@
       "mw_kda": 2.19,
       "aromaticity": 0.143,
       "instability": 18.0
+    }
+  ],
+  "shortlist": [
+    {
+      "id": "interface_pae_plddt_nomech__0134",
+      "cond": "sin",
+      "pae": 16.39,
+      "p100": 46.5,
+      "plddt": 53.5,
+      "label": "0134"
+    },
+    {
+      "id": "interface_pae_plddt_nomech__0041",
+      "cond": "sin",
+      "pae": 14.78,
+      "p100": 50.0,
+      "plddt": 50.0,
+      "label": "0041"
+    },
+    {
+      "id": "interface_pae_plddt_nomech__0121",
+      "cond": "sin",
+      "pae": 18.77,
+      "p100": 42.6,
+      "plddt": 57.4,
+      "label": "0121"
+    },
+    {
+      "id": "interface_pae_plddt_mech__0136",
+      "cond": "con",
+      "pae": 13.88,
+      "p100": 47.6,
+      "plddt": 52.4,
+      "label": "0136"
+    },
+    {
+      "id": "interface_pae_plddt_mech__0035",
+      "cond": "con",
+      "pae": 12.82,
+      "p100": 54.0,
+      "plddt": 46.0,
+      "label": "0035"
+    },
+    {
+      "id": "interface_pae_plddt_mech__0211",
+      "cond": "con",
+      "pae": 17.34,
+      "p100": 40.1,
+      "plddt": 59.9,
+      "label": "0211"
     }
   ]
 }

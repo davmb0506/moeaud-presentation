@@ -12,17 +12,19 @@ const COLOR_TARGET = "#7fb2e6";
 const COLOR_BINDER = "#34d399";
 const COLOR_BINDER_STICK = "#10b981";
 const COLOR_IF = "#e8590c";
+const COLOR_EXTRA = "#94a3b8";
 /** Epítopo contactado por el binder (criterio de cobertura ≈ 10 Å). */
 const COLOR_EPITOPE = "#f43f5e";
 /** Epítopo VEGFR-2 aún libre (no cubierto). */
 const COLOR_EPITOPE_FREE = "#fecdd3";
 
 /**
- * Epítopo VEGFR-2 sobre VEGF-A (PDB 3V2A): residuos de la cadena A a ≤5 Å
- * de la cadena R (dominio D2 de VEGFR-2). Misma numeración en los PDBs de diseño.
+ * Epítopo VEGFR-2 sobre VEGF-A (PDB 3V2A): posiciones 1-indexed de la cadena
+ * VEGF-A que están a ≤5 Å de VEGFR-2. Se ajustan al vuelo según la numeración
+ * real del PDB cargado (diseños empiezan en 1, nativo en 13).
  */
-export const VEGFA_VEGFR2_EPITOPE: readonly number[] = [
-  40, 41, 43, 44, 45, 46, 48, 81, 83, 85, 86, 88, 89, 91,
+export const VEGFA_VEGFR2_EPITOPE_SEQ1: readonly number[] = [
+  28, 29, 31, 32, 33, 34, 36, 69, 71, 73, 74, 76, 77, 79,
 ];
 
 /** Distancia usada en la métrica de cobertura de epítopo (heavy atoms). */
@@ -121,23 +123,33 @@ type EpitopeSplit = {
 function splitEpitopeCoverage(
   viewer: any,
   roles: ChainRoles,
-  epitopeResidues: readonly number[] | null | undefined
+  epitopeResidues: readonly number[] | null | undefined,
+  epitopeChainOverride?: string
 ): EpitopeSplit | null {
   if (!epitopeResidues?.length) return null;
-  const { targetChain, binderChain } = roles;
-  if (!binderChain) {
-    return { covered: [...epitopeResidues], free: [] };
+  const { binderChain } = roles;
+  const epiChain = epitopeChainOverride ?? roles.targetChain;
+
+  const targetAtoms = viewer.selectedAtoms({ chain: epiChain }) as any[];
+  if (!targetAtoms.length) return null;
+
+  const minResi = Math.min(...targetAtoms.map((a: any) => a.resi as number));
+  const offset = minResi - 1;
+  const adjustedEpitope = epitopeResidues.map((pos) => pos + offset);
+  const epi = new Set(adjustedEpitope);
+
+  const otherChain = epiChain === roles.targetChain ? binderChain : roles.targetChain;
+  if (!otherChain) {
+    return { covered: adjustedEpitope, free: [] };
   }
 
-  const epi = new Set(epitopeResidues);
   const cutoff2 = EPITOPE_COVERAGE_CUTOFF * EPITOPE_COVERAGE_CUTOFF;
-  const targetAtoms = viewer.selectedAtoms({ chain: targetChain }) as any[];
-  const binderAtoms = viewer.selectedAtoms({ chain: binderChain }) as any[];
+  const otherAtoms = viewer.selectedAtoms({ chain: otherChain }) as any[];
   const covered = new Set<number>();
 
   for (const a of targetAtoms) {
     if (a.resi == null || !epi.has(a.resi) || covered.has(a.resi)) continue;
-    for (const b of binderAtoms) {
+    for (const b of otherAtoms) {
       const dx = a.x - b.x;
       const dy = a.y - b.y;
       const dz = a.z - b.z;
@@ -148,8 +160,8 @@ function splitEpitopeCoverage(
     }
   }
 
-  const coveredList = epitopeResidues.filter((r) => covered.has(r));
-  const freeList = epitopeResidues.filter((r) => !covered.has(r));
+  const coveredList = adjustedEpitope.filter((r) => covered.has(r));
+  const freeList = adjustedEpitope.filter((r) => !covered.has(r));
   return { covered: coveredList, free: freeList };
 }
 
@@ -198,28 +210,41 @@ function styleBaseCartoon(
   viewer: any,
   roles: ChainRoles,
   binderSpectrum = false,
-  epitopeResidues: readonly number[] | null = null
+  epitopeResidues: readonly number[] | null = null,
+  epitopeChainOverride?: string
 ) {
   const { targetChain, binderChain } = roles;
+  const epiChain = epitopeChainOverride ?? targetChain;
+  const swapped = epitopeChainOverride && epitopeChainOverride !== targetChain;
   viewer.setStyle({}, {});
+
   viewer.setStyle(
     { chain: targetChain },
-    { cartoon: { color: COLOR_TARGET } }
+    { cartoon: { color: swapped ? COLOR_BINDER : COLOR_TARGET } }
   );
-  styleEpitopeCartoon(
-    viewer,
-    targetChain,
-    splitEpitopeCoverage(viewer, roles, epitopeResidues)
-  );
-  if (binderChain) {
+  if (binderChain && binderChain !== epiChain) {
     viewer.setStyle(
       { chain: binderChain },
-      {
-        cartoon: {
-          color: binderSpectrum ? "spectrum" : COLOR_BINDER,
-        },
-      }
+      { cartoon: { color: binderSpectrum ? "spectrum" : COLOR_BINDER } }
     );
+  }
+  if (epiChain !== targetChain) {
+    viewer.setStyle(
+      { chain: epiChain },
+      { cartoon: { color: COLOR_TARGET } }
+    );
+  }
+  const split = splitEpitopeCoverage(viewer, roles, epitopeResidues, epitopeChainOverride);
+  styleEpitopeCartoon(viewer, epiChain, split);
+  const knownChains = new Set([targetChain, binderChain, epiChain].filter(Boolean));
+  const allChains = (viewer.selectedAtoms({}) as any[]).reduce((s: Set<string>, a: any) => {
+    if (a.chain) s.add(a.chain);
+    return s;
+  }, new Set<string>());
+  for (const ch of allChains) {
+    if (!knownChains.has(ch)) {
+      viewer.setStyle({ chain: ch }, { cartoon: { color: COLOR_EXTRA } });
+    }
   }
 }
 
@@ -627,15 +652,23 @@ async function applyRepr(
   viewer: any,
   repr: Repr,
   roles: ChainRoles,
-  epitopeResidues: readonly number[] | null = null
+  epitopeResidues: readonly number[] | null = null,
+  epitopeChainOverride?: string
 ) {
   const { targetChain, binderChain } = roles;
-  const split = splitEpitopeCoverage(viewer, roles, epitopeResidues);
+  const epiChain = epitopeChainOverride ?? targetChain;
+  const split = splitEpitopeCoverage(viewer, roles, epitopeResidues, epitopeChainOverride);
+  const knownChains = new Set([targetChain, binderChain, epiChain].filter(Boolean));
+  const allChains = (viewer.selectedAtoms({}) as any[]).reduce((s: Set<string>, a: any) => {
+    if (a.chain) s.add(a.chain);
+    return s;
+  }, new Set<string>());
+  const extraChains = [...allChains].filter((c) => !knownChains.has(c));
+
   viewer.removeAllSurfaces();
   if (repr === "surface") {
-    viewer.setStyle({ chain: targetChain }, {});
-    if (binderChain) viewer.setStyle({ chain: binderChain }, {});
-    markEpitopeAtoms(viewer, targetChain, split);
+    viewer.setStyle({}, {});
+    markEpitopeAtoms(viewer, epiChain, split);
     viewer.render();
     try {
       await viewer.addSurface(
@@ -651,28 +684,55 @@ async function applyRepr(
           },
           opacity: 1,
         },
-        { chain: targetChain },
-        { chain: targetChain }
+        { chain: epiChain },
+        { chain: epiChain }
       );
-      if (binderChain) {
+      const swapped = epitopeChainOverride && epitopeChainOverride !== targetChain;
+      const otherChains = [targetChain, binderChain].filter(
+        (c) => c && c !== epiChain
+      );
+      for (const ch of otherChains) {
+        const isTarget = ch === targetChain;
+        const color = swapped
+          ? (isTarget ? COLOR_BINDER : COLOR_TARGET)
+          : (ch === binderChain ? COLOR_BINDER : COLOR_TARGET);
         await viewer.addSurface(
           $3Dmol.SurfaceType.MS,
-          { color: COLOR_BINDER, opacity: 1 },
-          { chain: binderChain },
-          { chain: binderChain }
+          { color, opacity: 1 },
+          { chain: ch },
+          { chain: ch }
+        );
+      }
+      for (const ch of extraChains) {
+        await viewer.addSurface(
+          $3Dmol.SurfaceType.MS,
+          { color: COLOR_EXTRA, opacity: 0.7 },
+          { chain: ch },
+          { chain: ch }
         );
       }
     } catch (e) {
       console.warn("addSurface falló:", e);
     }
   } else {
+    viewer.setStyle({}, {});
+    const swapped = epitopeChainOverride && epitopeChainOverride !== targetChain;
     viewer.setStyle(
       { chain: targetChain },
-      { cartoon: { color: COLOR_TARGET } }
+      { cartoon: { color: swapped ? COLOR_BINDER : COLOR_TARGET } }
     );
-    styleEpitopeCartoon(viewer, targetChain, split);
-    if (binderChain) {
+    if (binderChain && binderChain !== epiChain) {
       viewer.setStyle({ chain: binderChain }, { cartoon: { color: COLOR_BINDER } });
+    }
+    if (epiChain !== targetChain) {
+      viewer.setStyle(
+        { chain: epiChain },
+        { cartoon: { color: COLOR_TARGET } }
+      );
+    }
+    styleEpitopeCartoon(viewer, epiChain, split);
+    for (const ch of extraChains) {
+      viewer.setStyle({ chain: ch }, { cartoon: { color: COLOR_EXTRA } });
     }
   }
   viewer.render();
@@ -687,6 +747,8 @@ export function ComplexViewer({
   onMetricBeat,
   /** Si es true, colorea el epítopo VEGFR-2 sobre VEGF-A (residuos de 3V2A). */
   highlightEpitope = false,
+  /** Override: cadena donde pintar el epítopo (si difiere de targetChain detectada). */
+  epitopeChain,
 }: {
   pdbUrl: string | null;
   referenceUrl?: string | null;
@@ -698,6 +760,7 @@ export function ComplexViewer({
   /** Nombre del eje que la animación está ilustrando (p. ej. "pLDDT"). */
   onMetricBeat?: (beat: string | null) => void;
   highlightEpitope?: boolean;
+  epitopeChain?: string;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<any>(null);
@@ -712,9 +775,11 @@ export function ComplexViewer({
     targetChain: "B",
     binderChain: "A",
   });
-  const epitopeResidues = highlightEpitope ? VEGFA_VEGFR2_EPITOPE : null;
+  const epitopeResidues = highlightEpitope ? VEGFA_VEGFR2_EPITOPE_SEQ1 : null;
   const epitopeRef = useRef(epitopeResidues);
   epitopeRef.current = epitopeResidues;
+  const epitopeChainRef = useRef(epitopeChain);
+  epitopeChainRef.current = epitopeChain;
   const cameraSetRef = useRef(false);
   const [inView, setInView] = useState(false);
   // active=true/false fuerza el estado; undefined → IntersectionObserver propio.
@@ -1014,9 +1079,9 @@ export function ComplexViewer({
         viewer.zoom(0.9);
         cameraSetRef.current = true;
         if (!metricModeRef.current) {
-          applyRepr(viewer, reprRef.current, roles, epitopeRef.current);
+          applyRepr(viewer, reprRef.current, roles, epitopeRef.current, epitopeChainRef.current);
         } else {
-          styleBaseCartoon(viewer, roles, false, epitopeRef.current);
+          styleBaseCartoon(viewer, roles, false, epitopeRef.current, epitopeChainRef.current);
           viewer.render();
         }
         viewer.resize();
@@ -1036,7 +1101,7 @@ export function ComplexViewer({
     const viewer = viewerRef.current;
     if (!viewer || !viewerEpoch) return;
     if (metricMode) return; // la animación se encarga
-    applyRepr(viewer, repr, chainRolesRef.current, epitopeRef.current);
+    applyRepr(viewer, repr, chainRolesRef.current, epitopeRef.current, epitopeChainRef.current);
   }, [repr, metricMode, viewerEpoch, highlightEpitope]);
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import { motion, type Variants } from "framer-motion";
-import { ComplexViewer } from "../components/ComplexViewer";
 
 const wrap: Variants = {
   hidden: { opacity: 0 },
@@ -18,7 +17,6 @@ const fade: Variants = {
 const STROKE = "#1e293b";
 const FILL = "#ffffff";
 const MUTED = "#64748b";
-const VEGFA_PDB = "/pdbs/docking-validation/vegfa_A_native.pdb";
 
 function Box({
   x,
@@ -195,9 +193,9 @@ export function FormulacionesMecanismos() {
 
       <motion.div variants={fade} className="fexp-wrap">
         <div className="fexp-stage">
-          {/* Visor PDB anclado al hueco del SVG (VEGF-A) */}
+          {/* Imagen estática de VEGF-A superficie */}
           <div className="fexp-pdb-slot" aria-hidden>
-            <ComplexViewer pdbUrl={VEGFA_PDB} active highlightEpitope />
+            <img src="/img/vegfa_surface.png" alt="VEGF-A superficie" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           </div>
 
           <svg
@@ -379,16 +377,6 @@ export function FormulacionesMecanismos() {
             />
 
             {/* VEGF input + PDB slot (HTML overlay) */}
-            <rect
-              x={790}
-              y={28}
-              width={72}
-              height={72}
-              rx={8}
-              fill="#f8fafc"
-              stroke="#e2e8f0"
-              strokeWidth={1.5}
-            />
             <Box x={520} y={30} w={250} h={56} />
             <Label x={645} y={48} text="VEGF-A (proteína blanco)" size={12.5} weight={700} />
             <Label

@@ -43,6 +43,8 @@ type Highlight = {
 const NATIVE_HADDOCK_SCORE = -80.1;
 const NATIVE_COMPLEX_PDB =
   "/pdbs/shortlist-haddock/vegfa_vegfr2_native_haddock.pdb";
+const VEGFA_DIMER_VEGFR2_PDB =
+  "/pdbs/shortlist-haddock/vegfa_dimer_vegfr2.pdb";
 
 const COMPETITION_BY_GROUP: Record<string, { score: number; p: number }> = {
   interface_pae_plddt_mech: { score: 0.34, p: 0.0 },
@@ -257,12 +259,13 @@ export function ValidacionShortlist() {
           {designPdb ? (
             <div className="vhl-viewers-2" ref={viewersRef}>
               <div className="vhl-pose">
-                <span className="hapd1-tag aid">VEGFR-2 nativo</span>
+                <span className="hapd1-tag aid">VEGF-A / VEGFR-2</span>
                 <ComplexViewer
                   pdbUrl={NATIVE_COMPLEX_PDB}
                   referenceUrl={NATIVE_COMPLEX_PDB}
                   active={viewersActive ? true : undefined}
                   highlightEpitope
+                  epitopeChain="B"
                 />
               </div>
               <div className="vhl-pose">
