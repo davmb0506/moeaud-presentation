@@ -749,6 +749,8 @@ export function ComplexViewer({
   highlightEpitope = false,
   /** Override: cadena donde pintar el epítopo (si difiere de targetChain detectada). */
   epitopeChain,
+  /** Fuerza roles (p. ej. nativo VEGF-A=B, VEGFR-2=A; diseños VEGF-A=B, péptido=A). */
+  forceRoles,
 }: {
   pdbUrl: string | null;
   referenceUrl?: string | null;
@@ -761,6 +763,7 @@ export function ComplexViewer({
   onMetricBeat?: (beat: string | null) => void;
   highlightEpitope?: boolean;
   epitopeChain?: string;
+  forceRoles?: ChainRoles | null;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<any>(null);
@@ -780,6 +783,8 @@ export function ComplexViewer({
   epitopeRef.current = epitopeResidues;
   const epitopeChainRef = useRef(epitopeChain);
   epitopeChainRef.current = epitopeChain;
+  const forceRolesRef = useRef(forceRoles ?? null);
+  forceRolesRef.current = forceRoles ?? null;
   const cameraSetRef = useRef(false);
   const [inView, setInView] = useState(false);
   // active=true/false fuerza el estado; undefined → IntersectionObserver propio.
@@ -1002,7 +1007,8 @@ export function ComplexViewer({
       .then((raw) => {
         if (cancelled) return;
         const text = sanitizePdbText(raw);
-        const roles = detectChainRoles(text, null);
+        const roles =
+          forceRolesRef.current ?? detectChainRoles(text, null);
         const ca = chainCA(text, roles.targetChain);
         refRolesRef.current = roles;
         refPdbTextRef.current = text;
@@ -1044,7 +1050,9 @@ export function ComplexViewer({
         const text = sanitizePdbText(raw);
 
         let modelText = text;
-        let roles = detectChainRoles(text, refCARef.current?.length ?? null);
+        let roles =
+          forceRolesRef.current ??
+          detectChainRoles(text, refCARef.current?.length ?? null);
 
         if (
           fixTargetFromReference &&

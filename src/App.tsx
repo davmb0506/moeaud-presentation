@@ -101,6 +101,7 @@ export default function App() {
   };
 
 
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const isNext = NEXT_KEYS.includes(e.key);
@@ -280,7 +281,7 @@ export default function App() {
                     <strong>
                       péptidos de unión. Caso de estudio: VEGF-A.
                     </strong>
-                    .
+                    
                   </p>
                 </motion.div>
               ) : (

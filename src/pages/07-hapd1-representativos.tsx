@@ -123,10 +123,14 @@ function fmt(v: number | null, digits: number, unit?: string) {
   return unit ? `${s} ${unit}` : s;
 }
 
-function bestArmFor(key: MetricKey, higherBetter: boolean): ArmId | null {
-  let bestId: ArmId | null = null;
+function bestCardFor(
+  key: MetricKey,
+  higherBetter: boolean,
+  cards: { id: string; run: Run }[]
+): string | null {
+  let bestId: string | null = null;
   let bestVal: number | null = null;
-  for (const { arm, run } of REPS) {
+  for (const { id, run } of cards) {
     const v = metricValue(run, key);
     if (v == null) continue;
     if (
@@ -134,15 +138,11 @@ function bestArmFor(key: MetricKey, higherBetter: boolean): ArmId | null {
       (higherBetter ? v > bestVal : v < bestVal)
     ) {
       bestVal = v;
-      bestId = arm.id;
+      bestId = id;
     }
   }
   return bestId;
 }
-
-const BEST_BY_METRIC = Object.fromEntries(
-  METRICS.map((m) => [m.key, bestArmFor(m.key, m.higherBetter)])
-) as Record<MetricKey, ArmId | null>;
 
 type HaPd1Candidate = {
   id: string;
@@ -186,6 +186,38 @@ const VALIDATED_RUN: Run | null = HAPD1_BEST
     }
   : null;
 
+const COMPARE_CARDS: { id: string; run: Run }[] = [
+  ...REPS.map(({ arm, run }) => ({ id: arm.id, run })),
+  ...(VALIDATED_RUN ? [{ id: "validated", run: VALIDATED_RUN }] : []),
+];
+
+const BEST_BY_METRIC = Object.fromEntries(
+  METRICS.map((m) => [m.key, bestCardFor(m.key, m.higherBetter, COMPARE_CARDS)])
+) as Record<MetricKey, string | null>;
+
+function MetricsBlock({
+  run,
+  cardId,
+}: {
+  run: Run;
+  cardId: string;
+}) {
+  return (
+    <dl className="hapd1rep-metrics">
+      {METRICS.map((m) => {
+        const v = metricValue(run, m.key);
+        const isBest = BEST_BY_METRIC[m.key] === cardId;
+        return (
+          <div key={m.key} className={isBest ? "is-best" : undefined} title={m.why}>
+            <dt>{m.label}</dt>
+            <dd>{fmt(v, m.digits, m.unit)}</dd>
+          </div>
+        );
+      })}
+    </dl>
+  );
+}
+
 export function Hapd1Representativos() {
   return (
     <motion.div
@@ -215,24 +247,7 @@ export function Hapd1Representativos() {
                 <ComplexViewer pdbUrl={run.pdb} referenceUrl={run.pdb} />
               </div>
 
-              <dl className="hapd1rep-metrics">
-                {METRICS.map((m) => {
-                  const v = metricValue(run, m.key);
-                  const isBest = BEST_BY_METRIC[m.key] === arm.id;
-                  return (
-                    <div
-                      key={m.key}
-                      className={isBest ? "is-best" : undefined}
-                      title={m.why}
-                    >
-                      <dt>{m.label}</dt>
-                      <dd style={isBest ? { color: arm.color } : undefined}>
-                        {fmt(v, m.digits, m.unit)}
-                      </dd>
-                    </div>
-                  );
-                })}
-              </dl>
+              <MetricsBlock run={run} cardId={arm.id} />
 
               <dl className="hapd1rep-char">
                 <div>
@@ -283,17 +298,7 @@ export function Hapd1Representativos() {
                 <ComplexViewer pdbUrl={run.pdb} referenceUrl={run.pdb} />
               </div>
 
-              <dl className="hapd1rep-metrics">
-                {METRICS.map((m) => {
-                  const v = metricValue(run, m.key);
-                  return (
-                    <div key={m.key} title={m.why}>
-                      <dt>{m.label}</dt>
-                      <dd>{fmt(v, m.digits, m.unit)}</dd>
-                    </div>
-                  );
-                })}
-              </dl>
+              <MetricsBlock run={run} cardId="validated" />
 
               <dl className="hapd1rep-char">
                 <div>

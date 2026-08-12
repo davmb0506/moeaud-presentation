@@ -94,7 +94,7 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
       blurb: isMoea
         ? "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å)."
         : "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å).",
-      subtitle: isMoea ? "RMSD < 5 Å · diversidad entre grupos" : "RMSD < 5 Å",
+      subtitle: "RMSD < 5 Å",
       badge: v(4),
       kind: "end",
     },

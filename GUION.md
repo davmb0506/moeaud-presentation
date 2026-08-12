@@ -44,24 +44,9 @@ Y bueno, las actividades que quedaron pendientes del avance anterior son estas: 
 
 ## Slide 06 · Diseño experimental — Fase de búsqueda (~20 s)
 
+Ahora, se mencionó que este proyecto parte de EvoPro porque mantiene el esquema de, en un algoritmo evolutivo, evaluar las secuencias de aminoácidos utilizando AlphaFold y generar descendencia cada cierto número de generaciones con ProteinMPNN. Sin embargo, ahora lo que se busca optimizar no es una función escalarizada, sino un par de objetivos de manera simultánea.
 
-
-
-Ahora, se menciono que este proyecto parte de EvoPro por que mantiene el esquema de, en un algoritmo evolutivo, evaluar las secuencias de aminoacidos utilizando AlphaFold y generar descendencia cada cierto numero de generaciones con ProteinMPNN (que es otro modelo de aprendizaje profundo). Sin embargo, ahora lo que se busca optimizar no es una funcion escaralizada, si no un par de objetivos de manera simultanea. 
-
-Se seleccionaron tres pares de objetivos. El primero, Interface-PAE contra pLDDT, busca minimizar el error de la predicción en la interfaz y maximizar la confianza del plegamiento — esencialmente, que el modelo esté seguro de que el péptido se une bien y se pliega correctamente. El segundo, Compuesto contra TM-score, combina varias señales de calidad en un solo escalar y lo contrasta con la similitud estructural respecto a una conformación de referencia. El tercero, ipSAE contra SC, busca minimizar un error de alineamiento de la interfaz y maximizar la complementariedad de forma entre las superficies del péptido y el target.
-
-
-[Panel 1: Interface-PAE / pLDDT]
-En este par de objetivos se encontró diferencia estadísticamente significativa: los mecanismos adaptativos alcanzan un hipervolumen final mayor.
-
-[Panel 2: Compuesto / TM-score]
-En este par no se encontró diferencia significativa. Las medianas finales quedan muy cercanas.
-
-[Panel 3: ipSAE / SC]
-Tampoco se encontró diferencia significativa aquí.
-
-
+Se seleccionaron tres pares de objetivos. El primero, Interface-PAE contra pLDDT, busca minimizar el error de la predicción en la interfaz y maximizar la confianza del plegamiento. El segundo, Compuesto contra TM-score, combina varias señales de calidad en un solo escalar y lo contrasta con la similitud estructural. El tercero, ipSAE contra SC, busca minimizar un error de alineamiento de la interfaz y maximizar la complementariedad de forma. Cada par se corre con y sin mecanismos adaptativos (MA).
 
 ---
 ## Slide 07 · Ablación — Convergencia del hipervolumen (~50 s)

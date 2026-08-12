@@ -43,6 +43,8 @@ type Highlight = {
 const NATIVE_HADDOCK_SCORE = -80.1;
 const NATIVE_COMPLEX_PDB =
   "/pdbs/shortlist-haddock/vegfa_vegfr2_native_haddock.pdb";
+/** VEGF-A = target (azul); binder = VEGFR-2 o péptido (verde). */
+const VEGF_ROLES = { targetChain: "B", binderChain: "A" } as const;
 
 const COMPETITION_BY_GROUP: Record<string, { score: number; p: number }> = {
   interface_pae_plddt_mech: { score: 0.34, p: 0.0 },
@@ -259,23 +261,33 @@ export function ValidacionShortlist() {
             <div className="vhl-viewers-2" ref={viewersRef}>
               <div className="vhl-pose">
                 <span className="hapd1-tag aid">VEGF-A / VEGFR-2</span>
+                <span className="vhl-pose-score">
+                  Docking nativo <strong>{fmt(NATIVE_HADDOCK_SCORE, 1)}</strong>
+                </span>
                 <ComplexViewer
                   pdbUrl={NATIVE_COMPLEX_PDB}
                   referenceUrl={NATIVE_COMPLEX_PDB}
                   active={viewersActive ? true : undefined}
                   highlightEpitope
-                  epitopeChain="B"
+                  forceRoles={VEGF_ROLES}
                 />
               </div>
               <div className="vhl-pose">
                 <span className="hapd1-tag">Diseño</span>
+                {active?.haddock_score != null && (
+                  <span className="vhl-pose-score">
+                    Docking diseño{" "}
+                    <strong>{fmt(active.haddock_score, 1)}</strong>
+                  </span>
+                )}
                 {designPdb ? (
                   <ComplexViewer
                     key={active?.id}
                     pdbUrl={designPdb}
-                    referenceUrl={designPdb}
+                    referenceUrl={NATIVE_COMPLEX_PDB}
                     active={designViewerActive ? true : undefined}
                     highlightEpitope
+                    forceRoles={VEGF_ROLES}
                   />
                 ) : (
                   <p className="dockstory-note">PDB no disponible</p>

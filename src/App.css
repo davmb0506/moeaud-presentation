@@ -7513,7 +7513,11 @@
 }
 
 .hapd1rep-metrics > div.is-best {
-  background: color-mix(in srgb, var(--text-h) 8%, transparent);
+  background: rgba(22, 101, 52, 0.08);
+}
+
+.hapd1rep-metrics > div.is-best dd {
+  color: #166534;
 }
 
 .hapd1rep-metrics dt {
@@ -7594,7 +7598,7 @@
 }
 
 .hapd1rep-trait.is-ok {
-  color: #1d8a7a;
+  color: #166534;
 }
 
 .hapd1rep-trait.is-warn {
@@ -8961,6 +8965,20 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+}
+
+.vhl-pose-score {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  opacity: 0.75;
+  margin-top: -2px;
+}
+
+.vhl-pose-score strong {
+  font-weight: 750;
+  color: var(--text-h);
+  opacity: 1;
 }
 
 .vhl-pose .cv-stage {

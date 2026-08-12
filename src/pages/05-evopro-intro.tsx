@@ -33,17 +33,6 @@ export function EvoproIntro() {
             <strong>AlphaFold</strong> para el paso de evaluación de individuos
             y guía la evolución con <strong>ProteinMPNN</strong>.
           </p>
-
-          <p className="eintro-text eintro-subhead">La versión base de EvoPro:</p>
-          <ul className="eintro-list">
-            <li>
-              Utiliza <strong>mutación</strong> como operador principal.
-            </li>
-            <li>No usaba cruza.</li>
-            <li>
-              Supervivencia por <strong>selección elitista</strong>.
-            </li>
-          </ul>
         </motion.div>
 
         <motion.div variants={fade} className="eintro-flow">

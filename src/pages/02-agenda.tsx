@@ -38,9 +38,9 @@ export function Agenda() {
           </ol>
         </li>
         <li>
-          Resultados multiobjetivo
+          Resultados
           <ol type="a">
-            <li>Diseño experimental y formulaciones</li>
+            <li>Diseño experimental</li>
             <li>Ablación de mecanismos adaptativos</li>
             <li>Cribado y selección final</li>
           </ol>
