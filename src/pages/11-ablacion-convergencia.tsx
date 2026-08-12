@@ -88,20 +88,14 @@ type Test = {
   reject: boolean;
 };
 
-type SlideData =
-  | {
-      kind: "stats";
-      title: string;
-      sub: ReactNode;
-      img: string;
-      alt: string;
-      rows: Test[];
-    }
-  | {
-      kind: "overhead";
-      title: string;
-      sub: ReactNode;
-    };
+type SlideData = {
+  kind: "stats";
+  title: string;
+  sub: ReactNode;
+  img: string;
+  alt: string;
+  rows: Test[];
+};
 
 const H0_BI =
   "MOEA-UD con MA obtiene un HV final igual al de la versión Base.";
@@ -168,11 +162,6 @@ const SLIDES: SlideData[] = [
       { test: "Mann-Whitney U (unilateral)", h0: H0_UNI, h1: H1_UNI, p: "0.1378", sig: "n.s.", reject: false },
     ],
   },
-  {
-    kind: "overhead",
-    title: "Costo computacional adicional de los mecanismos adaptativos",
-    sub: null,
-  },
 ];
 const TOTAL = SLIDES.length;
 
@@ -201,64 +190,6 @@ const variants = {
 };
 
 function SlideView({ data }: { data: SlideData }) {
-  if (data.kind === "overhead") {
-    const s = OVERHEAD.summary.ma;
-    const genSec = s.gen_median_s;
-    const phases = [
-      { name: "Predicción AF2 y scoring", seconds: s.af2_scoring_per_gen_s_median },
-      { name: "Selección MOEA-UD", seconds: s.selection_per_gen_s_median },
-      { name: "Generación de descendencia", seconds: s.offspring_per_gen_s_median },
-      { name: "Inyección de diversidad", seconds: s.injection_per_gen_s_median, ma: true },
-      {
-        name: "Selección adaptativa de operadores",
-        seconds: OVERHEAD.operator_selection.per_gen_ms / 1000,
-        ma: true,
-      },
-    ];
-    return (
-      <motion.div
-        className="exp exp-oh-slide"
-        variants={fade}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="exp-head">
-          <h2 className="exp-title">{data.title}</h2>
-          {data.sub ? <p className="exp-sub">{data.sub}</p> : null}
-        </div>
-
-        <div className="exp-oh">
-          <table className="exp-table exp-table-phases">
-            <thead>
-              <tr>
-                <th>Fase de una generación</th>
-                <th>Tiempo</th>
-                <th>% de la generación</th>
-              </tr>
-            </thead>
-            <tbody>
-              {phases.map((p) => (
-                <tr key={p.name} className={p.ma ? "exp-tr-ma" : undefined}>
-                  <td className="exp-td-test">
-                    {p.name}
-                    {p.ma ? <span className="exp-ma-tag">MA</span> : null}
-                  </td>
-                  <td className="exp-td-num">{fmtTime(p.seconds)}</td>
-                  <td className="exp-td-num">{fmtPct(p.seconds, genSec)}</td>
-                </tr>
-              ))}
-              <tr className="exp-tr-median">
-                <td className="exp-td-test">Generación completa</td>
-                <td className="exp-td-num">{fmtTime(genSec)}</td>
-                <td className="exp-td-num">100 %</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </motion.div>
-    );
-  }
-
   return (
     <motion.div className="exp" variants={fade} initial="hidden" animate="visible">
       <div className="exp-head">
@@ -300,6 +231,66 @@ function SlideView({ data }: { data: SlideData }) {
                 </td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+    </motion.div>
+  );
+}
+
+export function AblacionCosto() {
+  const s = OVERHEAD.summary.ma;
+  const genSec = s.gen_median_s;
+  const phases = [
+    { name: "Predicción AF2 y scoring", seconds: s.af2_scoring_per_gen_s_median },
+    { name: "Selección MOEA-UD", seconds: s.selection_per_gen_s_median },
+    { name: "Generación de descendencia", seconds: s.offspring_per_gen_s_median },
+    { name: "Inyección de diversidad", seconds: s.injection_per_gen_s_median, ma: true },
+    {
+      name: "Selección adaptativa de operadores",
+      seconds: OVERHEAD.operator_selection.per_gen_ms / 1000,
+      ma: true,
+    },
+  ];
+  return (
+    <motion.div
+      className="exp exp-oh-slide"
+      variants={fade}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ amount: 0.2 }}
+    >
+      <div className="exp-head">
+        <h2 className="exp-title">
+          Costo computacional adicional de los mecanismos adaptativos
+        </h2>
+      </div>
+
+      <div className="exp-oh">
+        <table className="exp-table exp-table-phases">
+          <thead>
+            <tr>
+              <th>Fase de una generación</th>
+              <th>Tiempo</th>
+              <th>% de la generación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {phases.map((p) => (
+              <tr key={p.name} className={p.ma ? "exp-tr-ma" : undefined}>
+                <td className="exp-td-test">
+                  {p.name}
+                  {p.ma ? <span className="exp-ma-tag">MA</span> : null}
+                </td>
+                <td className="exp-td-num">{fmtTime(p.seconds)}</td>
+                <td className="exp-td-num">{fmtPct(p.seconds, genSec)}</td>
+              </tr>
+            ))}
+            <tr className="exp-tr-median">
+              <td className="exp-td-test">Generación completa</td>
+              <td className="exp-td-num">{fmtTime(genSec)}</td>
+              <td className="exp-td-num">100 %</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -377,18 +368,14 @@ export function AblacionConvergencia() {
   return (
     <div className="mec-deck" ref={rootRef}>
       <div className="mec-deck-top">
-        <span className="mec-part b">Ablación · HV y costo computacional</span>
+        <span className="mec-part b">Ablación · hipervolumen</span>
         <span className="mec-progress">
           {SLIDES.map((s, i) => (
             <button
               key={i}
               type="button"
               className={"mec-pip pb" + (i === idx ? " on" : "")}
-              aria-label={
-                s.kind === "overhead"
-                  ? "Ir al costo computacional de los mecanismos"
-                  : `Ir a la formulación ${i + 1}`
-              }
+              aria-label={`Ir a la formulación ${i + 1}`}
               onClick={() => {
                 setDir(i > idx ? 1 : -1);
                 setIdx(i);

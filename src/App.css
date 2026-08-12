@@ -54,6 +54,23 @@
   font-weight: 800;
 }
 
+/* Contador fijo: visible en viewport aunque el slide sea más alto. */
+.slide-no-fixed {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  z-index: 10000;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface, #fff) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-h) 12%, transparent);
+  box-shadow: 0 1px 4px color-mix(in srgb, #000 8%, transparent);
+  opacity: 0.92;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 /* ---- Portada (cover) - sobria, fiel al slide original ---- */
 .cover {
   min-height: 100svh;
@@ -3158,6 +3175,16 @@
   letter-spacing: -0.01em;
   color: var(--text-h);
   text-align: center;
+}
+
+.divider-subtitle {
+  margin: 0;
+  max-width: 36rem;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.45;
+  color: var(--text);
+  text-align: center;
+  opacity: 0.85;
 }
 
 /* ---- MOEA-UD ---- */
@@ -9218,31 +9245,56 @@
   color: var(--text);
 }
 
+.sintesis-prose {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 62ch;
+}
+
+.sintesis-prose p {
+  margin: 0;
+  font-size: clamp(15.5px, 1.4vw, 18px);
+  line-height: 1.55;
+  color: var(--text);
+}
+
 .sintesis-list li::marker {
   font-weight: 700;
   color: var(--text-h);
 }
 
-.sintesis-cronograma {
-  text-align: center;
-}
-
-.sintesis-cronograma img {
-  max-width: 130%;
-  height: auto;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+.sintesis--split {
+  width: min(1100px, 96vw);
 }
 
 .sintesis--split .sintesis-columns {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-  gap: 32px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: stretch;
 }
 
 .sintesis--split .sintesis-list {
   margin: 0;
+  max-width: 72ch;
+  font-size: clamp(15px, 1.35vw, 17.5px);
+}
+
+.sintesis-cronograma {
+  text-align: center;
+  min-width: 0;
+  width: 100%;
+}
+
+.sintesis-cronograma img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
 
 .sintesis-limit {
@@ -12970,7 +13022,234 @@
   }
 }
 
-/* ---- Formulaciones y mecanismos (puente pre-ablación) ---- */
+/* ---- Por qué multiobjetivo ---- */
+.pqmo {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 0 28px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.pqmo-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pqmo-title {
+  margin: 0;
+  font-size: clamp(26px, 2.8vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+}
+
+.pqmo-lead {
+  margin: 0;
+  max-width: 68ch;
+  font-size: clamp(14px, 1.25vw, 15.5px);
+  line-height: 1.45;
+  color: var(--text);
+  opacity: 0.88;
+}
+
+.pqmo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pqmo-card {
+  position: relative;
+  padding: 18px 16px 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--text-h) 12%, transparent);
+  background: color-mix(in srgb, var(--surface, #fff) 96%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100%;
+}
+
+.pqmo-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #166534;
+  background: rgba(22, 101, 52, 0.1);
+}
+
+.pqmo-card-title {
+  margin: 0;
+  font-size: clamp(15px, 1.35vw, 17px);
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  color: var(--text-h);
+  line-height: 1.25;
+}
+
+.pqmo-card-body {
+  margin: 0;
+  font-size: clamp(13px, 1.15vw, 14.5px);
+  line-height: 1.45;
+  color: var(--text);
+  opacity: 0.88;
+}
+
+.pqmo-foot {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+  opacity: 0.7;
+  max-width: 72ch;
+}
+
+@media (max-width: 900px) {
+  .pqmo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Pares de objetivos ---- */
+.paresobj {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 0 28px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.paresobj-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paresobj-title {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+}
+
+.paresobj-lead {
+  margin: 0;
+  max-width: 72ch;
+  font-size: clamp(14px, 1.25vw, 15.5px);
+  line-height: 1.45;
+  color: var(--text);
+  opacity: 0.88;
+}
+
+.paresobj-bullets {
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 72ch;
+  font-size: clamp(14px, 1.25vw, 15.5px);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.paresobj-bullets li::marker {
+  color: var(--text-h);
+}
+
+.paresobj-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--text-h) 12%, transparent);
+  background: color-mix(in srgb, var(--surface, #fff) 96%, transparent);
+}
+
+.paresobj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(12.5px, 1.15vw, 14px);
+}
+
+.paresobj-table th,
+.paresobj-table td {
+  padding: 12px 14px;
+  vertical-align: top;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-h) 8%, transparent);
+  text-align: left;
+}
+
+.paresobj-table thead th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.55;
+  background: color-mix(in srgb, var(--text-h) 4%, transparent);
+}
+
+.paresobj-table tbody th[scope="row"] {
+  font-weight: 750;
+  color: var(--text-h);
+  white-space: nowrap;
+  width: 18%;
+}
+
+.paresobj-table tbody tr:last-child th,
+.paresobj-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.paresobj-metric {
+  display: block;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 4px;
+}
+
+.paresobj-metric em {
+  font-style: normal;
+  font-weight: 650;
+  color: #166534;
+  margin-right: 4px;
+}
+
+.paresobj-mean {
+  display: block;
+  font-size: 0.92em;
+  line-height: 1.35;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+.paresobj-why {
+  line-height: 1.4;
+  color: var(--text-h);
+  font-weight: 550;
+}
+
+.paresobj-note {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text);
+  opacity: 0.7;
+  max-width: 78ch;
+}
+
 .formech {
   width: min(1080px, 100%);
   margin: 0 auto;
@@ -13000,6 +13279,30 @@
   font-size: clamp(13px, 1.15vw, 14.5px);
   color: var(--text);
   opacity: 0.7;
+}
+
+.formech-note {
+  margin: 0;
+  font-size: clamp(13px, 1.15vw, 14.5px);
+  line-height: 1.4;
+  color: var(--text);
+  opacity: 0.82;
+}
+
+.formech-bullets {
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: clamp(14.5px, 1.3vw, 17px);
+  line-height: 1.45;
+  color: var(--text);
+  max-width: 72ch;
+}
+
+.formech-bullets li::marker {
+  color: var(--text-h);
 }
 
 /* ---- Diagrama SVG experimental ---- */

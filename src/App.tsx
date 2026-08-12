@@ -10,7 +10,8 @@ import { Hapd1Representativos } from "./pages/07-hapd1-representativos";
 import { Multiobjetivo, MO_MAX_STEP } from "./pages/08-multiobjetivo";
 import { Moeaud, UD_MAX_STEP } from "./pages/09-moeaud";
 import { FormulacionesMecanismos } from "./pages/10-formulaciones-mecanismos";
-import { AblacionConvergencia } from "./pages/11-ablacion-convergencia";
+import { ParesObjetivos } from "./pages/06-pares-objetivos";
+import { AblacionConvergencia, AblacionCosto } from "./pages/11-ablacion-convergencia";
 import { Ablacion } from "./pages/12-ablacion";
 import { CompositeFront } from "./pages/13-composite-front";
 import { IpsaeScFront } from "./pages/14-ipsae-sc-front";
@@ -18,6 +19,7 @@ import { ValidacionSintesis, GOUDY_MAX_STEP } from "./pages/15-validacion-sintes
 import { ValidacionShortlist } from "./pages/16-validacion-shortlist";
 import { WrapUp, TrabajoPendiente } from "./pages/17-wrap-up";
 import { Referencias } from "./pages/18-referencias";
+import { SectionDivider } from "./pages/section-divider";
 /* Inactivos en avances (redundantes con HA-PD1):
 import { Experimentos } from "./pages/experimentos";
 import { Hapd1Stats } from "./pages/hapd1-stats";
@@ -35,13 +37,15 @@ import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 15;
+const TOTAL_SLIDES = 22;
 const pad = (n: number) => String(n).padStart(2, "0");
-function SlideNo({ n }: { n: number }) {
+
+function SlideNoFixed({ n }: { n: number | null }) {
+  if (n == null) return null;
   return (
-    <span className="slide-no" aria-hidden>
+    <div className="slide-no slide-no-fixed" aria-hidden>
       <b>{pad(n)}</b> / {pad(TOTAL_SLIDES)}
-    </span>
+    </div>
   );
 }
 
@@ -99,6 +103,49 @@ export default function App() {
     udRef.current = next;
     setUdStep(next);
   };
+
+  // Número de slide visible (fijo en esquina; no se pierde en slides altos).
+  const [visibleSlideNo, setVisibleSlideNo] = useState<number | null>(1);
+
+  useEffect(() => {
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".slide[data-n]")
+    );
+    if (!nodes.length) return;
+
+    const ratios = new Map<HTMLElement, number>();
+    const update = () => {
+      let best: HTMLElement | null = null;
+      let bestRatio = 0;
+      for (const el of nodes) {
+        const r = ratios.get(el) ?? 0;
+        if (r > bestRatio) {
+          bestRatio = r;
+          best = el;
+        }
+      }
+      if (!best || bestRatio <= 0) {
+        // Fuera del deck numerado (p. ej. apéndice): ocultar.
+        const anyMain = nodes.some((el) => (ratios.get(el) ?? 0) > 0.02);
+        if (!anyMain) setVisibleSlideNo(null);
+        return;
+      }
+      const n = Number(best.dataset.n);
+      if (!Number.isNaN(n)) setVisibleSlideNo(n);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          ratios.set(e.target as HTMLElement, e.intersectionRatio);
+        }
+        update();
+      },
+      { threshold: [0, 0.08, 0.2, 0.35, 0.5, 0.65, 0.8, 1] }
+    );
+    nodes.forEach((n) => observer.observe(n));
+    return () => observer.disconnect();
+  }, []);
 
 
 
@@ -193,16 +240,16 @@ export default function App() {
 
   return (
     <main className="app">
+      <SlideNoFixed n={visibleSlideNo} />
       {/* ============================================================ */}
       {/* === DECK AVANCES (activo) — énfasis en RESULTADOS === */}
-      {/* 01 Portada · 02 Agenda · 03 Objetivo · 04 EvoPro · 05 HA-PD1 variantes */}
-      {/* 06 HA-PD1 reps · 07 Actividades pendientes · 08 Mono→multi · 09 MOEA-UD */}
-      {/* 10 Formulaciones · 11 Ablación HV · 12 Frente PAE/pLDDT · 13 Composite/TM */}
-      {/* 14 ipSAE/SC · 15 Cribado · 16 Shortlist · 17 Síntesis · 18 Referencias */}
+      {/* 01 Portada · 02 Agenda · 03 Recapitulación · 04–06 Objetivo/EvoPro/Pendientes */}
+      {/* 07 Resultados · 08 Formulación multiobjetivo · 09 Diseño · 10–13 Ablación */}
+      {/* 14 Cribado · 15 Shortlist · 16 Sep. HA-PD1 · 17 HA-PD1 · 18 Síntesis · 19–20 Wrap/Pendiente · 21 Gracias · 22 Refs */}
       {/* ============================================================ */}
 
       {/* 01 · Portada */}
-      <motion.section
+      <motion.section data-n="1"
         className="cover slide"
         variants={slideContainer}
         initial="hidden"
@@ -237,11 +284,11 @@ export default function App() {
           <p>Dr. Irvin Hussein López Nava</p>
           <p>Dr. Pierrick Gerard Jean Fournier</p>
         </motion.div>
-        <SlideNo n={1} />
+
       </motion.section>
 
       {/* 02 · Agenda */}
-      <motion.section
+      <motion.section data-n="2"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -249,11 +296,26 @@ export default function App() {
         viewport={viewport}
       >
         <Agenda />
-        <SlideNo n={2} />
+
       </motion.section>
 
-      {/* 03 · Objetivo general / Importancia biológica */}
+      {/* 03 · Separador · Recapitulación */}
       <motion.section
+        data-n="3"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <SectionDivider
+          title="Recapitulación"
+          subtitle="Objetivo, punto de partida y pendientes del periodo anterior"
+        />
+      </motion.section>
+
+      {/* 04 · Objetivo general / Importancia biológica */}
+      <motion.section data-n="4"
         className="showcase slide"
         data-step="bio"
         variants={slideContainer}
@@ -342,11 +404,11 @@ export default function App() {
             </motion.p>
           </motion.div>
         </div>
-        <SlideNo n={3} />
+
       </motion.section>
 
-      {/* 04 · EvoPro */}
-      <motion.section
+      {/* 05 · EvoPro */}
+      <motion.section data-n="5"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -354,11 +416,11 @@ export default function App() {
         viewport={viewport}
       >
         <EvoproIntro />
-        <SlideNo n={4} />
+
       </motion.section>
 
-      {/* 05 · Actividades pendientes */}
-      <motion.section
+      {/* 06 · Actividades pendientes */}
+      <motion.section data-n="6"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -366,11 +428,35 @@ export default function App() {
         viewport={viewport}
       >
         <TrabajoPendientePrevio />
-        <SlideNo n={5} />
+
       </motion.section>
 
-      {/* 06 · Formulaciones multiobjetivo */}
+      {/* 07 · Separador · Resultados */}
       <motion.section
+        data-n="7"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <SectionDivider title="Resultados" />
+      </motion.section>
+
+      {/* 08 · Formulación multiobjetivo */}
+      <motion.section
+        data-n="8"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <ParesObjetivos />
+      </motion.section>
+
+      {/* 09 · Formulaciones multiobjetivo / diseño experimental */}
+      <motion.section data-n="9"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -378,11 +464,11 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <FormulacionesMecanismos />
-        <SlideNo n={6} />
+
       </motion.section>
 
-      {/* 07 · Ablación · convergencia HV */}
-      <motion.section
+      {/* 10 · Ablación · convergencia HV */}
+      <motion.section data-n="10"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -390,11 +476,11 @@ export default function App() {
         viewport={{ amount: 0.3 }}
       >
         <AblacionConvergencia />
-        <SlideNo n={7} />
+
       </motion.section>
 
-      {/* 08 · Ablación · frente Interface-PAE / pLDDT */}
-      <motion.section
+      {/* 11 · Ablación · frente Interface-PAE / pLDDT */}
+      <motion.section data-n="11"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -402,11 +488,11 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Ablacion />
-        <SlideNo n={8} />
+
       </motion.section>
 
-      {/* 09 · Ablación · frente Composite / TM-score */}
-      <motion.section
+      {/* 12 · Ablación · frente Composite / TM-score */}
+      <motion.section data-n="12"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -414,11 +500,11 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <CompositeFront />
-        <SlideNo n={9} />
+
       </motion.section>
 
-      {/* 10 · Ablación · frente ipSAE / SC */}
-      <motion.section
+      {/* 13 · Ablación · frente ipSAE / SC */}
+      <motion.section data-n="13"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -426,11 +512,11 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <IpsaeScFront />
-        <SlideNo n={10} />
+
       </motion.section>
 
-      {/* 11 · Cribado computacional */}
-      <motion.section
+      {/* 14 · Cribado computacional */}
+      <motion.section data-n="14"
         className="showcase slide"
         data-step="goudy"
         variants={slideContainer}
@@ -439,11 +525,11 @@ export default function App() {
         viewport={{ amount: 0.18 }}
       >
         <ValidacionSintesis step={goudyStep} onStepChange={setGoudy} />
-        <SlideNo n={11} />
+
       </motion.section>
 
-      {/* 12 · Shortlist / selección final */}
-      <motion.section
+      {/* 15 · Shortlist / selección final */}
+      <motion.section data-n="15"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -451,11 +537,23 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <ValidacionShortlist />
-        <SlideNo n={12} />
+
       </motion.section>
 
-      {/* 13 · HA-PD1 · soluciones representativas */}
+      {/* 16 · Separador · HA-PD1 */}
       <motion.section
+        data-n="16"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <SectionDivider title="Soluciones de experimentos previos" />
+      </motion.section>
+
+      {/* 17 · HA-PD1 · soluciones representativas */}
+      <motion.section data-n="17"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -463,11 +561,26 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Hapd1Representativos />
-        <SlideNo n={13} />
+
       </motion.section>
 
-      {/* 14 · Síntesis */}
+      {/* 18 · Separador · Síntesis */}
       <motion.section
+        data-n="18"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <SectionDivider
+          title="Síntesis"
+          subtitle="Hallazgos clave y trabajo pendiente"
+        />
+      </motion.section>
+
+      {/* 19 · Síntesis */}
+      <motion.section data-n="19"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -475,11 +588,11 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <WrapUp />
-        <SlideNo n={14} />
+
       </motion.section>
 
-      {/* 15 · Trabajo pendiente */}
-      <motion.section
+      {/* 20 · Trabajo pendiente */}
+      <motion.section data-n="20"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -487,11 +600,26 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <TrabajoPendiente />
-        <SlideNo n={15} />
+
       </motion.section>
 
-      {/* 16 · Referencias */}
+      {/* 21 · Cierre */}
       <motion.section
+        data-n="21"
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <SectionDivider
+          title="Muchas gracias"
+          subtitle="Preguntas y comentarios"
+        />
+      </motion.section>
+
+      {/* 22 · Referencias */}
+      <motion.section data-n="22"
         className="refs-slide slide"
         variants={slideContainer}
         initial="hidden"
@@ -499,7 +627,7 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={16} />
+
       </motion.section>
 
       {/* ============================================================ */}
@@ -513,7 +641,7 @@ export default function App() {
         whileInView="visible"
         viewport={viewport}
       >
-        <h2 className="appendix-title">Apéndice</h2>
+        <SectionDivider title="Apéndice" />
       </motion.section>
 
       <motion.section
@@ -524,6 +652,16 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <Hapd1Variantes />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <AblacionCosto />
       </motion.section>
 
       <motion.section

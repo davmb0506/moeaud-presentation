@@ -40,6 +40,7 @@ export function Agenda() {
         <li>
           Resultados
           <ol type="a">
+            <li>Formulación multiobjetivo</li>
             <li>Diseño experimental</li>
             <li>Ablación de mecanismos adaptativos</li>
             <li>Cribado y selección final</li>

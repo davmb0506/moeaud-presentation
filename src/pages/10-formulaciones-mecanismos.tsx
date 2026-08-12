@@ -189,6 +189,9 @@ export function FormulacionesMecanismos() {
     >
       <motion.div variants={fade} className="formech-head">
         <h2 className="formech-title">Diseño experimental — Fase de búsqueda</h2>
+        <p className="formech-note">
+          <strong>MA</strong> = mecanismos adaptativos
+        </p>
       </motion.div>
 
       <motion.div variants={fade} className="fexp-wrap">

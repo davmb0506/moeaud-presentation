@@ -29,19 +29,20 @@ export function WrapUp() {
 
       <motion.ol variants={fade} className="sintesis-list">
         <li>
-          Formulación monoobjetivo (HA-PD1): cruza y temperatura variable
-          mejoran la aptitud frente a la formulación base.
+          En la formulación monoobjetivo sobre HA-PD1, el uso de cruza y de
+          temperatura variable mejoró la aptitud respecto a la formulación
+          base.
         </li>
         <li>
-          Formulación multiobjetivo (VEGF-A): los mecanismos adaptativos
-          mejoran el rendimiento y aumentan el tamaño del conjunto final de
-          secuencias en el par de objetivos Interface-PAE / pLDDT.
+          En la formulación multiobjetivo sobre VEGF-A, los mecanismos
+          adaptativos mejoraron el rendimiento y ampliaron el conjunto final
+          de secuencias, en particular en el par Interface-PAE / pLDDT.
         </li>
         <li>
-          El framework produce secuencias que, tras validación in silico
-          (relajación, control composicional, repredicción independiente),
-          resultan estructuralmente plausibles y diversas como candidatos
-          para futura caracterización experimental.
+          Tras la validación in silico —relajación, control composicional y
+          repredicción independiente—, el marco produce secuencias
+          estructuralmente plausibles y diversas, listas como candidatos para
+          una caracterización experimental futura.
         </li>
       </motion.ol>
     </motion.div>

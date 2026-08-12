@@ -16,7 +16,13 @@ La agenda del día es la siguiente. Primero hare una breve recapitulación del p
 
 ---
 
-## Slide 03 · Objetivo general / Importancia biológica (~45 s)
+## Slide 03 · Separador · Recapitulación (~5 s)
+
+[Separador] Empezamos con la recapitulación.
+
+---
+
+## Slide 04 · Objetivo general / Importancia biológica (~45 s)
 
 El objetivo general de este proyecto era desarrollar, implementar y validar un marco computacional de diseño de proteínas basado en optimización evolutiva multiobjetivo, aplicándolo al diseño de novo de péptidos de union, tomando como caso de estudio a VEGF-A.
 
@@ -26,7 +32,7 @@ El objetivo general de este proyecto era desarrollar, implementar y validar un m
 
 ---
 
-## Slide 04 · EvoPro (~60 s)
+## Slide 05 · EvoPro (~60 s)
 
 Recordando un poco de anteriores avances, el proyecto parte una metodología de diseño computacional de proteinas basada en deep learning y en un algoritmo genético llamada EvoPro. EvoPro utiliza AlphaFold2 para predecir la estructura de las secuencias que conforman la poblacion a evolucionar con el algoritmo y ProteinMPNN cada cierto numero de generaciones para guiar la evolucion.
 
@@ -36,29 +42,46 @@ El flujo es: se inicia con una población de 50 secuencias, se evalúan con Alph
 
 ---
 
-## Slide 05 · Actividades pendientes del periodo pasado (~15 s)
+## Slide 06 · Actividades pendientes del periodo pasado (~15 s)
 
 Y bueno, las actividades que quedaron pendientes del avance anterior son estas: Realizar los experimentos finales con la formulacion multiobjetivo que se implemento, validar los resultados de estos experimentos y, finalmente la redaccion del documento de tesis.
 
 ---
 
-## Slide 06 · Diseño experimental — Fase de búsqueda (~20 s)
+## Slide 07 · Separador · Resultados (~5 s)
 
-Ahora, se mencionó que este proyecto parte de EvoPro porque mantiene el esquema de, en un algoritmo evolutivo, evaluar las secuencias de aminoácidos utilizando AlphaFold y generar descendencia cada cierto número de generaciones con ProteinMPNN. Sin embargo, ahora lo que se busca optimizar no es una función escalarizada, sino un par de objetivos de manera simultánea.
-
-Se seleccionaron tres pares de objetivos. El primero, Interface-PAE contra pLDDT, busca minimizar el error de la predicción en la interfaz y maximizar la confianza del plegamiento. El segundo, Compuesto contra TM-score, combina varias señales de calidad en un solo escalar y lo contrasta con la similitud estructural. El tercero, ipSAE contra SC, busca minimizar un error de alineamiento de la interfaz y maximizar la complementariedad de forma. Cada par se corre con y sin mecanismos adaptativos (MA).
-
----
-## Slide 07 · Ablación — Convergencia del hipervolumen (~50 s)
-
-
-
-[Panel 4: Costo computacional]
-El costo adicional de los mecanismos es despreciable. La predicción con AlphaFold toma ~6 minutos por generación; la inyección de diversidad toma 0.15 segundos y la selección de operadores 0.7 milisegundos. Frente a la ganancia en Interface-PAE/pLDDT, vale la pena usarlos.
+[Separador] Pasamos a los resultados de este periodo.
 
 ---
 
-## Slide 08 · Frente Interface-PAE / pLDDT (~30 s)
+## Slide 08 · Formulación multiobjetivo (~60 s)
+
+- El proyecto mantiene el esquema de EvoPro en cuanto al uso de modelos de deep learning para la evaluación y generación de secuencias.
+- Lo que cambia es lo que se optimiza.
+
+Hay tres pares; todos miden calidad de interfaz global, no el epítopo VEGFR-2.
+
+**Interface-PAE / pLDDT.** Error de pose relativa y confianza del pliegue.
+
+**Compuesto / TM-score.** Calidad de interfaz agregada y similitud del péptido monómero vs. unido al blanco.
+
+**ipSAE / SC.** Confianza de pose en la interfaz y complementariedad de forma.
+
+Cada par se corre con y sin mecanismos adaptativos → seis formulaciones. El siguiente slide muestra el diseño experimental.
+
+---
+## Slide 09 · Diseño experimental — Fase de búsqueda (~20 s)
+
+Cada par se corre con y sin mecanismos adaptativos (MA).
+
+---
+## Slide 10 · Ablación — Convergencia del hipervolumen (~50 s)
+
+Tres formulaciones: Interface-PAE / pLDDT (MA supera a Base, significativo), Compuesto / TM-score e ipSAE / SC (sin diferencia significativa).
+
+---
+
+## Slide 11 · Frente Interface-PAE / pLDDT (~30 s)
 
 Aquí vemos los frentes no dominados de una réplica representativa (la más cercana a la media en tamaño de archivo). El frente con mecanismos (azul) domina al frente sin mecanismos (naranja) en la mayor parte del espacio de objetivos. Además, el tamaño del archivo es mayor — 44 soluciones promedio frente a 31 — lo cual da más candidatos para análisis posterior.
 
@@ -66,19 +89,19 @@ Al seleccionar cualquier punto se puede inspeccionar su estructura y propiedades
 
 ---
 
-## Slide 09 · Frente Compuesto / TM-score (~15 s)
+## Slide 12 · Frente Compuesto / TM-score (~15 s)
 
 En Compuesto / TM-score ya no es tan clara la diferencia: algunas soluciones con mecanismos dominan a algunas sin mecanismos y viceversa. Consistente con que no hubo significancia estadística. Ninguno de los candidatos finales proviene de esta formulación.
 
 ---
 
-## Slide 10 · Frente ipSAE / SC (~15 s)
+## Slide 13 · Frente ipSAE / SC (~15 s)
 
 Mismo caso para ipSAE / SC. En esta réplica particular sí se observa cierta dominancia visual, pero no se replicó en todas las ejecuciones.
 
 ---
 
-## Slide 11 · Cribado computacional (~45 s)
+## Slide 14 · Cribado computacional (~45 s)
 
 Una vez obtenidos los frentes, las 1208 secuencias no dominadas pasaron por un pipeline de validación.
 
@@ -92,7 +115,7 @@ Finalmente, repredicción con AlphaFold 2 y OmegaFold: se pide que ambos modelos
 
 ---
 
-## Slide 12 · Diseños destacados (~50 s)
+## Slide 15 · Diseños destacados (~50 s)
 
 De los 10 que pasan el filtro, cuatro resaltan por un criterio distinto cada uno.
 
@@ -108,27 +131,13 @@ Algunos puntos de validación adicionales: la identidad entre los finalistas es 
 
 ---
 
-## Slide 13 · Síntesis (~25 s)
+## Slide 16 · Separador · Soluciones de experimentos previos (~5 s)
 
-En resumen:
-
-Uno. La formulación monoobjetivo (HA-PD1) mostró que cruza y temperatura variable mejoran la aptitud frente a la formulación base.
-
-Dos. La formulación multiobjetivo (VEGF-A): los mecanismos adaptativos mejoran el rendimiento y aumentan el tamaño del conjunto final de secuencias en el par de objetivos Interface-PAE / pLDDT.
-
-Tres. Los diseños muestran oclusión estérica significativa del sitio VEGFR-2, posicionándolos como candidatos computacionales pendientes de validación experimental.
+[Separador] Había quedado pendiente mostrar las soluciones representativas de la formulación monoobjetivo.
 
 ---
 
-## Slide 14 · Trabajo pendiente (~20 s)
-
-La actividad principal pendiente es continuar redactando el documento de tesis. Ya se escribieron los capítulos 1, 2 y 3; actualmente estoy escribiendo el cuarto y aplicando las correcciones sugeridas.
-
-A la derecha se muestra el cronograma actualizado con las actividades restantes.
-
----
-
-## Slide 15 · Soluciones representativas HA-PD1 (~30 s)
+## Slide 17 · Soluciones representativas HA-PD1 (~30 s)
 
 Aquí se muestran las soluciones representativas del experimento monoobjetivo sobre HA-PD1 — una por cada variante del algoritmo genético: solo mutación, mutación y cruce, y temperatura variable.
 
@@ -136,9 +145,37 @@ La cuarta tarjeta muestra el mejor AID validado computacionalmente: proviene del
 
 ---
 
-## Slide 16 · Referencias (~5 s)
+## Slide 18 · Separador · Síntesis (~5 s)
 
-Aquí están las referencias. Muchas gracias, estoy abierto a preguntas.
+[Separador] Cerramos con la síntesis.
+
+---
+
+## Slide 19 · Síntesis (~25 s)
+
+1. En la formulación monoobjetivo sobre HA-PD1, el uso de cruza y de temperatura variable mejoró la aptitud respecto a la formulación base.
+2. En la formulación multiobjetivo sobre VEGF-A, los mecanismos adaptativos mejoraron el rendimiento y ampliaron el conjunto final de secuencias, en particular en el par Interface-PAE / pLDDT.
+3. Tras la validación in silico —relajación, control composicional y repredicción independiente—, el marco produce secuencias estructuralmente plausibles y diversas, listas como candidatos para una caracterización experimental futura.
+
+---
+
+## Slide 20 · Trabajo pendiente (~20 s)
+
+La actividad principal pendiente es continuar redactando el documento de tesis. Ya se escribieron los capítulos 1, 2 y 3; actualmente estoy escribiendo el cuarto y aplicando las correcciones sugeridas.
+
+A la derecha se muestra el cronograma actualizado con las actividades restantes.
+
+---
+
+## Slide 21 · Muchas gracias (~5 s)
+
+Muchas gracias. Estoy abierto a preguntas.
+
+---
+
+## Slide 22 · Referencias (~5 s)
+
+Aquí están las referencias.
 
 ---
 
