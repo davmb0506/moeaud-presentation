@@ -230,6 +230,7 @@ export function ValidacionShortlist() {
     >
       <header className="vhl-head">
         <h2 className="vhl-title">Diseños destacados</h2>
+        <p className="vhl-note">MA = Mecanismos Adaptativos</p>
       </header>
 
       <div className="vhl-grid">

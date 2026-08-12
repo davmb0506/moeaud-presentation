@@ -38,9 +38,10 @@ export function WrapUp() {
           secuencias en el par de objetivos Interface-PAE / pLDDT.
         </li>
         <li>
-          Los diseños muestran oclusión estérica significativa del sitio
-          VEGFR-2, posicionándolos como candidatos computacionales
-          pendientes de validación experimental.
+          El framework produce secuencias que, tras validación in silico
+          (relajación, control composicional, repredicción independiente),
+          resultan estructuralmente plausibles y diversas como candidatos
+          para futura caracterización experimental.
         </li>
       </motion.ol>
     </motion.div>

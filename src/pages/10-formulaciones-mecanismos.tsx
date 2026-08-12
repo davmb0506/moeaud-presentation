@@ -164,20 +164,20 @@ const PAIRS = [
 ] as const;
 
 export function FormulacionesMecanismos() {
-  const seedCx = 230;
-  const vegfCx = 645;
-  const inputBottom = 86;
-  const joinY = 108;
-  const pairY = 148;
-  const pairW = 220;
-  const pairH = 40;
-  const leafY = 250;
-  const leafW = 88;
-  const leafH = 32;
-  const moea = { x: 300, y: 350, w: 300, h: 58 };
+  const pairY = 20;
+  const pairW = 210;
+  const pairH = 38;
+  const leafY = 95;
+  const leafW = 84;
+  const leafH = 30;
+  const mergeY = 152;
+  const moea = { x: 310, y: 250, w: 280, h: 56 };
   const moeaCx = moea.x + moea.w / 2;
-  const mergeY = 320;
-  const frontY = 440;
+  const moeaCy = moea.y + moea.h / 2;
+  const frontY = 355;
+
+  const seedBox = { x: 100, y: 250, w: 190, h: 56 };
+  const vegfBox = { x: 610, y: 250, w: 190, h: 56 };
 
   return (
     <motion.div
@@ -200,9 +200,9 @@ export function FormulacionesMecanismos() {
 
           <svg
             className="fexp-svg"
-            viewBox="0 0 900 510"
+            viewBox="0 0 900 420"
             role="img"
-            aria-label="Flujo del experimento: entradas, tres pares de objetivos con y sin mecanismos adaptativos, MOEA-UD y seis frentes no dominados"
+            aria-label="Flujo del experimento: tres pares de objetivos, entradas laterales, MOEA-UD y seis frentes no dominados"
           >
             <defs>
               <marker
@@ -217,211 +217,78 @@ export function FormulacionesMecanismos() {
               >
                 <path d="M2 2 L10 6 L2 10 Z" fill={STROKE} />
               </marker>
-              <clipPath id="fexp-pdb-clip">
-                <rect x={790} y={28} width={72} height={72} rx={8} />
-              </clipPath>
             </defs>
 
-            {/* Inputs → join → pairs */}
-            <path
-              d={`M ${seedCx} ${inputBottom} V ${joinY} H ${moeaCx}`}
-              fill="none"
-              stroke={STROKE}
-              strokeWidth={1.4}
-            />
-            <path
-              d={`M ${vegfCx} ${inputBottom} V ${joinY} H ${moeaCx}`}
-              fill="none"
-              stroke={STROKE}
-              strokeWidth={1.4}
-            />
-            <line
-              x1={PAIRS[0].cx}
-              y1={joinY}
-              x2={PAIRS[2].cx}
-              y2={joinY}
-              stroke={STROKE}
-              strokeWidth={1.4}
-            />
-            {PAIRS.map((p) => (
-              <line
-                key={`to-pair-${p.name}`}
-                x1={p.cx}
-                y1={joinY}
-                x2={p.cx}
-                y2={pairY}
-                stroke={STROKE}
-                strokeWidth={1.4}
-                markerEnd="url(#fexp-arrow)"
-              />
-            ))}
-
-            {/* Pair → leaves */}
+            {/* === Objective pairs at top === */}
             {PAIRS.map((p) => {
-              const leftCx = p.cx - 52;
-              const rightCx = p.cx + 52;
+              const leftCx = p.cx - 50;
+              const rightCx = p.cx + 50;
               const pairBottom = pairY + pairH;
-              const splitY = pairBottom + 18;
-              return (
-                <g key={`pair-lines-${p.name}`}>
-                  <line
-                    x1={p.cx}
-                    y1={pairBottom}
-                    x2={p.cx}
-                    y2={splitY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                  />
-                  <line
-                    x1={leftCx}
-                    y1={splitY}
-                    x2={rightCx}
-                    y2={splitY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                  />
-                  <line
-                    x1={leftCx}
-                    y1={splitY}
-                    x2={leftCx}
-                    y2={leafY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                    markerEnd="url(#fexp-arrow)"
-                  />
-                  <line
-                    x1={rightCx}
-                    y1={splitY}
-                    x2={rightCx}
-                    y2={leafY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                    markerEnd="url(#fexp-arrow)"
-                  />
-                </g>
-              );
-            })}
-
-            {/* Leaves → MOEA */}
-            {PAIRS.map((p) => {
-              const leftCx = p.cx - 52;
-              const rightCx = p.cx + 52;
-              return (
-                <g key={`to-moea-${p.name}`}>
-                  <line
-                    x1={leftCx}
-                    y1={leafY + leafH}
-                    x2={leftCx}
-                    y2={mergeY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                  />
-                  <line
-                    x1={rightCx}
-                    y1={leafY + leafH}
-                    x2={rightCx}
-                    y2={mergeY}
-                    stroke={STROKE}
-                    strokeWidth={1.3}
-                  />
-                </g>
-              );
-            })}
-            <line
-              x1={PAIRS[0].cx - 52}
-              y1={mergeY}
-              x2={PAIRS[2].cx + 52}
-              y2={mergeY}
-              stroke={STROKE}
-              strokeWidth={1.3}
-            />
-            <line
-              x1={moeaCx}
-              y1={mergeY}
-              x2={moeaCx}
-              y2={moea.y}
-              stroke={STROKE}
-              strokeWidth={1.4}
-              markerEnd="url(#fexp-arrow)"
-            />
-            <line
-              x1={moeaCx}
-              y1={moea.y + moea.h}
-              x2={moeaCx}
-              y2={frontY}
-              stroke={STROKE}
-              strokeWidth={1.4}
-              markerEnd="url(#fexp-arrow)"
-            />
-
-            <Label
-              x={450}
-              y={14}
-              text="Entradas del algoritmo"
-              size={13}
-              weight={700}
-              fill={MUTED}
-            />
-
-            {/* Seed input + peptide icon */}
-            <PeptideIcon x={42} y={16} />
-            <Box x={130} y={30} w={200} h={56} />
-            <Label x={230} y={48} text="Péptido semilla (21 aa)" size={12.5} weight={700} />
-            <Label
-              x={230}
-              y={68}
-              text="Población inicial por mutación"
-              size={10}
-              fill={MUTED}
-              weight={500}
-            />
-
-            {/* VEGF input + PDB slot (HTML overlay) */}
-            <Box x={520} y={30} w={250} h={56} />
-            <Label x={645} y={48} text="VEGF-A (proteína blanco)" size={12.5} weight={700} />
-            <Label
-              x={645}
-              y={68}
-              text="Estructura 3D para evaluación"
-              size={10}
-              fill={MUTED}
-              weight={500}
-            />
-
-            {PAIRS.map((p) => {
-              const leftCx = p.cx - 52;
-              const rightCx = p.cx + 52;
+              const splitY = pairBottom + 14;
               return (
                 <g key={p.name}>
                   <Box x={p.cx - pairW / 2} y={pairY} w={pairW} h={pairH} />
-                  <Label x={p.cx} y={pairY + pairH / 2} text={p.name} size={12.5} />
+                  <Label x={p.cx} y={pairY + pairH / 2} text={p.name} size={12} />
+
+                  <line x1={p.cx} y1={pairBottom} x2={p.cx} y2={splitY} stroke={STROKE} strokeWidth={1.3} />
+                  <line x1={leftCx} y1={splitY} x2={rightCx} y2={splitY} stroke={STROKE} strokeWidth={1.3} />
+                  <line x1={leftCx} y1={splitY} x2={leftCx} y2={leafY} stroke={STROKE} strokeWidth={1.3} markerEnd="url(#fexp-arrow)" />
+                  <line x1={rightCx} y1={splitY} x2={rightCx} y2={leafY} stroke={STROKE} strokeWidth={1.3} markerEnd="url(#fexp-arrow)" />
+
                   <Box x={leftCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
-                  <Label x={leftCx} y={leafY + leafH / 2} text="con MA" size={12} />
+                  <Label x={leftCx} y={leafY + leafH / 2} text="con MA" size={11} />
                   <Box x={rightCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
-                  <Label x={rightCx} y={leafY + leafH / 2} text="sin MA" size={12} />
+                  <Label x={rightCx} y={leafY + leafH / 2} text="sin MA" size={11} />
+
+                  <line x1={leftCx} y1={leafY + leafH} x2={leftCx} y2={mergeY} stroke={STROKE} strokeWidth={1.3} />
+                  <line x1={rightCx} y1={leafY + leafH} x2={rightCx} y2={mergeY} stroke={STROKE} strokeWidth={1.3} />
                 </g>
               );
             })}
 
-            <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
-            <Label x={moeaCx} y={moea.y + 22} text="MOEA-UD" size={16} weight={800} />
-            <Label
-              x={moeaCx}
-              y={moea.y + 42}
-              text="pop. 50 · 200 gen · 10 réplicas"
-              size={11}
-              weight={500}
-              fill={MUTED}
+            {/* Merge line → arrow down to MOEA-UD */}
+            <line x1={PAIRS[0].cx - 50} y1={mergeY} x2={PAIRS[2].cx + 50} y2={mergeY} stroke={STROKE} strokeWidth={1.3} />
+            <line x1={moeaCx} y1={mergeY} x2={moeaCx} y2={moea.y} stroke={STROKE} strokeWidth={1.4} markerEnd="url(#fexp-arrow)" />
+
+            {/* === Inputs aligned with MOEA-UD (same row) === */}
+            {/* Seed: icon to the left of the box */}
+            <PeptideIcon x={seedBox.x - 80} y={seedBox.y + 2} />
+            <Box x={seedBox.x} y={seedBox.y} w={seedBox.w} h={seedBox.h} />
+            <Label x={seedBox.x + seedBox.w / 2} y={seedBox.y + 20} text="Péptido semilla (21 aa)" size={11.5} weight={700} />
+            <Label x={seedBox.x + seedBox.w / 2} y={seedBox.y + 38} text="Población inicial por mutación" size={9.5} fill={MUTED} weight={500} />
+            <line
+              x1={seedBox.x + seedBox.w}
+              y1={moeaCy}
+              x2={moea.x}
+              y2={moeaCy}
+              stroke={STROKE}
+              strokeWidth={1.4}
+              markerEnd="url(#fexp-arrow)"
             />
 
-            <Box x={270} y={frontY} w={360} h={42} r={8} strokeWidth={2} />
-            <Label
-              x={450}
-              y={frontY + 21}
-              text="6 frentes no dominados"
-              size={14}
-              weight={700}
+            {/* VEGF-A */}
+            <Box x={vegfBox.x} y={vegfBox.y} w={vegfBox.w} h={vegfBox.h} />
+            <Label x={vegfBox.x + vegfBox.w / 2} y={vegfBox.y + 20} text="VEGF-A (proteína blanco)" size={11.5} weight={700} />
+            <Label x={vegfBox.x + vegfBox.w / 2} y={vegfBox.y + 38} text="Estructura 3D para evaluación" size={9.5} fill={MUTED} weight={500} />
+            <line
+              x1={vegfBox.x}
+              y1={moeaCy}
+              x2={moea.x + moea.w}
+              y2={moeaCy}
+              stroke={STROKE}
+              strokeWidth={1.4}
+              markerEnd="url(#fexp-arrow)"
             />
+
+            {/* === MOEA-UD === */}
+            <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
+            <Label x={moeaCx} y={moea.y + 22} text="MOEA-UD" size={16} weight={800} />
+            <Label x={moeaCx} y={moea.y + 42} text="pop. 50 · 200 gen · 10 réplicas" size={11} weight={500} fill={MUTED} />
+
+            {/* MOEA-UD → Fronts */}
+            <line x1={moeaCx} y1={moea.y + moea.h} x2={moeaCx} y2={frontY} stroke={STROKE} strokeWidth={1.4} markerEnd="url(#fexp-arrow)" />
+            <Box x={270} y={frontY} w={360} h={42} r={8} strokeWidth={2} />
+            <Label x={450} y={frontY + 21} text="6 frentes no dominados" size={14} weight={700} />
           </svg>
         </div>
       </motion.div>

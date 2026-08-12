@@ -12,81 +12,45 @@ Buenas tardes a todos. Voy a presentar los avances de mi proyecto de diseño de 
 
 ## Slide 02 · Agenda (~20 s)
 
-La agenda del día es la siguiente. Primero una recapitulación del proyecto: el objetivo, el punto de partida con EvoPro y los resultados monoobjetivo previos. Luego los resultados de este periodo: la formulación multiobjetivo, los experimentos de ablación y el cribado de candidatos. Finalmente, la síntesis y el cierre.
+La agenda del día es la siguiente. Primero hare una breve recapitulación del proyecto: el objetivo general, el punto de partida del mismo y las actividades que quedaron pendientes del periodo pasado. Luego hablare de los experimentos realizados durante este periodo y los resultados obtenidos. Finalmente, hare una breve síntesis, para concluir con el trabajo subsecuente.
 
 ---
 
 ## Slide 03 · Objetivo general / Importancia biológica (~45 s)
 
-El objetivo general es desarrollar, implementar y validar un marco computacional de diseño de proteínas basado en optimización evolutiva multiobjetivo, aplicándolo al diseño de novo de péptidos de unión. Caso de estudio: VEGF-A.
+El objetivo general de este proyecto era desarrollar, implementar y validar un marco computacional de diseño de proteínas basado en optimización evolutiva multiobjetivo, aplicándolo al diseño de novo de péptidos de union, tomando como caso de estudio a VEGF-A.
 
 [Avanzar para revelar importancia biológica]
 
-¿Por qué VEGF-A? VEGF-A promueve la formación de vasos sanguíneos. En patologías que dependen de angiogénesis anómala — cáncer, enfermedades oculares neovasculares — su sobreexpresión favorece la progresión. Fármacos como bevacizumab son anticuerpos de ~150 kDa que se unen a VEGF-A y evitan que active VEGFR-2. Aquí se buscan péptidos de 21 residuos con el mismo propósito: más pequeños, más baratos de sintetizar.
+¿Por qué VEGF-A? VEGF-A promueve la formación de vasos sanguíneos. En patologías que dependen de angiogénesis anómala — cáncer, enfermedades oculares neovasculares — su sobreexpresión favorece la progresión. Fármacos como bevacizumab son anticuerpos de ~150 kDa que se unen a VEGF-A, evitando la interacción con VEGFR. Aquí se buscan péptidos de 21 residuos con el mismo propósito.
 
 ---
 
 ## Slide 04 · EvoPro (~60 s)
 
-El proyecto parte de EvoPro, una metodología de diseño computacional basada en deep learning y en un algoritmo genético. EvoPro utiliza AlphaFold 2 para evaluar individuos y ProteinMPNN para generar secuencias que se plieguen en conformaciones específicas.
+Recordando un poco de anteriores avances, el proyecto parte una metodología de diseño computacional de proteinas basada en deep learning y en un algoritmo genético llamada EvoPro. EvoPro utiliza AlphaFold2 para predecir la estructura de las secuencias que conforman la poblacion a evolucionar con el algoritmo y ProteinMPNN cada cierto numero de generaciones para guiar la evolucion.
 
 El flujo es: se inicia con una población de 50 secuencias, se evalúan con AlphaFold, se ordenan por una función escalarizada de tres términos derivados de la predicción — confianza de plegamiento, confianza de interfaz —, se elimina la peor mitad, se genera descendencia a partir de los sobrevivientes y se repite. Cada diez generaciones se usa ProteinMPNN para samplear hijos a partir de los backbones de los padres.
 
-Las áreas de oportunidad que encontramos: solo usaba mutación como operador, no tenía cruza, y la supervivencia era puramente elitista.
+
 
 ---
 
-## Slide 05 · Variantes monoobjetivo HA-PD1 (~40 s)
+## Slide 05 · Actividades pendientes del periodo pasado (~15 s)
 
-Para abordar estas limitaciones, propusimos tres variantes y las ejecutamos en diez réplicas de 60 generaciones cada una sobre un dominio autoinhibitorio de HA-PD1.
-
-La primera variante mantiene solo mutación — el baseline del artículo. La segunda agrega cruza. La tercera agrega además temperatura variable en ProteinMPNN: si el algoritmo necesita diversidad se sube la temperatura, si necesita concentrar la búsqueda se baja.
-
-Se encontró diferencia significativa de mutación-sola frente a las variantes con cruza. No se encontró diferencia significativa entre cruza y temperatura variable usando Mann-Whitney unilateral.
+Y bueno, las actividades que quedaron pendientes del avance anterior son estas: Realizar los experimentos finales con la formulacion multiobjetivo que se implemento, validar los resultados de estos experimentos y, finalmente la redaccion del documento de tesis.
 
 ---
 
-## Slide 06 · Soluciones representativas HA-PD1 (~20 s)
+## Slide 06 · Diseño experimental — Fase de búsqueda (~20 s)
 
-Aquí se pueden ver algunas soluciones representativas. Los diseños con cruza y temperatura variable presentan mejores valores de la función de aptitud. Esto nos dio pie a incorporar estos cambios en la siguiente fase del algoritmo.
 
----
 
-## Slide 07 · Actividades pendientes del periodo pasado (~15 s)
 
-Estas eran las actividades pendientes: finalizar los experimentos multiobjetivo, la validación in silico de los diseños, y la redacción de la tesis.
+Ahora, se menciono que este proyecto parte de EvoPro por que mantiene el esquema de, en un algoritmo evolutivo, evaluar las secuencias de aminoacidos utilizando AlphaFold y generar descendencia cada cierto numero de generaciones con ProteinMPNN (que es otro modelo de aprendizaje profundo). Sin embargo, ahora lo que se busca optimizar no es una funcion escaralizada, si no un par de objetivos de manera simultanea. 
 
----
+Se seleccionaron tres pares de objetivos. El primero, Interface-PAE contra pLDDT, busca minimizar el error de la predicción en la interfaz y maximizar la confianza del plegamiento — esencialmente, que el modelo esté seguro de que el péptido se une bien y se pliega correctamente. El segundo, Compuesto contra TM-score, combina varias señales de calidad en un solo escalar y lo contrasta con la similitud estructural respecto a una conformación de referencia. El tercero, ipSAE contra SC, busca minimizar un error de alineamiento de la interfaz y maximizar la complementariedad de forma entre las superficies del péptido y el target.
 
-## Slide 08 · De monoobjetivo a multiobjetivo (~40 s)
-
-¿Por qué pasar a una formulación multiobjetivo? En diseño de proteínas, la calidad de un diseño depende de varios criterios simultáneamente — por ejemplo, que un péptido se una bien al target y que además sea compacto. Estos criterios suelen estar en conflicto: mejorar uno puede empeorar otro.
-
-Cuando hay conflicto entre objetivos, una formulación multiobjetivo permite explorar los compromisos y obtener un frente de soluciones no dominadas. Lo que se obtiene no es una solución, sino un conjunto de soluciones donde ninguna es mejor que otra en todos los criterios a la vez. Esto es valioso porque para llevar candidatos al laboratorio se necesitan muchos: mientras más opciones, mayor probabilidad de éxito.
-
----
-
-## Slide 09 · MOEA-UD (~50 s)
-
-El algoritmo multiobjetivo que implementamos es MOEA-UD.
-
-¿Por qué este frente a otros como NSGA-III o MOEA/D? Esos algoritmos usan vectores de referencia fijos para guiar la búsqueda. Si el frente es irregular — como suele ser en diseño de proteínas —, algunos vectores quedan sin representación y las soluciones se sesgan hacia regiones específicas.
-
-MOEA-UD redistribuye los vectores de referencia adaptándose a la forma del frente. Además mantiene un archivo externo que preserva todas las soluciones no dominadas encontradas.
-
-[Avanzar para mecanismos adaptativos]
-
-Sobre esta base se añadieron dos mecanismos: selección adaptativa de operadores e inyección de diversidad, ambos guiados por el hipervolumen.
-
----
-
-## Slide 10 · Formulaciones multiobjetivo (~20 s)
-
-El diagrama muestra el diseño experimental. Partimos de la semilla de 21 aminoácidos y VEGF-A como target. MOEA-UD se ejecuta con tres pares de objetivos — Interface-PAE / pLDDT, Compuesto / TM-score, ipSAE / SC — cada uno con y sin mecanismos adaptativos. Esto da seis configuraciones, cada una con diez réplicas, y se obtienen seis frentes no dominados.
-
----
-
-## Slide 11 · Ablación — Convergencia del hipervolumen (~50 s)
 
 [Panel 1: Interface-PAE / pLDDT]
 En este par de objetivos se encontró diferencia estadísticamente significativa: los mecanismos adaptativos alcanzan un hipervolumen final mayor.
@@ -97,32 +61,39 @@ En este par no se encontró diferencia significativa. Las medianas finales queda
 [Panel 3: ipSAE / SC]
 Tampoco se encontró diferencia significativa aquí.
 
+
+
+---
+## Slide 07 · Ablación — Convergencia del hipervolumen (~50 s)
+
+
+
 [Panel 4: Costo computacional]
 El costo adicional de los mecanismos es despreciable. La predicción con AlphaFold toma ~6 minutos por generación; la inyección de diversidad toma 0.15 segundos y la selección de operadores 0.7 milisegundos. Frente a la ganancia en Interface-PAE/pLDDT, vale la pena usarlos.
 
 ---
 
-## Slide 12 · Frente Interface-PAE / pLDDT (~30 s)
+## Slide 08 · Frente Interface-PAE / pLDDT (~30 s)
 
-Aquí vemos los frentes no dominados de una réplica representativa. El frente con mecanismos (azul) domina al frente sin mecanismos (naranja) en la mayor parte del espacio de objetivos. Además, el tamaño del archivo es mayor — 44 soluciones promedio frente a 31 — lo cual da más candidatos para análisis posterior.
+Aquí vemos los frentes no dominados de una réplica representativa (la más cercana a la media en tamaño de archivo). El frente con mecanismos (azul) domina al frente sin mecanismos (naranja) en la mayor parte del espacio de objetivos. Además, el tamaño del archivo es mayor — 44 soluciones promedio frente a 31 — lo cual da más candidatos para análisis posterior.
 
 Al seleccionar cualquier punto se puede inspeccionar su estructura y propiedades fisicoquímicas.
 
 ---
 
-## Slide 13 · Frente Compuesto / TM-score (~15 s)
+## Slide 09 · Frente Compuesto / TM-score (~15 s)
 
-En Compuesto / TM-score ya no es tan clara la diferencia: algunas soluciones con mecanismos dominan a algunas sin mecanismos y viceversa. Consistente con que no hubo significancia estadística.
+En Compuesto / TM-score ya no es tan clara la diferencia: algunas soluciones con mecanismos dominan a algunas sin mecanismos y viceversa. Consistente con que no hubo significancia estadística. Ninguno de los candidatos finales proviene de esta formulación.
 
 ---
 
-## Slide 14 · Frente ipSAE / SC (~15 s)
+## Slide 10 · Frente ipSAE / SC (~15 s)
 
 Mismo caso para ipSAE / SC. En esta réplica particular sí se observa cierta dominancia visual, pero no se replicó en todas las ejecuciones.
 
 ---
 
-## Slide 15 · Cribado computacional (~45 s)
+## Slide 11 · Cribado computacional (~45 s)
 
 Una vez obtenidos los frentes, las 1208 secuencias no dominadas pasaron por un pipeline de validación.
 
@@ -136,7 +107,7 @@ Finalmente, repredicción con AlphaFold 2 y OmegaFold: se pide que ambos modelos
 
 ---
 
-## Slide 16 · Diseños destacados (~50 s)
+## Slide 12 · Diseños destacados (~50 s)
 
 De los 10 que pasan el filtro, cuatro resaltan por un criterio distinto cada uno.
 
@@ -148,28 +119,42 @@ El tercero tiene la estructura más consistente: los dos predictores coinciden c
 
 El cuarto tiene la mayor cobertura del epítopo — 64% — sin que el epítopo haya sido un objetivo de optimización directo.
 
-Algunos puntos de validación adicionales: la identidad entre los finalistas es de 0 a 14%, es decir, son soluciones genuinamente diversas. Y 3 de los 4 muestran oclusión estérica significativa del sitio de VEGFR-2: se posicionan donde iría el receptor natural.
+Algunos puntos de validación adicionales: la identidad entre los finalistas es de 0 a 29%, es decir, son soluciones genuinamente diversas. Y 3 de los 4 muestran oclusión estérica significativa del sitio de VEGFR-2: se posicionan donde iría el receptor natural.
 
 ---
 
-## Slide 17 · Síntesis (~30 s)
+## Slide 13 · Síntesis (~25 s)
 
 En resumen:
 
-Uno. La formulación monoobjetivo mostró que cruza y temperatura variable mejoran la aptitud frente a la formulación base.
+Uno. La formulación monoobjetivo (HA-PD1) mostró que cruza y temperatura variable mejoran la aptitud frente a la formulación base.
 
-Dos. En la formulación multiobjetivo, los mecanismos adaptativos mejoran hipervolumen y archivo solo en Interface-PAE / pLDDT.
+Dos. La formulación multiobjetivo (VEGF-A): los mecanismos adaptativos mejoran el rendimiento y aumentan el tamaño del conjunto final de secuencias en el par de objetivos Interface-PAE / pLDDT.
 
-Tres. Los diseños muestran oclusión estérica significativa del sitio VEGFR-2, posicionándolos como leads computacionales pendientes de validación experimental.
-
-Trabajo pendiente: redacción de tesis, desarrollo de interfaz gráfica, y queda fuera del alcance la validación experimental.
+Tres. Los diseños muestran oclusión estérica significativa del sitio VEGFR-2, posicionándolos como candidatos computacionales pendientes de validación experimental.
 
 ---
 
-## Slide 18 · Referencias (~5 s)
+## Slide 14 · Trabajo pendiente (~20 s)
+
+La actividad principal pendiente es continuar redactando el documento de tesis. Ya se escribieron los capítulos 1, 2 y 3; actualmente estoy escribiendo el cuarto y aplicando las correcciones sugeridas.
+
+A la derecha se muestra el cronograma actualizado con las actividades restantes.
+
+---
+
+## Slide 15 · Soluciones representativas HA-PD1 (~30 s)
+
+Aquí se muestran las soluciones representativas del experimento monoobjetivo sobre HA-PD1 — una por cada variante del algoritmo genético: solo mutación, mutación y cruce, y temperatura variable.
+
+La cuarta tarjeta muestra el mejor AID validado computacionalmente: proviene del brazo de temperatura variable, con un RMSD AF2–OmegaFold de solo 0.83 Å. De hecho, los 4 candidatos que pasaron el pipeline de validación para HA-PD1 provienen todos de este brazo, lo cual refuerza el hallazgo de que la temperatura variable produce mejores diseños.
+
+---
+
+## Slide 16 · Referencias (~5 s)
 
 Aquí están las referencias. Muchas gracias, estoy abierto a preguntas.
 
 ---
 
-**Tiempo total estimado: ~9–10 minutos**
+**Tiempo total estimado: ~8–9 minutos**

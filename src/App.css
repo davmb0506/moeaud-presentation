@@ -8822,6 +8822,13 @@
   color: var(--text-h);
 }
 
+.vhl-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted, #64748b);
+  font-weight: 500;
+}
+
 .vhl-sub {
   margin: 0;
   font-size: clamp(13px, 1.2vw, 15.5px);
@@ -12998,9 +13005,9 @@
 /* Hueco SVG: x=790 y=28 w=72 h=72 en viewBox 900×510 */
 .fexp-pdb-slot {
   position: absolute;
-  left: calc(790 / 900 * 100%);
-  top: calc(28 / 510 * 100%);
-  width: calc(72 / 900 * 100%);
+  left: calc(810 / 900 * 100%);
+  top: calc(252 / 420 * 100%);
+  width: calc(60 / 900 * 100%);
   aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;

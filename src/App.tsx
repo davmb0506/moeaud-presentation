@@ -453,31 +453,7 @@ export default function App() {
         <SlideNo n={12} />
       </motion.section>
 
-      {/* 13 · Síntesis */}
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.15 }}
-      >
-        <WrapUp />
-        <SlideNo n={13} />
-      </motion.section>
-
-      {/* 14 · Trabajo pendiente */}
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.15 }}
-      >
-        <TrabajoPendiente />
-        <SlideNo n={14} />
-      </motion.section>
-
-      {/* 15 · HA-PD1 · soluciones representativas */}
+      {/* 13 · HA-PD1 · soluciones representativas */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -486,6 +462,30 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Hapd1Representativos />
+        <SlideNo n={13} />
+      </motion.section>
+
+      {/* 14 · Síntesis */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <WrapUp />
+        <SlideNo n={14} />
+      </motion.section>
+
+      {/* 15 · Trabajo pendiente */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <TrabajoPendiente />
         <SlideNo n={15} />
       </motion.section>
 

@@ -83,14 +83,14 @@ function flowForPanel(panelId: PanelId, funnel: FunnelNode[]): FlowNode[] {
       id: "qc",
       title: "Control de calidad",
       blurb: isMoea
-        ? "Corta secuencias raras o sesgadas y exige ≥20 % del epítopo VEGFR-2."
+        ? "Entropía de Shannon para sesgos composicionales + ≥20 % cobertura del epítopo VEGFR-2."
         : "Corta sesgos de composición (Ala, Leu, Gln) del protocolo de Goudy.",
       badge: v(3),
       kind: "qc",
     },
     {
       id: "reprod",
-      title: "Repredicción AF2 – OmegaFold",
+      title: "Repredicción OmegaFold",
       blurb: isMoea
         ? "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å)."
         : "Pide que la forma del péptido coincida en complejo y solo (RMSD < 5 Å).",
