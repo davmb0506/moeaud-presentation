@@ -370,7 +370,7 @@ export function AblacionConvergencia() {
       <div className="mec-deck-top">
         <span className="mec-part b">Ablación · hipervolumen</span>
         <span className="mec-progress">
-          {SLIDES.map((s, i) => (
+          {SLIDES.map((_, i) => (
             <button
               key={i}
               type="button"
