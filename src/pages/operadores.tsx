@@ -253,7 +253,11 @@ export function Operadores() {
 
         {/* Visor del complejo de la solución seleccionada */}
         <div className="ablacion-viewer">
-          <ComplexViewer pdbUrl={sol.pdb} referenceUrl={REF_SOL.pdb} />
+          <ComplexViewer
+            pdbUrl={sol.pdb}
+            referenceUrl={REF_SOL.pdb}
+            highlightEpitope
+          />
           <div className="ablacion-info">
             <div className="ablacion-info-head">
               <span className="ablacion-info-tag" style={{ background: COND_COLOR[sol.group] }}>

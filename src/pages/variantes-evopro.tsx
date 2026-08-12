@@ -662,7 +662,11 @@ export function VariantesEvoPro() {
         </section>
 
         <section className="ablacion-viewer">
-            <ComplexViewer pdbUrl={viewerPdb} referenceUrl={viewerReference} />
+            <ComplexViewer
+              pdbUrl={viewerPdb}
+              referenceUrl={viewerReference}
+              highlightEpitope
+            />
 
             <div className="ablacion-info">
               {viewerMode === "ops" ? (
@@ -733,8 +737,10 @@ export function VariantesEvoPro() {
                 )
               )}
               <p className="ablacion-info-note">
-                <span className="ablacion-chip target" /> objetivo (VEGF-A) ·{" "}
-                <span className="ablacion-chip binder" /> péptido diseñado
+                <span className="ablacion-chip target" /> VEGF-A ·{" "}
+                <span className="ablacion-chip epitope" /> epítopo cubierto ·{" "}
+                <span className="ablacion-chip epitope-free" /> libre ·{" "}
+                <span className="ablacion-chip binder" /> péptido
               </p>
             </div>
         </section>

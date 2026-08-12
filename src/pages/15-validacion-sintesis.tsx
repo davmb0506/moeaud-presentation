@@ -147,16 +147,6 @@ export function ValidacionSintesis({
       viewport={{ amount: 0.2 }}
     >
       <h2 className="validacion-title">Cribado computacional</h2>
-      <p className="validacion-sub">
-        Cada etapa filtra con un criterio distinto; no se estima afinidad
-        experimental.
-      </p>
-
-      <div className="dockstory-case-controls cflow-controls">
-        <span className="dockstory-case-nav-btn" style={{ fontWeight: 700 }}>
-          {panel?.label ?? "MOEA VEGF-A (no dominados)"}
-        </span>
-      </div>
 
       {pending ? (
         <p className="validacion-sub">{panel?.note ?? "Filtro en curso…"}</p>

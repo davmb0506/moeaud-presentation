@@ -262,6 +262,7 @@ export function ValidacionShortlist() {
                   pdbUrl={NATIVE_COMPLEX_PDB}
                   referenceUrl={NATIVE_COMPLEX_PDB}
                   active={viewersActive ? true : undefined}
+                  highlightEpitope
                 />
               </div>
               <div className="vhl-pose">
@@ -272,6 +273,7 @@ export function ValidacionShortlist() {
                     pdbUrl={designPdb}
                     referenceUrl={designPdb}
                     active={designViewerActive ? true : undefined}
+                    highlightEpitope
                   />
                 ) : (
                   <p className="dockstory-note">PDB no disponible</p>
@@ -304,6 +306,8 @@ export function ValidacionShortlist() {
               <code className="vhl-seq">{active.binder_seq}</code>
               <p className="vhl-note">
                 <span className="ablacion-chip target" /> VEGF-A ·{" "}
+                <span className="ablacion-chip epitope" /> epítopo cubierto ·{" "}
+                <span className="ablacion-chip epitope-free" /> libre ·{" "}
                 <span className="ablacion-chip binder" /> VEGFR-2 | péptido
                 {hl.pose === "haddock" ? " · pose HADDOCK" : " · pose AF2"}
               </p>

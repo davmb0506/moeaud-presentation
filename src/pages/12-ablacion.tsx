@@ -234,7 +234,11 @@ export function Ablacion() {
 
         {/* Visor del complejo del punto activo */}
         <div className="ablacion-viewer">
-          <ComplexViewer pdbUrl={active?.pdb ?? null} referenceUrl={REF_POINT?.pdb ?? null} />
+          <ComplexViewer
+            pdbUrl={active?.pdb ?? null}
+            referenceUrl={REF_POINT?.pdb ?? null}
+            highlightEpitope
+          />
           {active && (
             <div className="ablacion-info">
               <div className="ablacion-info-head">
@@ -252,8 +256,10 @@ export function Ablacion() {
               <DesignCharacterization m={active} />
               <code className="ablacion-info-seq">{active.binder}</code>
               <p className="ablacion-info-note">
-                <span className="ablacion-chip target" /> VEGF-A (objetivo) ·{" "}
-                <span className="ablacion-chip binder" /> binder diseñado
+                <span className="ablacion-chip target" /> VEGF-A ·{" "}
+                <span className="ablacion-chip epitope" /> epítopo cubierto ·{" "}
+                <span className="ablacion-chip epitope-free" /> libre ·{" "}
+                <span className="ablacion-chip binder" /> binder
               </p>
             </div>
           )}

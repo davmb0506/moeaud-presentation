@@ -785,6 +785,32 @@
   text-align: left;
 }
 
+.eintro-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.eintro-flow {
+  display: flex;
+  justify-content: center;
+}
+
+.eintro-fig {
+  width: min(460px, 100%);
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.eintro-flow-svg {
+  width: min(380px, 100%);
+  height: auto;
+  display: block;
+}
+
 .eintro-copy {
   display: flex;
   flex-direction: column;
@@ -935,6 +961,15 @@
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--text);
+}
+
+.eintro-cite a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.eintro-cite a:hover {
+  text-decoration: underline;
 }
 
 /* ---- EvoPro: demo interactiva (diseño de proteínas) ---- */
@@ -4880,6 +4915,13 @@
   position: relative;
 }
 
+.appendix-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  color: #1e293b;
+  text-align: center;
+}
+
 .refs {
   width: 100%;
   max-width: 1200px;
@@ -8316,6 +8358,14 @@
   background: #7fb2e6;
 }
 
+.ablacion-chip.epitope {
+  background: #f43f5e;
+}
+
+.ablacion-chip.epitope-free {
+  background: #fecdd3;
+}
+
 .ablacion-chip.binder {
   background: #34d399;
 }
@@ -9026,6 +9076,80 @@
 
 .pendiente-list {
   gap: 0.95rem;
+}
+
+.cronograma {
+  width: fit-content;
+  max-width: 96%;
+  margin: 0 auto;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.cronograma-title {
+  margin: 0;
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  text-align: center;
+  width: 100%;
+}
+
+.cronograma-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.cronograma-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+.cronograma-img {
+  width: 520px;
+  max-width: min(520px, 55vw);
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.cronograma-pending h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cronograma-pending ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cronograma-pending li {
+  font-size: 15px;
+  line-height: 1.35;
+  color: #334155;
+  text-align: left;
 }
 
 .pendiente-sublist {
@@ -12824,10 +12948,38 @@
   justify-content: center;
 }
 
-.fexp-svg {
+.fexp-stage {
+  position: relative;
   width: min(960px, 100%);
+}
+
+.fexp-svg {
+  width: 100%;
   height: auto;
   display: block;
+}
+
+/* Hueco SVG: x=790 y=28 w=72 h=72 en viewBox 900×510 */
+.fexp-pdb-slot {
+  position: absolute;
+  left: calc(790 / 900 * 100%);
+  top: calc(28 / 510 * 100%);
+  width: calc(72 / 900 * 100%);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fexp-pdb-slot .cv-stage {
+  width: 100%;
+  height: 100%;
+}
+
+.fexp-pdb-slot .cv-toggle,
+.fexp-pdb-slot .cv-loading {
+  display: none;
 }
 
 /* ---- Cribado: diagrama de flujo ---- */

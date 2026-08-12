@@ -35,7 +35,6 @@ export function Agenda() {
           Recapitulación
           <ol type="a">
             <li>Objetivo y punto de partida (EvoPro)</li>
-            <li>Resultados monoobjetivo (HA-PD1)</li>
           </ol>
         </li>
         <li>
@@ -46,7 +45,7 @@ export function Agenda() {
             <li>Cribado y selección final</li>
           </ol>
         </li>
-        <li>Síntesis y cierre</li>
+        <li>Síntesis </li>
       </motion.ol>
     </motion.div>
   );

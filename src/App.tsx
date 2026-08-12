@@ -35,7 +35,7 @@ import { DisenoAlgoritmo } from "./pages/diseno-algoritmo";
 const NEXT_KEYS = ["ArrowRight", "ArrowDown", "PageDown"];
 const PREV_KEYS = ["ArrowLeft", "ArrowUp", "PageUp"];
 
-const TOTAL_SLIDES = 18;
+const TOTAL_SLIDES = 15;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
@@ -278,7 +278,7 @@ export default function App() {
                     <strong>optimización evolutiva multiobjetivo</strong>,
                     aplicándolo al diseño <em>de novo</em> de{" "}
                     <strong>
-                      péptidos <em>binders</em> de VEGF-A
+                      péptidos de unión. Caso de estudio: VEGF-A.
                     </strong>
                     .
                   </p>
@@ -356,31 +356,7 @@ export default function App() {
         <SlideNo n={4} />
       </motion.section>
 
-      {/* 05 · HA-PD1 · comparación de variantes */}
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.15 }}
-      >
-        <Hapd1Variantes />
-        <SlideNo n={5} />
-      </motion.section>
-
-      {/* 06 · HA-PD1 · soluciones representativas */}
-      <motion.section
-        className="showcase slide"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.12 }}
-      >
-        <Hapd1Representativos />
-        <SlideNo n={6} />
-      </motion.section>
-
-      {/* 07 · Actividades pendientes */}
+      {/* 05 · Actividades pendientes */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -389,36 +365,10 @@ export default function App() {
         viewport={viewport}
       >
         <TrabajoPendientePrevio />
-        <SlideNo n={7} />
+        <SlideNo n={5} />
       </motion.section>
 
-      {/* 08 · De monoobjetivo a multiobjetivo */}
-      <motion.section
-        className="showcase slide"
-        data-step="mo"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.15 }}
-      >
-        <Multiobjetivo step={moStep} />
-        <SlideNo n={8} />
-      </motion.section>
-
-      {/* 09 · MOEA-UD */}
-      <motion.section
-        className="showcase slide"
-        data-step="ud"
-        variants={slideContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.12 }}
-      >
-        <Moeaud step={udStep} />
-        <SlideNo n={9} />
-      </motion.section>
-
-      {/* 10 · Formulaciones multiobjetivo */}
+      {/* 06 · Formulaciones multiobjetivo */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -427,10 +377,10 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <FormulacionesMecanismos />
-        <SlideNo n={10} />
+        <SlideNo n={6} />
       </motion.section>
 
-      {/* 11 · Ablación · convergencia HV */}
+      {/* 07 · Ablación · convergencia HV */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -439,10 +389,10 @@ export default function App() {
         viewport={{ amount: 0.3 }}
       >
         <AblacionConvergencia />
-        <SlideNo n={11} />
+        <SlideNo n={7} />
       </motion.section>
 
-      {/* 12 · Ablación · frente Interface-PAE / pLDDT */}
+      {/* 08 · Ablación · frente Interface-PAE / pLDDT */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -451,10 +401,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <Ablacion />
-        <SlideNo n={12} />
+        <SlideNo n={8} />
       </motion.section>
 
-      {/* 13 · Ablación · frente Composite / TM-score */}
+      {/* 09 · Ablación · frente Composite / TM-score */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -463,10 +413,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <CompositeFront />
-        <SlideNo n={13} />
+        <SlideNo n={9} />
       </motion.section>
 
-      {/* 14 · Ablación · frente ipSAE / SC */}
+      {/* 10 · Ablación · frente ipSAE / SC */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -475,10 +425,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <IpsaeScFront />
-        <SlideNo n={14} />
+        <SlideNo n={10} />
       </motion.section>
 
-      {/* 15 · Cribado computacional */}
+      {/* 11 · Cribado computacional */}
       <motion.section
         className="showcase slide"
         data-step="goudy"
@@ -488,10 +438,10 @@ export default function App() {
         viewport={{ amount: 0.18 }}
       >
         <ValidacionSintesis step={goudyStep} onStepChange={setGoudy} />
-        <SlideNo n={15} />
+        <SlideNo n={11} />
       </motion.section>
 
-      {/* 16 · Shortlist / selección final */}
+      {/* 12 · Shortlist / selección final */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -500,10 +450,10 @@ export default function App() {
         viewport={{ amount: 0.12 }}
       >
         <ValidacionShortlist />
-        <SlideNo n={16} />
+        <SlideNo n={12} />
       </motion.section>
 
-      {/* 17 · Síntesis */}
+      {/* 13 · Síntesis */}
       <motion.section
         className="showcase slide"
         variants={slideContainer}
@@ -512,10 +462,22 @@ export default function App() {
         viewport={{ amount: 0.15 }}
       >
         <WrapUp />
-        <SlideNo n={17} />
+        <SlideNo n={13} />
       </motion.section>
 
-      {/* 18 · Referencias */}
+      {/* 14 · HA-PD1 · soluciones representativas */}
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <Hapd1Representativos />
+        <SlideNo n={14} />
+      </motion.section>
+
+      {/* 15 · Referencias */}
       <motion.section
         className="refs-slide slide"
         variants={slideContainer}
@@ -524,7 +486,53 @@ export default function App() {
         viewport={{ amount: 0.1 }}
       >
         <Referencias />
-        <SlideNo n={18} />
+        <SlideNo n={15} />
+      </motion.section>
+
+      {/* ============================================================ */}
+      {/* === APÉNDICE === */}
+      {/* ============================================================ */}
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <h2 className="appendix-title">Apéndice</h2>
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <Hapd1Variantes />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        data-step="mo"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.15 }}
+      >
+        <Multiobjetivo step={moStep} />
+      </motion.section>
+
+      <motion.section
+        className="showcase slide"
+        data-step="ud"
+        variants={slideContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.12 }}
+      >
+        <Moeaud step={udStep} />
       </motion.section>
 
       {/* ============================================================ */}

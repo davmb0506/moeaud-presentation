@@ -1,4 +1,5 @@
 import { motion, type Variants } from "framer-motion";
+import { ComplexViewer } from "../components/ComplexViewer";
 
 const wrap: Variants = {
   hidden: { opacity: 0 },
@@ -17,6 +18,7 @@ const fade: Variants = {
 const STROKE = "#1e293b";
 const FILL = "#ffffff";
 const MUTED = "#64748b";
+const VEGFA_PDB = "/pdbs/docking-validation/vegfa_A_native.pdb";
 
 function Box({
   x,
@@ -79,6 +81,84 @@ function Label({
   );
 }
 
+/** Semilla → flecha → pool de secuencias mutadas. */
+function PeptideIcon({ x, y }: { x: number; y: number }) {
+  const n = 8;
+  const spacing = 8;
+  const seedColors = [
+    "#e6194b",
+    "#3cb44b",
+    "#4363d8",
+    "#f58231",
+    "#911eb4",
+    "#42d4f4",
+    "#f032e6",
+    "#469990",
+  ];
+
+  function Seq({
+    oy,
+    mutateAt,
+    scale = 1,
+  }: {
+    oy: number;
+    mutateAt?: number[];
+    scale?: number;
+  }) {
+    const r = 3.2 * scale;
+    const sp = spacing * scale;
+    return (
+      <g>
+        <path
+          d={`M 4 ${oy} ${Array.from({ length: n - 1 }, (_, i) => {
+            const x1 = 4 + i * sp;
+            const x2 = 4 + (i + 1) * sp;
+            const bump = i % 2 === 0 ? -4 * scale : 4 * scale;
+            return `Q ${(x1 + x2) / 2} ${oy + bump} ${x2} ${oy}`;
+          }).join(" ")}`}
+          fill="none"
+          stroke="#94a3b8"
+          strokeWidth={1.2}
+        />
+        {Array.from({ length: n }, (_, i) => {
+          const mutated = mutateAt?.includes(i);
+          return (
+            <circle
+              key={i}
+              cx={4 + i * sp}
+              cy={oy}
+              r={r}
+              fill={mutated ? "#1e293b" : seedColors[i]}
+              stroke="#fff"
+              strokeWidth={0.6}
+            />
+          );
+        })}
+      </g>
+    );
+  }
+
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <Seq oy={10} />
+      {/* Flecha hacia el pool */}
+      <line
+        x1={36}
+        y1={18}
+        x2={36}
+        y2={32}
+        stroke="#1e293b"
+        strokeWidth={1.4}
+        markerEnd="url(#fexp-arrow)"
+      />
+      {/* Pool de secuencias */}
+      <Seq oy={42} mutateAt={[2, 5]} scale={0.92} />
+      <Seq oy={56} mutateAt={[1, 6]} scale={0.92} />
+      <Seq oy={70} mutateAt={[3, 4, 7]} scale={0.92} />
+    </g>
+  );
+}
+
 const PAIRS = [
   { name: "Interface-PAE / pLDDT", cx: 150 },
   { name: "Compuesto / TM-score", cx: 450 },
@@ -86,16 +166,20 @@ const PAIRS = [
 ] as const;
 
 export function FormulacionesMecanismos() {
-  const pairY = 248;
+  const seedCx = 230;
+  const vegfCx = 645;
+  const inputBottom = 86;
+  const joinY = 108;
+  const pairY = 148;
   const pairW = 220;
   const pairH = 40;
-  const leafY = 360;
+  const leafY = 250;
   const leafW = 88;
   const leafH = 32;
-  const moea = { x: 300, y: 118, w: 300, h: 58 };
+  const moea = { x: 300, y: 350, w: 300, h: 58 };
   const moeaCx = moea.x + moea.w / 2;
-  const moeaBottom = moea.y + moea.h;
-  const forkY = 210;
+  const mergeY = 320;
+  const frontY = 440;
 
   return (
     <motion.div
@@ -110,170 +194,248 @@ export function FormulacionesMecanismos() {
       </motion.div>
 
       <motion.div variants={fade} className="fexp-wrap">
-        <svg
-          className="fexp-svg"
-          viewBox="0 0 900 470"
-          role="img"
-          aria-label="Flujo del experimento multiobjetivo: entradas, MOEA-UD, tres pares de objetivos con y sin mecanismos adaptativos, y seis frentes no dominados"
-        >
-          <defs>
-            <marker
-              id="fexp-arrow"
-              viewBox="0 0 12 12"
-              refX="10"
-              refY="6"
-              markerWidth="8"
-              markerHeight="8"
-              orient="auto"
-              markerUnits="userSpaceOnUse"
-            >
-              <path d="M2 2 L10 6 L2 10 Z" fill={STROKE} />
-            </marker>
-          </defs>
+        <div className="fexp-stage">
+          {/* Visor PDB anclado al hueco del SVG (VEGF-A) */}
+          <div className="fexp-pdb-slot" aria-hidden>
+            <ComplexViewer pdbUrl={VEGFA_PDB} active highlightEpitope />
+          </div>
 
-          {/* Inputs → MOEA (ortogonal: baja, une, baja) */}
-          <path
-            d={`M 200 86 V 102 H ${moeaCx} V ${moea.y}`}
-            fill="none"
-            stroke={STROKE}
-            strokeWidth={1.4}
-            markerEnd="url(#fexp-arrow)"
-          />
-          <path
-            d={`M 700 86 V 102 H ${moeaCx}`}
-            fill="none"
-            stroke={STROKE}
-            strokeWidth={1.4}
-          />
+          <svg
+            className="fexp-svg"
+            viewBox="0 0 900 510"
+            role="img"
+            aria-label="Flujo del experimento: entradas, tres pares de objetivos con y sin mecanismos adaptativos, MOEA-UD y seis frentes no dominados"
+          >
+            <defs>
+              <marker
+                id="fexp-arrow"
+                viewBox="0 0 12 12"
+                refX="10"
+                refY="6"
+                markerWidth="8"
+                markerHeight="8"
+                orient="auto"
+                markerUnits="userSpaceOnUse"
+              >
+                <path d="M2 2 L10 6 L2 10 Z" fill={STROKE} />
+              </marker>
+              <clipPath id="fexp-pdb-clip">
+                <rect x={790} y={28} width={72} height={72} rx={8} />
+              </clipPath>
+            </defs>
 
-          {/* MOEA → fork bar → pairs */}
-          <line
-            x1={moeaCx}
-            y1={moeaBottom}
-            x2={moeaCx}
-            y2={forkY}
-            stroke={STROKE}
-            strokeWidth={1.4}
-          />
-          <line
-            x1={PAIRS[0].cx}
-            y1={forkY}
-            x2={PAIRS[2].cx}
-            y2={forkY}
-            stroke={STROKE}
-            strokeWidth={1.4}
-          />
-          {PAIRS.map((p) => (
+            {/* Inputs → join → pairs */}
+            <path
+              d={`M ${seedCx} ${inputBottom} V ${joinY} H ${moeaCx}`}
+              fill="none"
+              stroke={STROKE}
+              strokeWidth={1.4}
+            />
+            <path
+              d={`M ${vegfCx} ${inputBottom} V ${joinY} H ${moeaCx}`}
+              fill="none"
+              stroke={STROKE}
+              strokeWidth={1.4}
+            />
             <line
-              key={`down-${p.name}`}
-              x1={p.cx}
-              y1={forkY}
-              x2={p.cx}
-              y2={pairY}
+              x1={PAIRS[0].cx}
+              y1={joinY}
+              x2={PAIRS[2].cx}
+              y2={joinY}
+              stroke={STROKE}
+              strokeWidth={1.4}
+            />
+            {PAIRS.map((p) => (
+              <line
+                key={`to-pair-${p.name}`}
+                x1={p.cx}
+                y1={joinY}
+                x2={p.cx}
+                y2={pairY}
+                stroke={STROKE}
+                strokeWidth={1.4}
+                markerEnd="url(#fexp-arrow)"
+              />
+            ))}
+
+            {/* Pair → leaves */}
+            {PAIRS.map((p) => {
+              const leftCx = p.cx - 52;
+              const rightCx = p.cx + 52;
+              const pairBottom = pairY + pairH;
+              const splitY = pairBottom + 18;
+              return (
+                <g key={`pair-lines-${p.name}`}>
+                  <line
+                    x1={p.cx}
+                    y1={pairBottom}
+                    x2={p.cx}
+                    y2={splitY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                  />
+                  <line
+                    x1={leftCx}
+                    y1={splitY}
+                    x2={rightCx}
+                    y2={splitY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                  />
+                  <line
+                    x1={leftCx}
+                    y1={splitY}
+                    x2={leftCx}
+                    y2={leafY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                    markerEnd="url(#fexp-arrow)"
+                  />
+                  <line
+                    x1={rightCx}
+                    y1={splitY}
+                    x2={rightCx}
+                    y2={leafY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                    markerEnd="url(#fexp-arrow)"
+                  />
+                </g>
+              );
+            })}
+
+            {/* Leaves → MOEA */}
+            {PAIRS.map((p) => {
+              const leftCx = p.cx - 52;
+              const rightCx = p.cx + 52;
+              return (
+                <g key={`to-moea-${p.name}`}>
+                  <line
+                    x1={leftCx}
+                    y1={leafY + leafH}
+                    x2={leftCx}
+                    y2={mergeY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                  />
+                  <line
+                    x1={rightCx}
+                    y1={leafY + leafH}
+                    x2={rightCx}
+                    y2={mergeY}
+                    stroke={STROKE}
+                    strokeWidth={1.3}
+                  />
+                </g>
+              );
+            })}
+            <line
+              x1={PAIRS[0].cx - 52}
+              y1={mergeY}
+              x2={PAIRS[2].cx + 52}
+              y2={mergeY}
+              stroke={STROKE}
+              strokeWidth={1.3}
+            />
+            <line
+              x1={moeaCx}
+              y1={mergeY}
+              x2={moeaCx}
+              y2={moea.y}
               stroke={STROKE}
               strokeWidth={1.4}
               markerEnd="url(#fexp-arrow)"
             />
-          ))}
+            <line
+              x1={moeaCx}
+              y1={moea.y + moea.h}
+              x2={moeaCx}
+              y2={frontY}
+              stroke={STROKE}
+              strokeWidth={1.4}
+              markerEnd="url(#fexp-arrow)"
+            />
 
-          {/* Pair → leaves */}
-          {PAIRS.map((p) => {
-            const leftCx = p.cx - 52;
-            const rightCx = p.cx + 52;
-            const pairBottom = pairY + pairH;
-            const splitY = pairBottom + 18;
-            return (
-              <g key={`pair-lines-${p.name}`}>
-                <line
-                  x1={p.cx}
-                  y1={pairBottom}
-                  x2={p.cx}
-                  y2={splitY}
-                  stroke={STROKE}
-                  strokeWidth={1.3}
-                />
-                <line
-                  x1={leftCx}
-                  y1={splitY}
-                  x2={rightCx}
-                  y2={splitY}
-                  stroke={STROKE}
-                  strokeWidth={1.3}
-                />
-                <line
-                  x1={leftCx}
-                  y1={splitY}
-                  x2={leftCx}
-                  y2={leafY}
-                  stroke={STROKE}
-                  strokeWidth={1.3}
-                  markerEnd="url(#fexp-arrow)"
-                />
-                <line
-                  x1={rightCx}
-                  y1={splitY}
-                  x2={rightCx}
-                  y2={leafY}
-                  stroke={STROKE}
-                  strokeWidth={1.3}
-                  markerEnd="url(#fexp-arrow)"
-                />
-              </g>
-            );
-          })}
+            <Label
+              x={450}
+              y={14}
+              text="Entradas del algoritmo"
+              size={13}
+              weight={700}
+              fill={MUTED}
+            />
 
-          {/* Input section header */}
-          <Label x={450} y={12} text="Entradas del algoritmo" size={13} weight={700} fill={MUTED} />
+            {/* Seed input + peptide icon */}
+            <PeptideIcon x={42} y={16} />
+            <Box x={130} y={30} w={200} h={56} />
+            <Label x={230} y={48} text="Péptido semilla (21 aa)" size={12.5} weight={700} />
+            <Label
+              x={230}
+              y={68}
+              text="Población inicial por mutación"
+              size={10}
+              fill={MUTED}
+              weight={500}
+            />
 
-          {/* Input boxes */}
-          <Box x={70} y={30} w={260} h={56} />
-          <Label x={200} y={48} text="Péptido semilla (21 aa)" size={13} weight={700} />
-          <Label x={200} y={68} text="Población inicial por mutación" size={10.5} fill={MUTED} weight={500} />
+            {/* VEGF input + PDB slot (HTML overlay) */}
+            <rect
+              x={790}
+              y={28}
+              width={72}
+              height={72}
+              rx={8}
+              fill="#f8fafc"
+              stroke="#e2e8f0"
+              strokeWidth={1.5}
+            />
+            <Box x={520} y={30} w={250} h={56} />
+            <Label x={645} y={48} text="VEGF-A (proteína blanco)" size={12.5} weight={700} />
+            <Label
+              x={645}
+              y={68}
+              text="Estructura 3D para evaluación"
+              size={10}
+              fill={MUTED}
+              weight={500}
+            />
 
-          <Box x={570} y={30} w={260} h={56} />
-          <Label x={700} y={48} text="VEGF-A (proteína blanco)" size={13} weight={700} />
-          <Label x={700} y={68} text="Estructura 3D para evaluación" size={10.5} fill={MUTED} weight={500} />
+            {PAIRS.map((p) => {
+              const leftCx = p.cx - 52;
+              const rightCx = p.cx + 52;
+              return (
+                <g key={p.name}>
+                  <Box x={p.cx - pairW / 2} y={pairY} w={pairW} h={pairH} />
+                  <Label x={p.cx} y={pairY + pairH / 2} text={p.name} size={12.5} />
+                  <Box x={leftCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
+                  <Label x={leftCx} y={leafY + leafH / 2} text="con MA" size={12} />
+                  <Box x={rightCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
+                  <Label x={rightCx} y={leafY + leafH / 2} text="sin MA" size={12} />
+                </g>
+              );
+            })}
 
-          {/* MOEA-UD */}
-          <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
-          <Label x={moeaCx} y={moea.y + 22} text="MOEA-UD" size={16} weight={800} />
-          <Label
-            x={moeaCx}
-            y={moea.y + 42}
-            text="pop. 50 · 200 gen · 10 réplicas"
-            size={11}
-            weight={500}
-            fill={MUTED}
-          />
+            <Box x={moea.x} y={moea.y} w={moea.w} h={moea.h} r={10} strokeWidth={2} />
+            <Label x={moeaCx} y={moea.y + 22} text="MOEA-UD" size={16} weight={800} />
+            <Label
+              x={moeaCx}
+              y={moea.y + 42}
+              text="pop. 50 · 200 gen · 10 réplicas"
+              size={11}
+              weight={500}
+              fill={MUTED}
+            />
 
-          {/* Pair boxes + leaves */}
-          {PAIRS.map((p) => {
-            const leftCx = p.cx - 52;
-            const rightCx = p.cx + 52;
-            return (
-              <g key={p.name}>
-                <Box x={p.cx - pairW / 2} y={pairY} w={pairW} h={pairH} />
-                <Label x={p.cx} y={pairY + pairH / 2} text={p.name} size={12.5} />
-
-                <Box x={leftCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
-                <Label x={leftCx} y={leafY + leafH / 2} text="con MA" size={12} />
-
-                <Box x={rightCx - leafW / 2} y={leafY} w={leafW} h={leafH} r={6} />
-                <Label x={rightCx} y={leafY + leafH / 2} text="sin MA" size={12} />
-              </g>
-            );
-          })}
-
-          <Label
-            x={450}
-            y={440}
-            text="6 frentes no dominados"
-            size={13}
-            weight={700}
-            fill={MUTED}
-          />
-
-        </svg>
+            <Box x={270} y={frontY} w={360} h={42} r={8} strokeWidth={2} />
+            <Label
+              x={450}
+              y={frontY + 21}
+              text="6 frentes no dominados"
+              size={14}
+              weight={700}
+            />
+          </svg>
+        </div>
       </motion.div>
     </motion.div>
   );

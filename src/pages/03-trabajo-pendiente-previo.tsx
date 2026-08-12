@@ -14,42 +14,35 @@ const fade: Variants = {
   },
 };
 
-type Item = { text: string; sub?: readonly string[] };
-
-/** Texto del slide “Actividades subsecuentes” del avance de abril. */
-const PENDING: readonly Item[] = [
-  { text: "Experimentos finales con objetivos seleccionados." },
-  { text: "Validación de diseños in silico." },
-  { text: "Redacción de tesis." },
-];
-
 export function TrabajoPendientePrevio() {
   return (
     <motion.div
-      className="sintesis"
+      className="cronograma"
       variants={wrap}
       initial="hidden"
       whileInView="visible"
       viewport={{ amount: 0.2 }}
     >
-      <motion.h2 variants={fade} className="sintesis-title">
-        Actividades pendientes del periodo pasado
+      <motion.h2 variants={fade} className="cronograma-title">
+        Actividades pendientes del periodo anterior
       </motion.h2>
 
-      <motion.ol variants={fade} className="sintesis-list pendiente-list">
-        {PENDING.map((item) => (
-          <li key={item.text}>
-            {item.text}
-            {item.sub ? (
-              <ol type="a" className="pendiente-sublist">
-                {item.sub.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ol>
-            ) : null}
-          </li>
-        ))}
-      </motion.ol>
+      <motion.div variants={fade} className="cronograma-body">
+        <aside className="cronograma-pending">
+          <h3>Pendientes</h3>
+          <ol>
+            <li>Experimentos finales</li>
+            <li>Validación de resultados</li>
+            <li>Redacción de tesis</li>
+          </ol>
+        </aside>
+
+        <img
+          className="cronograma-img"
+          src="/cronograma.png"
+          alt="Cronograma de actividades 2026"
+        />
+      </motion.div>
     </motion.div>
   );
 }

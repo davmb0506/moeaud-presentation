@@ -18,7 +18,7 @@ La agenda del día es la siguiente. Primero una recapitulación del proyecto: el
 
 ## Slide 03 · Objetivo general / Importancia biológica (~45 s)
 
-El objetivo general es desarrollar, implementar y validar un marco computacional de diseño de proteínas basado en optimización evolutiva multiobjetivo, aplicándolo al diseño de novo de péptidos binders de VEGF-A.
+El objetivo general es desarrollar, implementar y validar un marco computacional de diseño de proteínas basado en optimización evolutiva multiobjetivo, aplicándolo al diseño de novo de péptidos de unión. Caso de estudio: VEGF-A.
 
 [Avanzar para revelar importancia biológica]
 

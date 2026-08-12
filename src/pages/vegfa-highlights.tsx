@@ -160,6 +160,7 @@ export function VegfaHighlights() {
           <ComplexViewer
             pdbUrl={active?.pdb ?? null}
             referenceUrl={REF?.pdb ?? null}
+            highlightEpitope
           />
           {active && activeHl && (
             <div className="vhl-info">
