@@ -43,8 +43,6 @@ type Highlight = {
 const NATIVE_HADDOCK_SCORE = -80.1;
 const NATIVE_COMPLEX_PDB =
   "/pdbs/shortlist-haddock/vegfa_vegfr2_native_haddock.pdb";
-const VEGFA_DIMER_VEGFR2_PDB =
-  "/pdbs/shortlist-haddock/vegfa_dimer_vegfr2.pdb";
 
 const COMPETITION_BY_GROUP: Record<string, { score: number; p: number }> = {
   interface_pae_plddt_mech: { score: 0.34, p: 0.0 },
