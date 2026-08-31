@@ -107,44 +107,56 @@ export default function App() {
   const [udStep, setUdStep] = useState(0);
   const udRef = useRef(0);
 
-  // Contador estable: solo slides con data-n (el apéndice no cuenta).
-  useEffect(() => {
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(".slide[data-n]")
-    );
-    if (!nodes.length) return;
+  // Contador + índice de navegación (scrollspy). Con zoom/#root, |top|≈0
+  // falla a mitad de un scroll suave; el umbral fijo no.
+  const slideIndexRef = useRef(0);
 
-    const ratios = new Map<HTMLElement, number>();
-    const update = () => {
-      let best: HTMLElement | null = null;
-      let bestRatio = 0;
-      for (const el of nodes) {
-        const r = ratios.get(el) ?? 0;
-        if (r > bestRatio) {
-          bestRatio = r;
-          best = el;
-        }
+  useEffect(() => {
+    let raf = 0;
+
+    const allSlides = () =>
+      Array.from(document.querySelectorAll<HTMLElement>(".slide"));
+
+    const numberedSlides = () =>
+      Array.from(document.querySelectorAll<HTMLElement>(".slide[data-n]"));
+
+    /** Último slide cuyo top ya pasó el marker (~1/3 del viewport). */
+    const indexAtMarker = (slides: HTMLElement[]) => {
+      if (!slides.length) return 0;
+      const marker = window.innerHeight * 0.35;
+      let idx = 0;
+      for (let i = 0; i < slides.length; i += 1) {
+        if (slides[i].getBoundingClientRect().top <= marker) idx = i;
+        else break;
       }
-      if (!best || bestRatio <= 0) {
-        const anyMain = nodes.some((el) => (ratios.get(el) ?? 0) > 0.02);
-        if (!anyMain) setCurrentSlide(null);
-        return;
-      }
-      const n = Number(best.dataset.n);
+      return idx;
+    };
+
+    const syncFromScroll = () => {
+      raf = 0;
+      const slides = allSlides();
+      slideIndexRef.current = indexAtMarker(slides);
+
+      const numbered = numberedSlides();
+      if (!numbered.length) return;
+      const active = numbered[indexAtMarker(numbered)];
+      const n = Number(active?.dataset.n);
       if (!Number.isNaN(n)) setCurrentSlide(n);
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          ratios.set(e.target as HTMLElement, e.intersectionRatio);
-        }
-        update();
-      },
-      { threshold: [0, 0.08, 0.2, 0.35, 0.5, 0.65, 0.8, 1] }
-    );
-    nodes.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    const onScrollOrResize = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(syncFromScroll);
+    };
+
+    syncFromScroll();
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -158,15 +170,24 @@ export default function App() {
       );
       if (!slides.length) return;
 
+      // Resync from scroll position (por si el usuario scrolleó a mano).
+      const marker = window.innerHeight * 0.35;
       let current = 0;
-      let best = Infinity;
-      slides.forEach((s, i) => {
-        const d = Math.abs(s.getBoundingClientRect().top);
-        if (d < best) {
-          best = d;
-          current = i;
-        }
-      });
+      for (let i = 0; i < slides.length; i += 1) {
+        if (slides[i].getBoundingClientRect().top <= marker) current = i;
+        else break;
+      }
+      // Preferir el índice de la última navegación por teclado si sigue
+      // alineado (evita saltos por zoom a mitad de transición).
+      const tracked = slideIndexRef.current;
+      if (
+        tracked >= 0 &&
+        tracked < slides.length &&
+        Math.abs(slides[tracked].getBoundingClientRect().top) <
+          window.innerHeight * 0.55
+      ) {
+        current = tracked;
+      }
 
       const step = slides[current]?.dataset.step;
 
@@ -262,7 +283,6 @@ export default function App() {
       if (target !== current) {
         e.preventDefault();
         const destStep = slides[target]?.dataset.step;
-        // Resetear el destino (no el origen) para no pelear con el scroll.
         if (destStep === "bio") {
           bioRef.current = 0;
           setBioStep(0);
@@ -283,9 +303,10 @@ export default function App() {
           udRef.current = 0;
           setUdStep(0);
         }
-        slides[target].scrollIntoView({ behavior: "auto", block: "start" });
+        slideIndexRef.current = target;
+        slides[target].scrollIntoView({ behavior: "instant", block: "start" });
         const n = Number(slides[target]?.dataset.n);
-        setCurrentSlide(Number.isFinite(n) ? n : null);
+        if (Number.isFinite(n)) setCurrentSlide(n);
       }
     };
 
