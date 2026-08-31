@@ -36,21 +36,26 @@
 }
 
 .slide-no {
-  position: absolute;
-  right: 28px;
-  bottom: 22px;
-  font-size: 13px;
+  position: fixed;
+  right: 20px;
+  bottom: 16px;
+  z-index: 10000;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 14px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  color: var(--text);
-  opacity: 0.45;
+  color: var(--text-h);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(10, 14, 26, 0.1);
+  box-shadow: 0 2px 10px rgba(10, 14, 26, 0.12);
   pointer-events: none;
   user-select: none;
 }
 
 .slide-no b {
-  color: var(--text-h);
+  color: var(--accent);
   font-weight: 800;
 }
 
@@ -216,6 +221,12 @@
   text-align: left;
 }
 
+.objective-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .objective-title {
   margin: 0 0 18px;
   font-size: clamp(26px, 3vw, 38px);
@@ -235,6 +246,31 @@
 .objective-text strong {
   color: var(--text-h);
   font-weight: 700;
+}
+
+.objective-specifics {
+  margin-top: 22px;
+}
+
+.objective-specifics-title {
+  margin: 0 0 10px;
+  font-size: clamp(15px, 1.35vw, 18px);
+  font-weight: 800;
+  color: var(--text-h);
+}
+
+.objective-specifics-list {
+  margin: 0;
+  padding-left: 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.objective-specifics-list li {
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.45;
+  color: var(--text);
 }
 
 .objective-bio {
@@ -371,6 +407,236 @@
   font-weight: 400;
   line-height: 1.45;
   color: var(--text);
+}
+
+.proteinas {
+  width: 100%;
+}
+
+.proteinas-grid {
+  align-items: center;
+}
+
+.proteinas-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.proteinas-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.proteinas-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, #3b82f6);
+}
+
+.proteinas-hero {
+  margin: 14px 0 16px;
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-h);
+}
+
+.proteinas-hero sup {
+  font-size: 0.52em;
+  font-weight: 700;
+}
+
+.proteinas-cite {
+  margin: 14px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(71, 85, 105, 0.88);
+}
+
+.proteinas-cite em {
+  font-style: italic;
+}
+
+.proteinas-caption {
+  margin: 10px 0 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(71, 85, 105, 0.85);
+}
+
+.proteinas-card {
+  display: flex;
+  flex-direction: column;
+  max-width: none;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+}
+
+.proteinas-fold {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+.proteinas-fold-frame {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 40vh, 420px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: #f4f7fb;
+}
+
+.proteinas-fold-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s linear;
+}
+
+.proteinas-native-view {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+  background: #f4f7fb;
+}
+
+.proteinas-native-view canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.proteinas-energy-overlay {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  bottom: 12px;
+  width: clamp(130px, 26%, 165px);
+  height: clamp(96px, 36%, 125px);
+  background: transparent;
+  pointer-events: none;
+}
+
+.proteinas-energy-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+@media (max-width: 960px) {
+  .proteinas-fold-frame {
+    height: clamp(240px, 32vh, 320px);
+  }
+  .proteinas-energy-overlay {
+    width: 140px;
+    height: 112px;
+  }
+}
+
+/* ---- Hipótesis termodinámica + diseño ---- */
+.hipdis {
+  width: 100%;
+}
+
+.hipdis-grid {
+  align-items: center;
+}
+
+.hipdis-fig-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.hipdis-fig {
+  display: block;
+  width: 100%;
+  max-height: min(58vh, 480px);
+  object-fit: contain;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.hipdis-fig-cite {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: rgba(71, 85, 105, 0.85);
+  text-align: left;
+}
+
+.hipdis-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hipdis-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.45;
+  color: var(--text);
+  text-align: left;
+}
+
+.hipdis-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, #3b82f6);
+}
+
+.hipdis-bridge {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent, #3b82f6);
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.45;
+  color: var(--text-h);
+  background: rgba(59, 130, 246, 0.06);
+  text-align: left;
+}
+
+.hipdis-cite {
+  margin: 14px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(71, 85, 105, 0.88);
+  text-align: left;
 }
 
 .agenda-list ol li::marker {
@@ -13563,4 +13829,531 @@
   text-justify: auto;
   hyphens: none;
 }
+
+
+/* ---- Algoritmos evolutivos: exploradores en la montaña ---- */
+.ae {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.ae-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ae-title {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-h);
+}
+
+.ae-lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.45vw, 19px);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.ae-lead strong {
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+/* --- Estanque --- */
+.ae-demo {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #eef7fb 0%, #e4f0f6 100%);
+  box-shadow: var(--shadow-sm);
+  padding: 10px 12px;
+  overflow: visible;
+  min-width: 0;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.ae-demo-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ae-gen {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.ae-stage {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h);
+  text-align: right;
+  max-width: 58%;
+  transition: color 0.25s ease;
+}
+
+.ae-stage[data-done] {
+  color: #9f1239;
+}
+
+.ae-tank {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  min-height: 0;
+  align-content: start;
+  overflow: visible;
+}
+
+.ae-select,
+.ae-cross,
+.ae-measure,
+.ae-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ae-tank--row {
+  min-height: 0;
+}
+
+.ae-fish {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid transparent;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+.ae-fish[data-state="keep"],
+.ae-fish[data-state="parent"] {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(196, 30, 30, 0.28);
+  box-shadow: 0 6px 14px rgba(196, 30, 30, 0.1);
+  z-index: 2;
+}
+
+.ae-fish[data-state="cull"] {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: transparent;
+  filter: grayscale(0.3);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ae-fish[data-state="child"] {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(15, 157, 122, 0.28);
+}
+
+.ae-fish-tag {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-h);
+  opacity: 0.85;
+}
+
+.ae-sprite {
+  width: 96px;
+  height: 96px;
+  flex: 0 0 auto;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  object-fit: contain;
+}
+
+.ae-fish-score {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.ae-fish-score i {
+  flex: 1 1 auto;
+  height: 5px;
+  border-radius: 999px;
+  display: block;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.45s ease;
+}
+
+.ae-fish-score b {
+  font-size: 9.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-h);
+  min-width: 5.6em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.slide .ae-fish-note {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f9d7a;
+  text-align: center;
+  text-justify: auto;
+  hyphens: none;
+  margin: 0;
+}
+
+.ae-fish-mut {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #b45309;
+  background: #fde68a;
+  border-radius: 999px;
+  padding: 2px 6px;
+}
+
+.slide .ae-cite {
+  margin: 16px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text);
+  opacity: 0.72;
+}
+
+/* ---- AE → diseño de proteínas ---- */
+.ae-prob {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  text-align: left;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 0 24px;
+  /* Compensa el peso visual del visor 3D (más tinta abajo). */
+  transform: translateY(-3.5vh);
+}
+
+.ae-prob-grid {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  align-items: center;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+}
+
+.ae-prob-copy {
+  min-width: 0;
+}
+
+.ae-prob-title {
+  margin: 0;
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-h);
+}
+
+.ae-prob-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.slide .ae-prob-body p {
+  margin: 0;
+  font-size: clamp(16px, 1.45vw, 20px);
+  line-height: 1.42;
+  color: var(--text);
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+.ae-prob-viz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Demo: población | unión */
+.ae-prob-demo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+  min-height: 0;
+}
+
+.ae-prob-demo-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+}
+
+.ae-prob-demo-pane--pop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  min-height: 0;
+}
+
+.ae-prob-pop-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ae-prob-pop-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.ae-prob-gen {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--mono);
+  color: var(--text-h);
+  letter-spacing: 0.04em;
+}
+
+.ae-prob-stage {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.5;
+}
+
+.ae-prob-pop-row[data-row-state="survivor"],
+.ae-prob-pop-row[data-row-state="parent"] {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(209, 250, 229, 0.35);
+}
+
+.ae-prob-pop-row[data-row-state="cull"] {
+  border-color: rgba(239, 68, 68, 0.2);
+  opacity: 0.22;
+  transform: scale(0.97);
+  filter: grayscale(0.9);
+}
+
+.ae-prob-pop-row[data-row-state="child"] {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(238, 242, 255, 0.65);
+  animation: ae-prob-child-in 0.5s ease;
+}
+
+@keyframes ae-prob-child-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.ae-prob-aa[data-from-b="true"] {
+  box-shadow: inset 0 0 0 1.5px rgba(99, 102, 241, 0.85);
+}
+
+.ae-prob-aa[data-mutated="true"] {
+  box-shadow: 0 0 0 2px #fbbf24;
+}
+
+.ae-prob-pop-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  width: 100%;
+  overflow: visible;
+}
+
+.ae-prob-pop-row {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition:
+    background 0.5s ease,
+    border-color 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    filter 0.5s ease;
+}
+
+.ae-prob-pop-row[data-active="true"] {
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.ae-prob-pop-row[data-muted="true"] {
+  opacity: 0.35;
+}
+
+.ae-prob-pop-row[data-status="fail"] {
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+.ae-prob-pop-row[data-status="success"] {
+  border-color: rgba(52, 211, 153, 0.55);
+}
+
+.ae-prob-pop-seq {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+}
+
+.ae-prob-aa {
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 23px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mono);
+  color: #fff;
+  line-height: 1;
+  flex: 0 0 auto;
+  padding: 0;
+}
+
+.ae-prob-aa--ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 14px;
+  height: 23px;
+  padding: 0 3px;
+  background: transparent;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ae-prob-bind-stage {
+  position: relative;
+  flex: 1;
+  min-height: min(38vh, 340px);
+  height: min(38vh, 340px);
+  overflow: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.ae-prob-bind-stage[data-stage="select"],
+.ae-prob-bind-stage[data-stage="breed"] {
+  opacity: 0.88;
+}
+
+.ae-prob-demo-pane--bind {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.ae-prob-bind-viewer {
+  width: 100%;
+  height: 100%;
+  min-height: min(38vh, 340px);
+  background: transparent;
+}
+
+.ae-prob-bind-tag {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.ae-prob-bind-tag--fail {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.95);
+}
+
+.ae-prob-bind-tag--ok {
+  color: #047857;
+  background: rgba(209, 250, 229, 0.95);
+}
+
+.ae-prob-bind-hint {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  margin: 0;
+  font-size: 11px;
+  color: var(--text);
+  opacity: 0.65;
+}
+
+@media (max-width: 900px) {
+  .ae-prob-demo {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .ae-prob-bind-stage,
+  .ae-prob-bind-viewer {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 720px) {
+  .ae-tank {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 

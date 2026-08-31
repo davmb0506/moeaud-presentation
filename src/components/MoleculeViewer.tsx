@@ -3,14 +3,6 @@ import * as $3Dmol from "3dmol";
 
 type Vec3 = [number, number, number];
 
-function IconPlay() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
 // Colores de la narrativa
 const COLOR_VEGFA = "#38bdf8"; // VEGF-A (objetivo)
 const COLOR_VEGFA_BB = "#0c4a6e"; // backbone (cartoon) de VEGF-A
@@ -69,23 +61,12 @@ export function MoleculeViewer() {
   // Por candidato: coords con su centroide en la pose "casi-acoplada"
   const candBaseRef = useRef<Vec3[][]>([]);
 
-  // Secuencias (código de 1 letra) para el panel
-  const vegfaSeqRef = useRef("");
-  const binderSeqRef = useRef("");
-  const candSeqsRef = useRef<string[]>([]);
-
   const cancelRef = useRef(false);
 
   const [ready, setReady] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [step, setStep] = useState<Step>(0);
-  const [seqInfo, setSeqInfo] = useState<{
-    name: string;
-    seq: string;
-    color: string;
-    note?: string;
-  } | null>(null);
 
   // ---- Superficies (limitadas por MODELO para no mezclar cadenas) -----------
   const addSurf = async (style: any, sel: any): Promise<any> => {
@@ -191,18 +172,14 @@ export function MoleculeViewer() {
     cancelRef.current = false;
     setPlaying(true);
 
-    const bound = boundRef.current;
-    const bindDir = bindDirRef.current;
-    const idA = modelARef.current?.getID();
-    const idR = modelRRef.current?.getID();
+    try {
+      const bound = boundRef.current;
+      const bindDir = bindDirRef.current;
+      const idA = modelARef.current?.getID();
+      const idR = modelRRef.current?.getID();
 
-    // Paso 1: revelar el epítopo
-    setStep(1);
-    setSeqInfo({
-      name: "VEGF-A (objetivo)",
-      seq: vegfaSeqRef.current,
-      color: COLOR_EPITOPE,
-    });
+      // Paso 1: revelar el epítopo
+      setStep(1);
     await showVegfaWithEpitope();
     if (cancelRef.current) return;
     viewer.zoomTo({ model: idA }, 600);
@@ -236,11 +213,6 @@ export function MoleculeViewer() {
           ] as Vec3
       );
 
-      setSeqInfo({
-        name: cand.name,
-        seq: candSeqsRef.current[i] || "",
-        color: cand.color,
-      });
       model.setStyle({}, { cartoon: { color: cand.color } });
       await runPath(model, start, base, APPROACH_FRAMES);
       if (cancelRef.current) return;
@@ -259,11 +231,6 @@ export function MoleculeViewer() {
 
     // Paso 3: el binder natural encaja
     if (cancelRef.current) return;
-    setSeqInfo({
-      name: "Binder natural (VEGFR-2)",
-      seq: binderSeqRef.current,
-      color: COLOR_BINDER,
-    });
     const successStart = bound.map(
       (p) =>
         [
@@ -280,9 +247,11 @@ export function MoleculeViewer() {
     modelRRef.current?.setStyle({}, {});
     surfRRef.current = await addSurf({ color: COLOR_BINDER, opacity: 0.92 }, selR());
     if (cancelRef.current) return;
-    viewer.zoomTo({ model: [idA, idR] }, 800);
-    viewer.render();
-    setPlaying(false);
+      viewer.zoomTo({ model: [idA, idR] }, 800);
+      viewer.render();
+    } finally {
+      setPlaying(false);
+    }
   };
 
   const reset = async () => {
@@ -291,14 +260,19 @@ export function MoleculeViewer() {
     cancelRef.current = true;
     setPlaying(false);
     setStep(0);
-    setSeqInfo(null);
     removeSurf(surfRRef);
     modelRRef.current?.setStyle({}, {});
     candModelsRef.current.forEach((m) => m?.setStyle({}, {}));
     await showVegfaPlain();
     viewer.zoomTo({ model: modelARef.current?.getID() }, 600);
     viewer.render();
+    cancelRef.current = false;
   };
+
+  const playRef = useRef(play);
+  const resetRef = useRef(reset);
+  playRef.current = play;
+  resetRef.current = reset;
 
   // ---- Visibilidad: libera el contexto WebGL fuera de pantalla --------------
   useEffect(() => {
@@ -336,7 +310,6 @@ export function MoleculeViewer() {
       setReady(false);
       setPlaying(false);
       setStep(0);
-      setSeqInfo(null);
       return;
     }
 
@@ -386,9 +359,6 @@ export function MoleculeViewer() {
 
         const aAtoms = modelA.selectedAtoms({}) as any[];
         const rAtoms = modelR.selectedAtoms({}) as any[];
-
-        vegfaSeqRef.current = sequenceOf(aAtoms);
-        binderSeqRef.current = sequenceOf(rAtoms);
 
         // Epítopo = residuos de VEGF-A a <= EPITOPE_CUTOFF Å del binder.
         const cutoff2 = EPITOPE_CUTOFF * EPITOPE_CUTOFF;
@@ -469,7 +439,6 @@ export function MoleculeViewer() {
         const modelRBind = viewer.addModel(chainRBind, "pdb");
         modelRRef.current = modelRBind;
         const rBindAtoms = modelRBind.selectedAtoms({}) as any[];
-        binderSeqRef.current = sequenceOf(rBindAtoms);
         boundRef.current = rBindAtoms.map((a) => [a.x, a.y, a.z] as Vec3);
 
         // VEGF-A: backbone (cartoon) visible bajo la superficie translúcida.
@@ -482,13 +451,11 @@ export function MoleculeViewer() {
         const [pb1, pb2] = perpBasis(bindDir);
         const candModels: any[] = [];
         const candBase: Vec3[][] = [];
-        const candSeqs: string[] = [];
         candTexts.forEach((text, i) => {
           const single = firstModel(text);
           const model = viewer.addModel(single, "pdb");
           model.setStyle({}, {});
           const atoms = model.selectedAtoms({}) as any[];
-          candSeqs[i] = sequenceOf(atoms);
           const c = centroid(atoms);
           const cfg = CANDIDATES[i];
           const target: Vec3 = [
@@ -508,7 +475,6 @@ export function MoleculeViewer() {
         });
         candModelsRef.current = candModels;
         candBaseRef.current = candBase;
-        candSeqsRef.current = candSeqs;
 
         await showVegfaPlain();
         if (cancelRef.current) return;
@@ -534,66 +500,67 @@ export function MoleculeViewer() {
     };
   }, [isVisible]);
 
-  const buttonLabel = playing
-    ? "Diseñando…"
-    : step === 0
-    ? <IconPlay />
-    : "Reiniciar";
+  // Rotación continua (también durante la animación de unión).
+  useEffect(() => {
+    if (!ready || !isVisible) return;
+    const viewer = glViewerRef.current;
+    if (!viewer) return;
 
-  const onButton = () => (step === 0 ? play() : reset());
+    let raf = 0;
+    let running = true;
+    const spin = () => {
+      if (!running) return;
+      viewer.rotate(0.35, { x: 0, y: 1, z: 0 });
+      viewer.render();
+      raf = requestAnimationFrame(spin);
+    };
+    raf = requestAnimationFrame(spin);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+  }, [ready, isVisible]);
+
+  // Bucle automático: rotación inicial → candidatos → éxito → pausa → reinicio.
+  useEffect(() => {
+    if (!ready || !isVisible) return;
+
+    let active = true;
+    const INITIAL_PAUSE_MS = 2500;
+    const HOLD_MS = 7000;
+    const BETWEEN_MS = 2000;
+
+    const run = async () => {
+      await delay(INITIAL_PAUSE_MS);
+      while (active) {
+        cancelRef.current = false;
+        await playRef.current();
+        if (!active) break;
+        await delay(HOLD_MS);
+        if (!active) break;
+        await resetRef.current();
+        await delay(BETWEEN_MS);
+      }
+    };
+
+    void run();
+    return () => {
+      active = false;
+      cancelRef.current = true;
+    };
+  }, [ready, isVisible]);
 
   return (
     <div className="molecule-block">
       <div className="molecule-stage">
         <div className="molecule-viewer" ref={viewerRef} />
-        {seqInfo && seqInfo.seq && (
-          <div className="molecule-seq">
-            {seqInfo.note && (
-              <p className="molecule-seq-note" style={{ color: seqInfo.color }}>
-                {seqInfo.note}
-              </p>
-            )}
-            <code
-              className="molecule-seq-text"
-              style={{ color: seqInfo.color }}
-            >
-              {seqInfo.seq}
-            </code>
-          </div>
-        )}
-      </div>
-      <div className="molecule-controls">
-        <button
-          className="molecule-button"
-          onClick={onButton}
-          disabled={!ready || playing}
-        >
-          {buttonLabel}
-        </button>
       </div>
     </div>
   );
 }
 
 // ---- Utilidades --------------------------------------------------------------
-const THREE_TO_ONE: Record<string, string> = {
-  ALA: "A", ARG: "R", ASN: "N", ASP: "D", CYS: "C", GLN: "Q", GLU: "E",
-  GLY: "G", HIS: "H", ILE: "I", LEU: "L", LYS: "K", MET: "M", PHE: "F",
-  PRO: "P", SER: "S", THR: "T", TRP: "W", TYR: "Y", VAL: "V",
-  MSE: "M", SEC: "U", PYL: "O",
-};
-
-// Secuencia en código de 1 letra a partir de los carbonos alfa (orden de archivo).
-function sequenceOf(atoms: any[]): string {
-  let seq = "";
-  for (const a of atoms) {
-    if (a.atom === "CA" && a.resn && THREE_TO_ONE[a.resn] !== undefined) {
-      seq += THREE_TO_ONE[a.resn];
-    }
-  }
-  return seq;
-}
-
 // Conserva solo el primer modelo de un PDB (relevante para ensambles NMR).
 function firstModel(pdbText: string): string {
   const out: string[] = [];

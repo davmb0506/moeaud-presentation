@@ -14,7 +14,7 @@ const fade: Variants = {
   },
 };
 
-export function DisenoAlgoritmo() {
+export function SectionTitle({ title }: { title: string }) {
   return (
     <motion.div
       className="divider"
@@ -25,8 +25,13 @@ export function DisenoAlgoritmo() {
     >
       <motion.span variants={fade} className="divider-rule" />
       <motion.h2 variants={fade} className="divider-title">
-        Diseño del algoritmo
+        {title}
       </motion.h2>
     </motion.div>
   );
+}
+
+/** @deprecated Prefer SectionTitle */
+export function DisenoAlgoritmo() {
+  return <SectionTitle title="Diseño del algoritmo" />;
 }

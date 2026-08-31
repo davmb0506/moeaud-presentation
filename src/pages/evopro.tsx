@@ -43,15 +43,7 @@ const GROUP: Record<string, AaGroup> = {
 
 const aaGroup = (a: string): AaGroup => GROUP[a] ?? "polar";
 
-// Color distinto por aminoácido (paleta de 20 colores distinguibles).
-const AA_COLOR: Record<string, string> = {
-  A: "#e6194b", R: "#3cb44b", N: "#ffe119", D: "#4363d8", C: "#f58231",
-  Q: "#911eb4", E: "#42d4f4", G: "#f032e6", H: "#bfef45", I: "#fabed4",
-  L: "#469990", K: "#dcbeff", M: "#9a6324", F: "#d4b106", P: "#800000",
-  S: "#aaffc3", T: "#808000", W: "#ffa472", Y: "#000075", V: "#a9a9a9",
-};
-
-// Texto blanco o negro según la luminancia del fondo, para legibilidad.
+import { aaColor } from "../data/aminoAcidColors";
 const textOn = (hex: string): string => {
   const c = hex.replace("#", "");
   const r = parseInt(c.slice(0, 2), 16);
@@ -313,7 +305,7 @@ export function Evopro({ intro }: { intro?: ReactNode }) {
                             variantOp === "mpnn" ? MPNN_COLOR : MUT_COLOR;
                           const bg = isChanged
                             ? changeColor
-                            : AA_COLOR[a] ?? "#94a3b8";
+                            : aaColor(a);
                           return (
                             <motion.span
                               key={idx}

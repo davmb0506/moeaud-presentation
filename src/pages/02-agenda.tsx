@@ -31,22 +31,12 @@ export function Agenda() {
       </motion.h2>
 
       <motion.ol variants={item} className="agenda-list">
-        <li>
-          Recapitulación
-          <ol type="a">
-            <li>Objetivo y punto de partida (EvoPro)</li>
-          </ol>
-        </li>
-        <li>
-          Resultados
-          <ol type="a">
-            <li>Formulación multiobjetivo</li>
-            <li>Diseño experimental</li>
-            <li>Ablación de mecanismos adaptativos</li>
-            <li>Cribado y selección final</li>
-          </ol>
-        </li>
-        <li>Síntesis </li>
+        <li>Objetivo y caso de estudio</li>
+        <li>Conceptos previos</li>
+        <li>Metodología</li>
+        <li>Resultados</li>
+        <li>Conclusiones</li>
+        <li>Trabajo futuro</li>
       </motion.ol>
     </motion.div>
   );
