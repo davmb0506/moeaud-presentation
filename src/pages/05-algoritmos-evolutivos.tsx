@@ -148,8 +148,8 @@ type Frame = { gen: number; stage: Stage };
 
 const FRAMES: Frame[] = [];
 for (let g = 0; g < GENS; g += 1) {
-  // Sin etapa “medir” suelta: el estanque ya se ve; la acción es ordenar/seleccionar.
-  ([1, 2, 3] as Stage[]).forEach((s) => FRAMES.push({ gen: g, stage: s }));
+  // 0 = estanque completo · 1 = selección · 2–3 = cruce / mutación
+  ([0, 1, 2, 3] as Stage[]).forEach((s) => FRAMES.push({ gen: g, stage: s }));
 }
 FRAMES.push({ gen: GENS, stage: 0 });
 
