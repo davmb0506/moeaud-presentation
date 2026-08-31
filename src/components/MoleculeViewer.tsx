@@ -66,7 +66,7 @@ export function MoleculeViewer() {
   const [ready, setReady] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [step, setStep] = useState<Step>(0);
+  const [, setStep] = useState<Step>(0);
 
   // ---- Superficies (limitadas por MODELO para no mezclar cadenas) -----------
   const addSurf = async (style: any, sel: any): Promise<any> => {

@@ -271,7 +271,6 @@ function FoldingAnimation({
     const viewer = $3Dmol.createViewer(nativeEl, {
       backgroundColor: "#f4f7fb",
       antialias: true,
-      disableMouse: true,
     });
     let nativeReady = false;
     let cancelled = false;
