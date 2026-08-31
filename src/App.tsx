@@ -49,7 +49,7 @@ const SPECIFIC_OBJECTIVES = [
   "Implementar el algoritmo multiobjetivo propuesto y analizar resultados experimentales",
 ] as const;
 
-const TOTAL_SLIDES = 22;
+const TOTAL_SLIDES = 23;
 const pad = (n: number) => String(n).padStart(2, "0");
 function SlideNo({ n }: { n: number }) {
   return (
