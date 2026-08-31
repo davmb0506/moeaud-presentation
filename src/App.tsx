@@ -51,7 +51,8 @@ const SPECIFIC_OBJECTIVES = [
 
 const TOTAL_SLIDES = 23;
 const pad = (n: number) => String(n).padStart(2, "0");
-function SlideNo({ n }: { n: number }) {
+function SlideNo({ n }: { n: number | null }) {
+  if (n == null) return null;
   return (
     <span className="slide-no" aria-hidden>
       <b>{pad(n)}</b> / {pad(TOTAL_SLIDES)}
@@ -79,7 +80,7 @@ const slideItem: Variants = {
 const viewport = { amount: 0.4 } as const;
 
 export default function App() {
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState<number | null>(1);
 
   // Pasos intra-slide del objetivo: 0 general → 1 específicos → 2 importancia.
   const [bioStep, setBioStep] = useState(0);
@@ -106,32 +107,44 @@ export default function App() {
   const [udStep, setUdStep] = useState(0);
   const udRef = useRef(0);
 
+  // Contador estable: solo slides con data-n (el apéndice no cuenta).
   useEffect(() => {
-    const syncSlideNo = () => {
-      const slides = Array.from(
-        document.querySelectorAll<HTMLElement>(".slide")
-      );
-      if (!slides.length) return;
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".slide[data-n]")
+    );
+    if (!nodes.length) return;
 
-      let idx = 0;
-      let best = Infinity;
-      slides.forEach((s, i) => {
-        const d = Math.abs(s.getBoundingClientRect().top);
-        if (d < best) {
-          best = d;
-          idx = i;
+    const ratios = new Map<HTMLElement, number>();
+    const update = () => {
+      let best: HTMLElement | null = null;
+      let bestRatio = 0;
+      for (const el of nodes) {
+        const r = ratios.get(el) ?? 0;
+        if (r > bestRatio) {
+          bestRatio = r;
+          best = el;
         }
-      });
-      setCurrentSlide(Math.min(idx + 1, TOTAL_SLIDES));
+      }
+      if (!best || bestRatio <= 0) {
+        const anyMain = nodes.some((el) => (ratios.get(el) ?? 0) > 0.02);
+        if (!anyMain) setCurrentSlide(null);
+        return;
+      }
+      const n = Number(best.dataset.n);
+      if (!Number.isNaN(n)) setCurrentSlide(n);
     };
 
-    syncSlideNo();
-    window.addEventListener("scroll", syncSlideNo, { passive: true });
-    window.addEventListener("resize", syncSlideNo);
-    return () => {
-      window.removeEventListener("scroll", syncSlideNo);
-      window.removeEventListener("resize", syncSlideNo);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          ratios.set(e.target as HTMLElement, e.intersectionRatio);
+        }
+        update();
+      },
+      { threshold: [0, 0.08, 0.2, 0.35, 0.5, 0.65, 0.8, 1] }
+    );
+    nodes.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -271,7 +284,8 @@ export default function App() {
           setUdStep(0);
         }
         slides[target].scrollIntoView({ behavior: "auto", block: "start" });
-        setCurrentSlide(Math.min(target + 1, TOTAL_SLIDES));
+        const n = Number(slides[target]?.dataset.n);
+        setCurrentSlide(Number.isFinite(n) ? n : null);
       }
     };
 
@@ -283,14 +297,13 @@ export default function App() {
     <main className="app">
       <SlideNo n={currentSlide} />
       {/* ============================================================ */}
-      {/* === DECK AVANCES (activo) — énfasis en RESULTADOS === */}
-      {/* 01 Portada · 02 Agenda · 03 Objetivos · 04 Objetivo · 05 Conceptos · 06 Proteínas · 07 AE */}
-      {/* 08 Diseño de proteínas · 09 Metodología · 10 EvoPro · … */}
-      {/* 08 Metodología · 09 EvoPro · 10 Actividades · 11 Formulaciones · … */}
+      {/* === DECK PRINCIPAL (data-n 01–23) === */}
+      {/* 01 Portada · 02 Agenda · 03–04 Objetivos · 05–08 Conceptos · 09–13 Metodología */}
+      {/* 14–17 Ablación · 18–19 Cribado/shortlist · 20 HA-PD1 · 21–22 Wrap · 23 Refs */}
       {/* ============================================================ */}
 
       {/* 01 · Portada */}
-      <motion.section
+      <motion.section data-n="1"
         className="cover slide"
         variants={slideContainer}
         initial="hidden"
@@ -325,7 +338,7 @@ export default function App() {
       </motion.section>
 
       {/* 02 · Agenda */}
-      <motion.section
+      <motion.section data-n="2"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -336,7 +349,7 @@ export default function App() {
       </motion.section>
 
       {/* 03 · Título de sección · Objetivos */}
-      <motion.section
+      <motion.section data-n="3"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -347,7 +360,7 @@ export default function App() {
       </motion.section>
 
       {/* 04 · Objetivo general / Específicos / Importancia biológica */}
-      <motion.section
+      <motion.section data-n="4"
         className="showcase slide"
         data-step="bio"
         variants={slideContainer}
@@ -467,7 +480,7 @@ export default function App() {
       </motion.section>
 
       {/* 05 · Título de sección · Conceptos previos */}
-      <motion.section
+      <motion.section data-n="5"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -478,7 +491,7 @@ export default function App() {
       </motion.section>
 
       {/* 06 · Conceptos · proteínas / hipótesis termodinámica */}
-      <motion.section
+      <motion.section data-n="6"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -489,7 +502,7 @@ export default function App() {
       </motion.section>
 
       {/* 07 · Conceptos · Algoritmos evolutivos */}
-      <motion.section
+      <motion.section data-n="7"
         className="showcase slide"
         data-step="ae"
         variants={slideContainer}
@@ -501,7 +514,7 @@ export default function App() {
       </motion.section>
 
       {/* 08 · Conceptos · AE → diseño de proteínas */}
-      <motion.section
+      <motion.section data-n="8"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -512,7 +525,7 @@ export default function App() {
       </motion.section>
 
       {/* 09 · Título de sección · Metodología */}
-      <motion.section
+      <motion.section data-n="9"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -523,7 +536,7 @@ export default function App() {
       </motion.section>
 
       {/* 10 · EvoPro */}
-      <motion.section
+      <motion.section data-n="10"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -534,7 +547,7 @@ export default function App() {
       </motion.section>
 
       {/* 09 · Actividades pendientes */}
-      <motion.section
+      <motion.section data-n="11"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -545,7 +558,7 @@ export default function App() {
       </motion.section>
 
       {/* 10 · Formulaciones multiobjetivo */}
-      <motion.section
+      <motion.section data-n="12"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -556,7 +569,7 @@ export default function App() {
       </motion.section>
 
       {/* Formulación multiobjetivo · pares de objetivos */}
-      <motion.section
+      <motion.section data-n="13"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -567,7 +580,7 @@ export default function App() {
       </motion.section>
 
       {/* 11 · Ablación · convergencia HV */}
-      <motion.section
+      <motion.section data-n="14"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -578,7 +591,7 @@ export default function App() {
       </motion.section>
 
       {/* 12 · Ablación · frente Interface-PAE / pLDDT */}
-      <motion.section
+      <motion.section data-n="15"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -589,7 +602,7 @@ export default function App() {
       </motion.section>
 
       {/* 13 · Ablación · frente Composite / TM-score */}
-      <motion.section
+      <motion.section data-n="16"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -600,7 +613,7 @@ export default function App() {
       </motion.section>
 
       {/* 14 · Ablación · frente ipSAE / SC */}
-      <motion.section
+      <motion.section data-n="17"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -611,7 +624,7 @@ export default function App() {
       </motion.section>
 
       {/* 15 · Cribado computacional */}
-      <motion.section
+      <motion.section data-n="18"
         className="showcase slide"
         data-step="goudy"
         variants={slideContainer}
@@ -623,7 +636,7 @@ export default function App() {
       </motion.section>
 
       {/* 16 · Shortlist / selección final */}
-      <motion.section
+      <motion.section data-n="19"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -634,7 +647,7 @@ export default function App() {
       </motion.section>
 
       {/* 17 · HA-PD1 · soluciones representativas */}
-      <motion.section
+      <motion.section data-n="20"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -645,7 +658,7 @@ export default function App() {
       </motion.section>
 
       {/* 18 · Síntesis */}
-      <motion.section
+      <motion.section data-n="21"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -656,7 +669,7 @@ export default function App() {
       </motion.section>
 
       {/* 19 · Trabajo pendiente */}
-      <motion.section
+      <motion.section data-n="22"
         className="showcase slide"
         variants={slideContainer}
         initial="hidden"
@@ -667,7 +680,7 @@ export default function App() {
       </motion.section>
 
       {/* 20 · Referencias */}
-      <motion.section
+      <motion.section data-n="23"
         className="refs-slide slide"
         variants={slideContainer}
         initial="hidden"
